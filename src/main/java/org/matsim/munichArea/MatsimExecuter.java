@@ -163,7 +163,7 @@ public class MatsimExecuter {
                         matsimRunner.runMatsim(hourOfDay * 60 * 60, 1,
                                 networkFile, matsimPopulation, year,
                                 TransformationFactory.WGS84, iterations, simulationName,
-                                outputFolder, flowCapacityFactor, storageCapacityFactor, locationList, autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile);
+                                outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor , locationList, autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile);
 
                         if (autoTimeSkims) autoTravelTime = matsimRunner.getAutoTravelTime();
                         if (autoDistSkims) autoTravelDistance = matsimRunner.getAutoTravelDistance();

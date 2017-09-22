@@ -34,7 +34,9 @@ public class MatsimRunFromJava {
                                                                                    String inputNetworkFile,
                                                                                    Population population, int year,
                                                                                    String crs, int numberOfIterations, String siloRunId, String outputDirectoryRoot,
-                                                                                   double flowCapacityFactor, double storageCapacityFactor,
+                                                                                   double scaleFactor,
+                                                                                   double flowCapacityFactor,
+                                                                                   double storageCapacityFactor,
                                                                                    ArrayList<Location> locationList, boolean autoTimeSkims, boolean autoDistSkims,
                                                                                    String scheduleFile, String vehicleFile) {
         // String populationFile, int year, String crs, int numberOfIterations) {
@@ -71,6 +73,9 @@ public class MatsimRunFromJava {
 
         config.qsim().setStartTime(0);
         config.qsim().setEndTime(24*60*60);
+
+        //todo test the direction of the scaling of the stuck time!!
+        config.qsim().setStuckTime(10 * scaleFactor);
 
         // Controller
         //		String siloRunId = "run_09";
