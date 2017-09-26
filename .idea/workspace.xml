@@ -4,12 +4,7 @@
     <list default="true" id="a15e1a17-0473-40da-a7d8-a5224804c518" name="Default" comment="">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/networkTools/NetworkEditor.java" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/networkTools/RoadBuilder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/InputTrip.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/automated/CreateAVDemand.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/automated/CreateAVDemand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/ReadSyntheticPopulation.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/ReadSyntheticPopulation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/MultiModalMATSim.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/MultiModalMATSim.java" />
     </list>
     <ignored path="MATSim.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1732,8 +1727,8 @@
       <file leaf-file-name="NetworkEditor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/networkTools/NetworkEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="34" column="43" lean-forward="true" selection-start-line="34" selection-start-column="43" selection-end-line="34" selection-end-column="43" />
+            <state relative-caret-position="465">
+              <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1744,14 +1739,14 @@
       <file leaf-file-name="RoadBuilder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/networkTools/RoadBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="359">
-              <caret line="25" column="30" lean-forward="true" selection-start-line="25" selection-start-column="30" selection-end-line="25" selection-end-column="30" />
+            <state relative-caret-position="425">
+              <caret line="33" column="37" lean-forward="true" selection-start-line="33" selection-start-column="37" selection-end-line="33" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#531#532#0" expanded="true" />
-                <element signature="e#559#560#0" expanded="true" />
-                <element signature="e#2717#2718#0" expanded="true" />
-                <element signature="e#2747#2748#0" expanded="true" />
+                <element signature="e#714#715#0" expanded="true" />
+                <element signature="e#742#743#0" expanded="true" />
+                <element signature="e#3681#3682#0" expanded="true" />
+                <element signature="e#3711#3712#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1808,7 +1803,7 @@
       <file leaf-file-name="MatsimExecuter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
+            <state relative-caret-position="2057">
               <caret line="121" column="0" lean-forward="true" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -1820,12 +1815,22 @@
       <file leaf-file-name="AddCyclingHighway.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/AddCyclingHighway.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="516">
+            <state relative-caret-position="1037">
               <caret line="80" column="75" lean-forward="true" selection-start-line="80" selection-start-column="8" selection-end-line="80" selection-end-column="75" />
               <folding>
                 <element signature="e#1088#1089#0" expanded="true" />
                 <element signature="e#1116#1117#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Zone2ZoneTravelDistanceListener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="39" column="94" lean-forward="true" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="94" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1898,8 +1903,8 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
-        <option value="cllorca1 &lt;carlos.llorca@tum.de&gt;" />
         <option value="cllorca1" />
+        <option value="cllorca1 &lt;carlos.llorca@tum.de&gt;" />
         <option value="cll" />
       </list>
     </option>
@@ -2643,13 +2648,6 @@
       <option name="presentableId" value="Default" />
       <updated>1473665247616</updated>
     </task>
-    <task id="LOCAL-00010" summary="added visualization in OTFVis">
-      <created>1474627702678</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1474627702678</updated>
-    </task>
     <task id="LOCAL-00011" summary="added properties and modified working directory">
       <created>1475073333963</created>
       <option name="number" value="00011" />
@@ -2986,7 +2984,14 @@
       <option name="project" value="LOCAL" />
       <updated>1506074284375</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="improved level of detail of reporting input plans">
+      <created>1506415735716</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1506415735716</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TodoView">
@@ -3078,7 +3083,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="eventAnalyzer fileNames as args" />
     <MESSAGE value="corrected some errors in transit skim matrices" />
     <MESSAGE value="corrected some errors in transit skim matrices v2" />
     <MESSAGE value="small corrections" />
@@ -3103,7 +3107,8 @@
     <MESSAGE value="backup commit" />
     <MESSAGE value="stuck time scale test available" />
     <MESSAGE value="minor change in agent trip duration event analyzer" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor change in agent trip duration event analyzer" />
+    <MESSAGE value="improved level of detail of reporting input plans" />
+    <option name="LAST_COMMIT_MESSAGE" value="improved level of detail of reporting input plans" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3212,13 +3217,6 @@
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/contrib/matrixbasedptrouter/0.9.0-SNAPSHOT/matrixbasedptrouter-0.9.0-20170518.221721-1058.jar!/example/ptTravelInfo.csv" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/contrib/matrixbasedptrouter/0.9.0-SNAPSHOT/matrixbasedptrouter-0.9.0-20170518.221721-1058.jar!/example/ptStops.csv" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3112">
-          <caret line="246" column="33" lean-forward="false" selection-start-line="246" selection-start-column="24" selection-end-line="246" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.9.0-SNAPSHOT/matsim-0.9.0-20170518.212838-1030-sources.jar!/org/matsim/api/core/v01/population/PopulationFactory.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/NetworkCleaner.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -3334,16 +3332,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="121" column="0" lean-forward="true" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/MultiModalMATSim.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -3368,22 +3356,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/AddCyclingHighway.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="80" column="75" lean-forward="true" selection-start-line="80" selection-start-column="8" selection-end-line="80" selection-end-column="75" />
-          <folding>
-            <element signature="e#1088#1089#0" expanded="true" />
-            <element signature="e#1116#1117#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/ReadSyntheticPopulation.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="621">
           <caret line="363" column="13" lean-forward="false" selection-start-line="363" selection-start-column="8" selection-end-line="363" selection-end-column="13" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.9.0-SNAPSHOT/matsim-0.9.0-20170522.171950-1039.jar!/org/matsim/core/network/NetworkUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="505" column="23" lean-forward="false" selection-start-line="505" selection-start-column="23" selection-end-line="505" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/networkTools/NetworkEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -3423,34 +3418,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.9.0-SNAPSHOT/matsim-0.9.0-20170522.171950-1039.jar!/org/matsim/core/network/NetworkUtils.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="505" column="23" lean-forward="false" selection-start-line="505" selection-start-column="23" selection-end-line="505" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/networkTools/NetworkEditor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="34" column="43" lean-forward="true" selection-start-line="34" selection-start-column="43" selection-end-line="34" selection-end-column="43" />
+        <state relative-caret-position="2057">
+          <caret line="121" column="0" lean-forward="true" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/AddCyclingHighway.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1037">
+          <caret line="80" column="75" lean-forward="true" selection-start-line="80" selection-start-column="8" selection-end-line="80" selection-end-column="75" />
+          <folding>
+            <element signature="e#1088#1089#0" expanded="true" />
+            <element signature="e#1116#1117#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="39" column="94" lean-forward="true" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="94" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/networkTools/RoadBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="25" column="30" lean-forward="true" selection-start-line="25" selection-start-column="30" selection-end-line="25" selection-end-column="30" />
+        <state relative-caret-position="425">
+          <caret line="33" column="37" lean-forward="true" selection-start-line="33" selection-start-column="37" selection-end-line="33" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#531#532#0" expanded="true" />
-            <element signature="e#559#560#0" expanded="true" />
-            <element signature="e#2717#2718#0" expanded="true" />
-            <element signature="e#2747#2748#0" expanded="true" />
+            <element signature="e#714#715#0" expanded="true" />
+            <element signature="e#742#743#0" expanded="true" />
+            <element signature="e#3681#3682#0" expanded="true" />
+            <element signature="e#3711#3712#0" expanded="true" />
           </folding>
         </state>
       </provider>
