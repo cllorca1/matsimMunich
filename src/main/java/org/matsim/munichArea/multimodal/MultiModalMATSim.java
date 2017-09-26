@@ -48,7 +48,7 @@ public class MultiModalMATSim {
             ReadSyntheticPopulation readSyntheticPopulation = new ReadSyntheticPopulation(rb, locationList);
             readSyntheticPopulation.demandFromSyntheticPopulation(0, 1, rb.getString("plan.file"));
             readSyntheticPopulation.printHistogram();
-            readSyntheticPopulation.printSyntheticPlansList("./input/" + rb.getString("plan.csv.file"));
+            readSyntheticPopulation.printSyntheticPlansList("./input/" + rb.getString("plan.csv.file"),  0);
 
         }
 

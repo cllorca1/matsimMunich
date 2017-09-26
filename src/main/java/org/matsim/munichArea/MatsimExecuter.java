@@ -128,9 +128,11 @@ public class MatsimExecuter {
                         ArrayList<Location> shortServedZoneList = new ArrayList<>();
                         shortServedZoneList.addAll(servedZoneList.subList(min, max));
 
-                        System.out.println("sub-iteration: " + subRun  );
-                        System.out.println("getting PT skim matrix between zone " + min + " and zone " + max  + " which count a total of " + shortServedZoneList.size());
 
+                        if (maxSubRuns>1) {
+                            System.out.println("sub-iteration: " + subRun);
+                            System.out.println("getting PT skim matrix between zone " + min + " and zone " + max + " which count a total of " + shortServedZoneList.size());
+                        }
 
                         //alternative methods --> alternative gravity model that doesn't create other than a OD matrix with counts
                         if (runGravityModel) {
@@ -146,7 +148,10 @@ public class MatsimExecuter {
                             readSp.demandFromSyntheticPopulation(0, (float) tripScalingFactor, "sp/plans.xml");
                             matsimPopulation = readSp.getMatsimPopulation();
                             readSp.printHistogram();
-                            readSp.printSyntheticPlansList("./sp/plans.csv");
+                            readSp.printSyntheticPlansList("./sp/plansAuto.csv" , 0);
+                            readSp.printSyntheticPlansList("./sp/plansWalk.csv" , 1);
+                            readSp.printSyntheticPlansList("./sp/plansCycle.csv" , 2);
+                            readSp.printSyntheticPlansList("./sp/plansTransit.csv" , 3);
                         } else{
                             MatsimPopulationCreator matsimPopulationCreator = new MatsimPopulationCreator();
                             matsimPopulationCreator.createMatsimPopulation(locationList, 2013, true, tripScalingFactor);

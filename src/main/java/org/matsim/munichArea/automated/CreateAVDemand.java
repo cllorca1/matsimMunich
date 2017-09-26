@@ -28,7 +28,7 @@ public class CreateAVDemand {
 
         ReadSyntheticPopulation readSp = new ReadSyntheticPopulation(rb, locationList);
         readSp.demandFromSyntheticPopulation(avPenetrationRate, tripScalingFactor, plansFileName);
-        readSp.printSyntheticPlansList(plansFileName + ".csv");
+        readSp.printSyntheticPlansList(plansFileName + ".csv", 0);
 
 
     }
