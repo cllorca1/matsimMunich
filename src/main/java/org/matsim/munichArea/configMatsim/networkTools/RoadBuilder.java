@@ -45,10 +45,14 @@ public class RoadBuilder {
         Node exampleNode = network.getNodes().get(Id.createNodeId(265776702));
         log.info("A node has been found by its id : " + exampleNode.getId().toString());
         //remove two links because the new roads intersects them
+
+
         //get node from its id
         Link l1 = network.getLinks().get(Id.createLinkId(141381));
         log.info("A node has been found by its id : " + l1.getToNode().getId().toString());
-        //get nodes from to link
+
+
+        //get from/to nodes from a link
         Node n3 = l1.getFromNode();
         Node n4 = l1.getToNode();
         //inverse direction
@@ -64,8 +68,15 @@ public class RoadBuilder {
         //coordinates of the intersection
         double x5 = (n3.getCoord().getY() - y1 - m34 * n3.getCoord().getX() + m12 * x1) / (m12 - m34);
         double y5 = y1 + m12 * (x5 - x1);
-        Coord c3 = new Coord(x5, y5);
-        Node n5 = NetworkUtils.createNode(Id.createNodeId("node5"), c3);
+        //and check that it is inside the links
+        if((x5-x1 > 0 && x5-x2 > 0) || (x5-x1 > 0 && x5-x2 > 0)){
+            log.info("The intersection point is not in the link");
+        } else {
+            log.info("The intersection point is in the link");
+        }
+
+        Coord c5 = new Coord(x5, y5);
+        Node n5 = NetworkUtils.createNode(Id.createNodeId("node5"), c5);
         network.addNode(n5);
 
         //create the new links connecting these 5 nodes
@@ -91,9 +102,7 @@ public class RoadBuilder {
                 centerLink = NetworkUtils.createLink(Id.createLinkId(linkId), d, n5, network, NetworkUtils.getEuclideanDistance(n5.getCoord(), d.getCoord()), 30, 200, 2);
                 network.addLink(centerLink);
             }
-
         }
-
     }
 
     public Network getNetwork() {
