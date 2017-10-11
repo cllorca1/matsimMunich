@@ -4,6 +4,8 @@ package org.matsim.munichArea.outputCreation.transitSkim;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.*;
 import org.matsim.api.core.v01.events.handler.*;
+import org.matsim.core.api.experimental.events.AgentWaitingForPtEvent;
+import org.matsim.core.api.experimental.events.handler.AgentWaitingForPtEventHandler;
 import org.matsim.munichArea.configMatsim.createDemandPt.PtSyntheticTraveller;
 
 import java.util.Map;
@@ -12,7 +14,7 @@ import java.util.Map;
  * Created by carlloga on 3/2/17.
  */
 public class ODTripAnalyzer implements ActivityEndEventHandler, ActivityStartEventHandler, PersonEntersVehicleEventHandler,
-        PersonLeavesVehicleEventHandler {
+        PersonLeavesVehicleEventHandler, AgentWaitingForPtEventHandler {
 
     private Map<Id, PtSyntheticTraveller> ptSyntheticTravellerMap;
 
@@ -40,6 +42,7 @@ public class ODTripAnalyzer implements ActivityEndEventHandler, ActivityStartEve
         try {
             PtSyntheticTraveller ptSyntheticTraveller = ptSyntheticTravellerMap.get(event.getPersonId());
             ptSyntheticTraveller.boards(event.getTime());
+
         } catch (Exception e) {}
     }
 
@@ -57,4 +60,12 @@ public class ODTripAnalyzer implements ActivityEndEventHandler, ActivityStartEve
         } catch (Exception e) {}
     }
 
+
+    @Override
+    public void handleEvent(AgentWaitingForPtEvent event) {
+        try {
+            PtSyntheticTraveller ptSyntheticTraveller = ptSyntheticTravellerMap.get(event.getPersonId());
+            ptSyntheticTraveller.addLeg(event.getWaitingAtStopId().toString(), event.getDestinationStopId().toString());
+        } catch (Exception e) {}
+    }
 }

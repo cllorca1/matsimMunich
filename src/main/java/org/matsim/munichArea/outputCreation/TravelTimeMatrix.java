@@ -6,6 +6,9 @@ import omx.hdf5.*;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
 
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -78,7 +81,38 @@ public class TravelTimeMatrix {
 
     }
 
+    public static void createStringCSVSkimMatrix(String[][] matrix, ArrayList<Location> locationList, String omxFileName, String omxMatrixName){
+
+
+        try {
+
+
+            PrintWriter pw = new PrintWriter(new FileWriter(omxFileName, false));
+
+            pw.println("origin,destination,route");
+
+            for (int i =1; i < locationList.size(); i++ ){
+                for (int j = 1; j< locationList.size(); j++){
+
+                    pw.print(i);
+                    pw.print(",");
+                    pw.print(j);
+                    pw.print(",");
+                    pw.println(matrix[i][j]);
+                }
+            }
+
+            pw.flush();
+            pw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
+
+}
 
 
 

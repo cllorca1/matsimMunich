@@ -15,10 +15,11 @@ public class PtSyntheticTraveller {
     private Location destLoc;
     private Person person;
     private double departureTime;
-    //in case the traveller nevel arrive gives a very long duration in mins
+    //in case the traveller never arrives gives a very long duration in mins
     private double arrivalTime = 1000000;
     private HashMap<Integer,Double> boardingMap;
     private HashMap<Integer,Double> alightingMap;
+    private HashMap<Integer,String> stopMap;
     private int boardSeq;
     private int alightSeq;
 
@@ -32,6 +33,7 @@ public class PtSyntheticTraveller {
         this.person = person;
         this.boardingMap = new HashMap<>();
         this.alightingMap = new HashMap<>();
+        this.stopMap = new HashMap<>();
         this.boardSeq = 0;
         this.alightSeq = 0;
     }
@@ -127,4 +129,12 @@ public class PtSyntheticTraveller {
         return  egressTime;
     }
 
+    public void addLeg(String initialStop, String finalStop){
+        stopMap.put(stopMap.size()+1, initialStop);
+        stopMap.put(stopMap.size()+1, finalStop);
+    }
+
+    public HashMap<Integer, String> getStopMap() {
+        return stopMap;
+    }
 }

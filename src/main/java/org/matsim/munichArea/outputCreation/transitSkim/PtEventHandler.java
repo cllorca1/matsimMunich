@@ -47,9 +47,7 @@ public class PtEventHandler {
         System.out.println("Number of PT synthetic trips: " + ptSyntheticTravellerMap.size());
         for (PtSyntheticTraveller ptst : ptSyntheticTravellerMap.values()){
 
-            //System.out.println(ptst.getOrigLoc().getId() + "-" + tt);
-
-            if(!ptst.getBoardingMap().isEmpty()) {
+            if(!ptst.getBoardingMap().isEmpty() && !ptst.getAlightingMap().isEmpty()) {
 
                 double end = ptst.getAlightingMap().get(ptst.getAlightingMap().keySet().size() - 1);
 
@@ -152,6 +150,27 @@ public class PtEventHandler {
         }
 
         return transitEgressTt;
+    }
+
+
+    public String[][] ptRouteMatrix(Map<Id,PtSyntheticTraveller> ptSyntheticTravellerMap, String [][] routeMatrix) {
+
+        for (PtSyntheticTraveller ptst : ptSyntheticTravellerMap.values()) {
+
+            String route = "";
+            int seq = 0;
+            Map<Integer, String> stopMap = ptst.getStopMap();
+            for (String leg : stopMap.values()){
+                route += leg;
+                seq ++;
+                if (seq < stopMap.size()) {
+                    route += "&";
+                }
+            }
+            routeMatrix[ptst.getOrigLoc().getId()][ptst.getDestLoc().getId()] =  route;
+            routeMatrix[ptst.getDestLoc().getId()][ptst.getOrigLoc().getId()] =  route;
+        }
+        return routeMatrix;
     }
 
 
