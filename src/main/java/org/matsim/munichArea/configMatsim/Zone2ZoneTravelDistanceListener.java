@@ -13,6 +13,7 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Plan;
+import org.matsim.contrib.dvrp.router.DijkstraTree;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
@@ -187,7 +188,8 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
                         float euclideanDistance = euclideanDistanceCalculator.getDistanceFrom(originZone, destinationZone);
                         if (euclideanDistance < 5e3) {
 
-                            Dijkstra dijkstra = new Dijkstra(network, travelDisutility, travelTime);
+
+                            Dijkstra dijkstra = new DijkstraTree(network, travelDisutility, travelTime);
                             LeastCostPathCalculator.Path path = dijkstra.calcLeastCostPath(originNode, destinationNode, departureTime, person, vehicle);
                             float distance = 0;
                             for (Link link : path.links) {

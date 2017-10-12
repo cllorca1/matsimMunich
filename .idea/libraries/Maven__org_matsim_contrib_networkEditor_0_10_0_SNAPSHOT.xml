@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.matsim.contrib:networkEditor:0.10.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/matsim/contrib/networkEditor/0.10.0-SNAPSHOT/networkEditor-0.10.0-20171011.234001-219.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/matsim/contrib/networkEditor/0.10.0-SNAPSHOT/networkEditor-0.10.0-20171011.234001-219-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/matsim/contrib/networkEditor/0.10.0-SNAPSHOT/networkEditor-0.10.0-20171011.234001-219-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
