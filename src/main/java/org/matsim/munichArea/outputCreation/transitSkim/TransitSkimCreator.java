@@ -2,6 +2,7 @@ package org.matsim.munichArea.outputCreation.transitSkim;
 
 import com.pb.common.matrix.Matrix;
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.events.EventsUtils;
 import org.matsim.core.events.MatsimEventsReader;
@@ -12,13 +13,13 @@ import java.util.Map;
 /**
  * Created by carlloga on 3/2/17.
  */
-public class PtEventHandler {
+public class TransitSkimCreator {
 
 
-    public void runPtEventAnalyzer(String eventsFile, Map<Id, PtSyntheticTraveller> ptSyntheticTravellerMap){
+    public void runPtEventAnalyzer(String eventsFile, Map<Id, PtSyntheticTraveller> ptSyntheticTravellerMap, Network network){
         EventsManager eventsManager = EventsUtils.createEventsManager();
-        ODTripAnalyzer odTripAnalyzer = new ODTripAnalyzer(ptSyntheticTravellerMap);
-        eventsManager.addHandler(odTripAnalyzer);
+        TransitEventHandler transitEventHandler = new TransitEventHandler(ptSyntheticTravellerMap, network);
+        eventsManager.addHandler(transitEventHandler);
         new MatsimEventsReader(eventsManager).readFile(eventsFile);
     }
 
@@ -171,6 +172,27 @@ public class PtEventHandler {
             routeMatrix[ptst.getDestLoc().getId()][ptst.getOrigLoc().getId()] =  route;
         }
         return routeMatrix;
+    }
+
+    public Matrix transitDistance (Map<Id,PtSyntheticTraveller> ptSyntheticTravellerMap, Matrix transitDistance) {
+
+        System.out.println("Transit distance matrix written");
+        for (PtSyntheticTraveller ptst : ptSyntheticTravellerMap.values()){
+
+            //System.out.println(ptst.getOrigLoc().getId() + "-" + tt);
+
+
+
+            float distance = ptst.getDistanceInTransit();
+
+            if (distance>0) {
+                transitDistance.setValueAt(ptst.getOrigLoc().getId(), ptst.getDestLoc().getId(), distance);
+                transitDistance.setValueAt(ptst.getDestLoc().getId(), ptst.getOrigLoc().getId(), distance);
+            }
+        }
+
+        return transitDistance;
+
     }
 
 

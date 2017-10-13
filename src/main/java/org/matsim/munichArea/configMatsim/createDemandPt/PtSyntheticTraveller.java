@@ -1,7 +1,9 @@
 package org.matsim.munichArea.configMatsim.createDemandPt;
 
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.vehicles.Vehicle;
 
 import java.util.HashMap;
 
@@ -20,8 +22,11 @@ public class PtSyntheticTraveller {
     private HashMap<Integer,Double> boardingMap;
     private HashMap<Integer,Double> alightingMap;
     private HashMap<Integer,String> stopMap;
+
     private int boardSeq;
     private int alightSeq;
+
+    private double distanceInTransit;
 
 
 
@@ -36,6 +41,8 @@ public class PtSyntheticTraveller {
         this.stopMap = new HashMap<>();
         this.boardSeq = 0;
         this.alightSeq = 0;
+
+        this.distanceInTransit = 0;
     }
 
     public int getId() {
@@ -88,6 +95,7 @@ public class PtSyntheticTraveller {
 
     public void boards(double boardingTime){
         boardingMap.put(boardSeq,boardingTime);
+
         boardSeq++;
     }
 
@@ -136,5 +144,13 @@ public class PtSyntheticTraveller {
 
     public HashMap<Integer, String> getStopMap() {
         return stopMap;
+    }
+
+    public void addDistanceInTransit(Double distance){
+        this.distanceInTransit += distance;
+    }
+
+    public float getDistanceInTransit(){
+        return (float) this.distanceInTransit;
     }
 }

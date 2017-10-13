@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a15e1a17-0473-40da-a7d8-a5224804c518" name="Default" comment="">
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/ODTripAnalyzer.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitEventHandler.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/PtEventHandler.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimCreator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/ReadZonesServedByTransit.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/ReadZonesServedByTransit.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java" />
     </list>
     <ignored path="MATSim.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1715,11 +1717,41 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TransitSkimPostProcessing.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java">
+      <file leaf-file-name="MatsimPopulationCreator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/MatsimPopulationCreator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="26" column="45" lean-forward="true" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="45" />
+            <state relative-caret-position="-170">
+              <caret line="251" column="83" lean-forward="true" selection-start-line="251" selection-start-column="83" selection-end-line="251" selection-end-column="83" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TransitSkimCreator.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimCreator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="140">
+              <caret line="189" column="0" lean-forward="false" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TransitEventHandler.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitEventHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="140">
+              <caret line="109" column="0" lean-forward="false" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PtSyntheticTraveller.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="259">
+              <caret line="143" column="0" lean-forward="true" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -1736,7 +1768,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>locationList.get</find>
       <find>locationMap.get</find>
       <find>timeallocation</find>
       <find>transit</find>
@@ -1766,6 +1797,7 @@
       <find>modeChoice</find>
       <find>scenario</find>
       <find>stuck</find>
+      <find>netw</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -1791,9 +1823,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/planCreation/MatsimPopulationCreator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/matsimAvExample/CreateAVs.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/ODTripAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/ActivityStartEndAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/AgentTripDurationEventAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/ActivityStartEndAnalyzer.java" />
@@ -1822,7 +1851,6 @@
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/ActivityStartEndHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/AgentTripDurationEventAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/InputPlan.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/AddCyclingHighway.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/automated/CreateAVDemand.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/MultiModalMATSim.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/InputTrip.java" />
@@ -1834,14 +1862,18 @@
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/AgentWaitingForPtEventHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/ODTripAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/PtEventHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/ReadZonesServedByTransit.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/PtEventHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/AddCyclingHighway.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimCreator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitEventsAfterRun.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitEventHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java" />
       </list>
     </option>
   </component>
@@ -1941,6 +1973,16 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="munichArea" type="462c0819:PsiDirectoryNode" />
               <item name="configMatsim" type="462c0819:PsiDirectoryNode" />
+              <item name="createDemandPt" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="matsimMunichArea" type="b2602c69:ProjectViewProjectNode" />
+              <item name="matsimMunichArea" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="munichArea" type="462c0819:PsiDirectoryNode" />
+              <item name="configMatsim" type="462c0819:PsiDirectoryNode" />
               <item name="planCreation" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -1973,25 +2015,17 @@
             </path>
             <path>
               <item name="matsimMunichArea" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="matsimMunichArea" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="munichArea" type="462c0819:PsiDirectoryNode" />
+              <item name="outputCreation" type="462c0819:PsiDirectoryNode" />
+              <item name="tripDurationAnalyzer" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="matsimMunichArea" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="networkEditor-0.8.0.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="matsimMunichArea" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="networkEditor-0.8.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="networkEditor" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="matsimMunichArea" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="networkEditor-0.8.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="networkEditor" type="462c0819:PsiDirectoryNode" />
-              <item name="run" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -2052,7 +2086,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.TransitSkimPostProcess">
+  <component name="RunManager" selected="Application.MatsimExecuter">
     <configuration name="AccCalc" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="org.matsim.munichArea.outputCreation.accessibilityCalculator.AcessCalculator" />
@@ -2546,13 +2580,6 @@
       <option name="presentableId" value="Default" />
       <updated>1473665247616</updated>
     </task>
-    <task id="LOCAL-00015" summary="included a first sbahn line">
-      <created>1481538418728</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1481538418728</updated>
-    </task>
     <task id="LOCAL-00016" summary="rename package">
       <created>1481555869149</created>
       <option name="number" value="00016" />
@@ -2889,7 +2916,14 @@
       <option name="project" value="LOCAL" />
       <updated>1507818915245</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="skim post processing separated from main class">
+      <created>1507878462222</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1507878462222</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2911,9 +2945,9 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33044422" sideWeight="0.5125" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33044422" sideWeight="0.15" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18333334" sideWeight="0.49317408" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33044422" sideWeight="0.4875" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33044422" sideWeight="0.85" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32887402" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32887402" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2923,7 +2957,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48754063" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48754063" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -3016,8 +3050,14 @@
           <properties />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java</url>
+          <line>213</line>
+          <properties />
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="26" />
+      <option name="time" value="64" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -3026,96 +3066,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/CentroidsToLocations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="27" column="43" lean-forward="false" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/Location.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="15" column="23" lean-forward="false" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/automated/CreateAVs.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/CyclingHighwayAnalysis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="35" lean-forward="false" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/CreateNetwork.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="809">
-          <caret line="121" column="0" lean-forward="false" selection-start-line="29" selection-start-column="4" selection-end-line="121" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/SkimMatrixReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="59" lean-forward="false" selection-start-line="27" selection-start-column="59" selection-end-line="27" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/contrib/matrixbasedptrouter/0.9.0-SNAPSHOT/matrixbasedptrouter-0.9.0-20170518.221721-1058.jar!/example/ptTravelInfo.csv" />
-    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/contrib/matrixbasedptrouter/0.9.0-SNAPSHOT/matrixbasedptrouter-0.9.0-20170518.221721-1058.jar!/example/ptStops.csv" />
-    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.9.0-SNAPSHOT/matsim-0.9.0-20170518.212838-1030-sources.jar!/org/matsim/api/core/v01/population/PopulationFactory.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/NetworkCleaner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="511">
-          <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimRunFromFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="30" column="19" lean-forward="false" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.9.0-SNAPSHOT/matsim-0.9.0-20170518.212838-1030-sources.jar!/org/matsim/core/events/EventsUtils.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/CreatePopulationExample.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/ActivityStartEndHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/AllModesTripAnalyzer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="25" column="39" lean-forward="false" selection-start-line="25" selection-start-column="39" selection-end-line="25" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/AgentTripDurationEventAnalyzer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="41" column="64" lean-forward="false" selection-start-line="41" selection-start-column="64" selection-end-line="41" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelTimeListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="52" column="42" lean-forward="true" selection-start-line="52" selection-start-column="42" selection-end-line="52" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/automated/RunAVExample.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -3141,14 +3091,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/MultiModalMATSim.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="34" column="54" lean-forward="false" selection-start-line="33" selection-start-column="7" selection-end-line="34" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/awt/geom/Line2D.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="10141">
@@ -3160,17 +3102,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="61" column="9" lean-forward="true" selection-start-line="61" selection-start-column="9" selection-end-line="61" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/AddCyclingHighway.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1003">
-          <caret line="80" column="75" lean-forward="false" selection-start-line="80" selection-start-column="8" selection-end-line="80" selection-end-column="75" />
-          <folding>
-            <element signature="e#1088#1089#0" expanded="false" />
-            <element signature="e#1116#1117#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3279,50 +3210,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="69" column="57" lean-forward="false" selection-start-line="69" selection-start-column="57" selection-end-line="69" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/ODTripAnalyzer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="67" column="39" lean-forward="false" selection-start-line="67" selection-start-column="33" selection-end-line="67" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-15">
           <caret line="71" column="9" lean-forward="false" selection-start-line="71" selection-start-column="9" selection-end-line="71" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/PtEventHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-372">
-          <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/MatsimPopulationCreator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="37" column="16" lean-forward="false" selection-start-line="37" selection-start-column="16" selection-end-line="37" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/Trip.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -3335,28 +3226,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="196" column="29" lean-forward="true" selection-start-line="196" selection-start-column="29" selection-end-line="196" selection-end-column="29" />
-          <folding>
-            <element signature="class#5178:6809" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/TransitDemandForSkim.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="502">
           <caret line="56" column="75" lean-forward="false" selection-start-line="56" selection-start-column="75" selection-end-line="56" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="36" column="26" lean-forward="false" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
           <folding />
         </state>
       </provider>
@@ -3370,14 +3243,6 @@
             <element signature="e#497#498#0" expanded="true" />
             <element signature="e#525#526#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="71" column="85" lean-forward="true" selection-start-line="71" selection-start-column="85" selection-end-line="71" selection-end-column="85" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3399,8 +3264,229 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="26" column="45" lean-forward="true" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="45" />
+        <state relative-caret-position="119">
+          <caret line="23" column="44" lean-forward="true" selection-start-line="23" selection-start-column="44" selection-end-line="23" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.10.0-SNAPSHOT/matsim-0.10.0-20171011.223023-240.jar!/org/matsim/api/core/v01/events/LinkEnterEvent.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-154">
+          <caret line="16" column="45" lean-forward="false" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.10.0-SNAPSHOT/matsim-0.10.0-20171011.223023-240.jar!/org/matsim/analysis/TravelDistanceStats.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2142">
+          <caret line="64" column="34" lean-forward="true" selection-start-line="64" selection-start-column="34" selection-end-line="64" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.10.0-SNAPSHOT/matsim-0.10.0-20171011.223023-240.jar!/org/matsim/analysis/TravelDistanceStatsControlerListener.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="18" column="21" lean-forward="true" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="71" column="58" lean-forward="true" selection-start-line="71" selection-start-column="58" selection-end-line="71" selection-end-column="58" />
+          <folding>
+            <element signature="class#5178:6809" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/AddCyclingHighway.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="601">
+          <caret line="79" column="0" lean-forward="true" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/MultiModalMATSim.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-510">
+          <caret line="34" column="54" lean-forward="false" selection-start-line="33" selection-start-column="7" selection-end-line="34" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/CyclingHighwayAnalysis.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="35" lean-forward="false" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.10.0-SNAPSHOT/matsim-0.10.0-20171011.223023-240.jar!/org/matsim/core/network/NetworkUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-56">
+          <caret line="121" column="67" lean-forward="false" selection-start-line="121" selection-start-column="62" selection-end-line="121" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="206" column="14" lean-forward="false" selection-start-line="206" selection-start-column="14" selection-end-line="206" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/Trip.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="100" column="39" lean-forward="false" selection-start-line="100" selection-start-column="39" selection-end-line="100" selection-end-column="39" />
+          <folding>
+            <element signature="e#2251#2252#0" expanded="false" />
+            <element signature="e#2291#2292#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/ActivityStartEndHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="122" column="24" lean-forward="true" selection-start-line="122" selection-start-column="24" selection-end-line="122" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.10.0-SNAPSHOT/matsim-0.10.0-20171011.223023-240.jar!/org/matsim/api/core/v01/events/TransitDriverStartsEvent.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/AgentTripDurationEventAnalyzer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="43" column="40" lean-forward="true" selection-start-line="42" selection-start-column="8" selection-end-line="43" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/TimSort.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="297" column="20" lean-forward="true" selection-start-line="297" selection-start-column="20" selection-end-line="297" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="163" column="74" lean-forward="true" selection-start-line="163" selection-start-column="74" selection-end-line="163" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/MatsimPopulationCreator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-170">
+          <caret line="251" column="83" lean-forward="true" selection-start-line="251" selection-start-column="83" selection-end-line="251" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitEventsAfterRun.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="4" lean-forward="false" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.10.0-SNAPSHOT/matsim-0.10.0-20171011.223023-240.jar!/org/matsim/core/events/EventsManagerImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="189" column="0" lean-forward="false" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../Osmosis/lib/default/xercesImpl-2.9.1.jar!/org/apache/xerces/parsers/AbstractSAXParser.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="170" column="102" lean-forward="false" selection-start-line="170" selection-start-column="102" selection-end-line="170" selection-end-column="102" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../Osmosis/lib/default/xercesImpl-2.9.1.jar!/org/apache/xerces/impl/XMLDocumentFragmentScannerImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="730" column="80" lean-forward="false" selection-start-line="730" selection-start-column="80" selection-end-line="730" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../Osmosis/lib/default/xercesImpl-2.9.1.jar!/org/apache/xerces/parsers/XMLParser.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="23" column="77" lean-forward="false" selection-start-line="23" selection-start-column="77" selection-end-line="23" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../Osmosis/lib/default/xercesImpl-2.9.1.jar!/org/apache/xerces/jaxp/SAXParserImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="167" column="95" lean-forward="false" selection-start-line="167" selection-start-column="95" selection-end-line="167" selection-end-column="95" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.10.0-SNAPSHOT/matsim-0.10.0-20171011.223023-240.jar!/org/matsim/core/utils/io/MatsimXmlParser.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.10.0-SNAPSHOT/matsim-0.10.0-20171011.223023-240.jar!/org/matsim/core/events/MatsimEventsReader.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitEventHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="109" column="0" lean-forward="false" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="143" column="0" lean-forward="true" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimCreator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="189" column="0" lean-forward="false" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
           <folding />
         </state>
       </provider>

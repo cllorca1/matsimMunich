@@ -1,6 +1,8 @@
 package org.matsim.munichArea.configMatsim;
 
 import com.pb.common.matrix.Matrix;
+import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Population;
 
 import org.matsim.core.config.Config;
@@ -8,6 +10,7 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.*;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
+import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.scenario.MutableScenario;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
@@ -23,9 +26,12 @@ public class MatsimRunFromJava {
     private ResourceBundle rb;
     private Matrix autoTravelTime;
     private Matrix autoTravelDistance;
+    private Network network;
+    private final Config config;
 
     public MatsimRunFromJava(ResourceBundle rb) {
         this.rb = rb;
+        config = ConfigUtils.createConfig();
 
     }
 
@@ -40,7 +46,7 @@ public class MatsimRunFromJava {
                                                                                    ArrayList<Location> locationList, boolean autoTimeSkims, boolean autoDistSkims,
                                                                                    String scheduleFile, String vehicleFile) {
         // String populationFile, int year, String crs, int numberOfIterations) {
-        final Config config = ConfigUtils.createConfig();
+
 
         autoTravelTime = new Matrix(locationList.size(), locationList.size());
 
@@ -194,5 +200,10 @@ public class MatsimRunFromJava {
 
     public Matrix getAutoTravelDistance() {
         return autoTravelDistance;
+    }
+
+    public Network getNetwork() {
+        Scenario scenario = ScenarioUtils.loadScenario(config);
+        return scenario.getNetwork();
     }
 }

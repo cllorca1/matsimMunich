@@ -12,8 +12,7 @@ import org.matsim.munichArea.configMatsim.createDemandPt.PtSyntheticTraveller;
 import org.matsim.munichArea.configMatsim.createDemandPt.ReadZonesServedByTransit;
 import org.matsim.munichArea.outputCreation.EuclideanDistanceCalculator;
 import org.matsim.munichArea.outputCreation.accessibilityCalculator.Accessibility;
-import org.matsim.munichArea.outputCreation.transitSkim.PtEventHandler;
-import org.matsim.munichArea.outputCreation.transitSkim.TransitSkimPostProcessing;
+import org.matsim.munichArea.outputCreation.transitSkim.TransitSkimCreator;
 import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
 import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
@@ -91,6 +90,8 @@ public class MatsimExecuter {
         transitAccessTt.fill(-1F);
         Matrix transitEgressTt = new Matrix(locationList.size(), locationList.size());
         transitEgressTt.fill(-1F);
+        Matrix transitDistance = new Matrix(locationList.size(), locationList.size());
+        transitDistance.fill(-1F);
 
         String[][] routeMatrix = new String[locationList.size()][locationList.size()];
 
@@ -195,9 +196,9 @@ public class MatsimExecuter {
 
                         if (ptSkimsFromEvents) {
                             String eventFile = outputFolder + "/" + simulationName + "_" + year + ".output_events.xml.gz";
-                            PtEventHandler ptEH = new PtEventHandler();
+                            TransitSkimCreator ptEH = new TransitSkimCreator();
 
-                            ptEH.runPtEventAnalyzer(eventFile, ptSyntheticTravellerMap);
+                            ptEH.runPtEventAnalyzer(eventFile, ptSyntheticTravellerMap, matsimRunner.getNetwork() );
 
                             transitTotalTime = ptEH.ptTotalTime(ptSyntheticTravellerMap, transitTotalTime);
                             transitInTime = ptEH.ptInTransitTime(ptSyntheticTravellerMap, transitInTime);
@@ -205,7 +206,9 @@ public class MatsimExecuter {
                             inVehicleTime = ptEH.inVehicleTt(ptSyntheticTravellerMap, inVehicleTime);
                             transitAccessTt = ptEH.transitAccessTt(ptSyntheticTravellerMap, transitAccessTt);
                             transitEgressTt = ptEH.transitEgressTt(ptSyntheticTravellerMap, transitEgressTt);
+                            transitDistance = ptEH.transitDistance(ptSyntheticTravellerMap, transitDistance);
                             routeMatrix = ptEH.ptRouteMatrix(ptSyntheticTravellerMap, routeMatrix);
+
                         }
 
                     }
