@@ -8,16 +8,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
-import static org.matsim.munichArea.MatsimExecuter.rb;
 
 /**
  * Created by carlloga on 28.02.2017.
  */
 public class ReadZonesServedByTransit {
 
+    private ResourceBundle rb;
+
+    public ReadZonesServedByTransit(ResourceBundle rb) {
+        this.rb = rb;
+    }
+
     public ArrayList<Location> readZonesServedByTransit(ArrayList<Location> locationList) {
-        String fileName = rb.getString("zones.served.SU.file");
+
+        String fileName = rb.getString("zones.served.file");
 
         BufferedReader bufferReader = null;
 

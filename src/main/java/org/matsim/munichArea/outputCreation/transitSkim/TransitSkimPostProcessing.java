@@ -1,9 +1,14 @@
 package org.matsim.munichArea.outputCreation.transitSkim;
 
 import com.pb.common.matrix.Matrix;
+import com.pb.common.util.ResourceUtil;
 import org.matsim.munichArea.SkimMatrixReader;
+import org.matsim.munichArea.configMatsim.createDemandPt.ReadZonesServedByTransit;
+import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -30,6 +35,54 @@ public class TransitSkimPostProcessing {
     private Matrix autoTravelDistance;
     private Matrix inVehicle;
 
+    private static String simulationName;
+
+
+    public static void main (String[] args){
+
+        File propFile = new File(args[0]);
+        ResourceBundle munich = ResourceUtil.getPropertyBundle(propFile);
+
+        simulationName = munich.getString("simulation.name");
+
+        CentroidsToLocations centroidsToLocations = new CentroidsToLocations(munich);
+        ArrayList<Location> locationList = centroidsToLocations.readCentroidList();
+
+        ReadZonesServedByTransit servedZoneReader = new ReadZonesServedByTransit(munich);
+        ArrayList<Location> servedZoneList = servedZoneReader.readZonesServedByTransit(locationList);
+
+        TransitSkimPostProcessing postProcess = new TransitSkimPostProcessing(munich, locationList, servedZoneList);
+        postProcess.postProcessTransitSkims();
+
+        Matrix completeTotalPtTime = postProcess.getTotalTimeCompleteMatrix();
+        Matrix completeInTransitTotalPtTime = postProcess.getInTransitCompleteMatrix();
+        Matrix completeAccessTimePtTime = postProcess.getAccessTimeCompleteMatrix();
+        Matrix completeEgressTimePtTime = postProcess.getEgressTimeCompleteMatrix();
+        Matrix completeTransfersPtTime = postProcess.getTransfersCompleteMatrix();
+        Matrix completeInVehiclePtTime = postProcess.getInVehicleTimeCompleteMatrix();
+
+        String omxPtFileName = munich.getString("pt.total.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(completeTotalPtTime, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.in.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(completeInTransitTotalPtTime, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.access.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(completeAccessTimePtTime, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.egress.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(completeEgressTimePtTime, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.transfer.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(completeTransfersPtTime, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(completeInVehiclePtTime, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(completeInVehiclePtTime, locationList, omxPtFileName, "mat1");
+    }
+
 
     public TransitSkimPostProcessing(ResourceBundle munich, ArrayList<Location> locationList, ArrayList<Location> servedZoneList) {
         this.munich = munich;
@@ -41,12 +94,12 @@ public class TransitSkimPostProcessing {
     public void postProcessTransitSkims() {
         SkimMatrixReader skimReader = new SkimMatrixReader();
         //read original matrices
-        inTransit = skimReader.readSkim(munich.getString("pt.in.skim.file") + "SkimsPt.omx", "mat1");
-        totalTime = skimReader.readSkim(munich.getString("pt.total.skim.file") + "SkimsPt.omx", "mat1");
-        accessTime = skimReader.readSkim(munich.getString("pt.access.skim.file") + "SkimsPt.omx", "mat1");
-        egressTime = skimReader.readSkim(munich.getString("pt.egress.skim.file") + "SkimsPt.omx", "mat1");
-        transfers = skimReader.readSkim(munich.getString("pt.transfer.skim.file") + "SkimsPt.omx", "mat1");
-        inVehicle = skimReader.readSkim(munich.getString("pt.in.vehicle.skim.file") + "SkimsPt.omx", "mat1");
+        inTransit = skimReader.readSkim(munich.getString("pt.in.skim.file") + simulationName + ".omx", "mat1");
+        totalTime = skimReader.readSkim(munich.getString("pt.total.skim.file") + simulationName + ".omx", "mat1");
+        accessTime = skimReader.readSkim(munich.getString("pt.access.skim.file") + simulationName + ".omx", "mat1");
+        egressTime = skimReader.readSkim(munich.getString("pt.egress.skim.file") + simulationName + ".omx", "mat1");
+        transfers = skimReader.readSkim(munich.getString("pt.transfer.skim.file") + simulationName + ".omx", "mat1");
+        inVehicle = skimReader.readSkim(munich.getString("pt.in.vehicle.skim.file") + simulationName + ".omx", "mat1");
         //read the distances
         autoTravelDistance = skimReader.readSkim(munich.getString("out.skim.auto.dist.base") + "Test.omx", "mat1");
         //fill in the locations without access by transit

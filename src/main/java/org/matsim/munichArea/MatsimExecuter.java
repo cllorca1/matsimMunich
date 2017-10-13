@@ -69,7 +69,7 @@ public class MatsimExecuter {
         locationList = shortLocationList;
         System.out.println(locationList.size());*/
 
-        ReadZonesServedByTransit servedZoneReader = new ReadZonesServedByTransit();
+        ReadZonesServedByTransit servedZoneReader = new ReadZonesServedByTransit(rb);
         ArrayList<Location> servedZoneList = servedZoneReader.readZonesServedByTransit(locationList);
 
         //get arrays of parameters for single runs
@@ -256,39 +256,6 @@ public class MatsimExecuter {
 
         }
 
-        if (Boolean.parseBoolean(rb.getString("skim.postprocess"))){
-
-            TransitSkimPostProcessing postProcess = new TransitSkimPostProcessing(rb, locationList, servedZoneList);
-            postProcess.postProcessTransitSkims();
-
-            Matrix completeTotalPtTime = postProcess.getTotalTimeCompleteMatrix();
-            Matrix completeInTransitTotalPtTime = postProcess.getInTransitCompleteMatrix();
-            Matrix completeAccessTimePtTime = postProcess.getAccessTimeCompleteMatrix();
-            Matrix completeEgressTimePtTime = postProcess.getEgressTimeCompleteMatrix();
-            Matrix completeTransfersPtTime = postProcess.getTransfersCompleteMatrix();
-            Matrix completeInVehiclePtTime = postProcess.getInVehicleTimeCompleteMatrix();
-
-            String omxPtFileName = rb.getString("pt.total.skim.file") + simulationName + "Complete.omx";
-            TravelTimeMatrix.createOmxSkimMatrix(completeTotalPtTime, locationList, omxPtFileName, "mat1");
-
-            omxPtFileName = rb.getString("pt.in.skim.file") + simulationName + "Complete.omx";
-            TravelTimeMatrix.createOmxSkimMatrix(completeInTransitTotalPtTime, locationList, omxPtFileName, "mat1");
-
-            omxPtFileName = rb.getString("pt.access.skim.file") + simulationName + "Complete.omx";
-            TravelTimeMatrix.createOmxSkimMatrix(completeAccessTimePtTime, locationList, omxPtFileName, "mat1");
-
-            omxPtFileName = rb.getString("pt.egress.skim.file") + simulationName + "Complete.omx";
-            TravelTimeMatrix.createOmxSkimMatrix(completeEgressTimePtTime, locationList, omxPtFileName, "mat1");
-
-            omxPtFileName = rb.getString("pt.transfer.skim.file") + simulationName + "Complete.omx";
-            TravelTimeMatrix.createOmxSkimMatrix(completeTransfersPtTime, locationList, omxPtFileName, "mat1");
-
-            omxPtFileName = rb.getString("pt.in.vehicle.skim.file") + simulationName + "Complete.omx";
-            TravelTimeMatrix.createOmxSkimMatrix(completeInVehiclePtTime, locationList, omxPtFileName, "mat1");
-
-            omxPtFileName = rb.getString("pt.in.vehicle.skim.file") + simulationName + "Complete.omx";
-            TravelTimeMatrix.createOmxSkimMatrix(completeInVehiclePtTime, locationList, omxPtFileName, "mat1");
-        }
 
 
         if (analyzeAccessibility) {
