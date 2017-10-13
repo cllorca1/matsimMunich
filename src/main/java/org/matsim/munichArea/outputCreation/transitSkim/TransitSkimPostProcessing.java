@@ -51,37 +51,16 @@ public class TransitSkimPostProcessing {
         ReadZonesServedByTransit servedZoneReader = new ReadZonesServedByTransit(munich);
         ArrayList<Location> servedZoneList = servedZoneReader.readZonesServedByTransit(locationList);
 
+
+        //fill matrices for non-served locations
         TransitSkimPostProcessing postProcess = new TransitSkimPostProcessing(munich, locationList, servedZoneList);
-        postProcess.postProcessTransitSkims();
+        postProcess.fillTransitSkims();
+        postProcess.writeFilledMatrices();
 
-        Matrix completeTotalPtTime = postProcess.getTotalTimeCompleteMatrix();
-        Matrix completeInTransitTotalPtTime = postProcess.getInTransitCompleteMatrix();
-        Matrix completeAccessTimePtTime = postProcess.getAccessTimeCompleteMatrix();
-        Matrix completeEgressTimePtTime = postProcess.getEgressTimeCompleteMatrix();
-        Matrix completeTransfersPtTime = postProcess.getTransfersCompleteMatrix();
-        Matrix completeInVehiclePtTime = postProcess.getInVehicleTimeCompleteMatrix();
 
-        String omxPtFileName = munich.getString("pt.total.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(completeTotalPtTime, locationList, omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.in.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(completeInTransitTotalPtTime, locationList, omxPtFileName, "mat1");
-
-        omxPtFileName = munich.getString("pt.access.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(completeAccessTimePtTime, locationList, omxPtFileName, "mat1");
-
-        omxPtFileName = munich.getString("pt.egress.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(completeEgressTimePtTime, locationList, omxPtFileName, "mat1");
-
-        omxPtFileName = munich.getString("pt.transfer.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(completeTransfersPtTime, locationList, omxPtFileName, "mat1");
-
-        omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(completeInVehiclePtTime, locationList, omxPtFileName, "mat1");
-
-        omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(completeInVehiclePtTime, locationList, omxPtFileName, "mat1");
     }
+
 
 
     public TransitSkimPostProcessing(ResourceBundle munich, ArrayList<Location> locationList, ArrayList<Location> servedZoneList) {
@@ -91,7 +70,9 @@ public class TransitSkimPostProcessing {
 
     }
 
-    public void postProcessTransitSkims() {
+
+
+    public void fillTransitSkims() {
         SkimMatrixReader skimReader = new SkimMatrixReader();
         //read original matrices
         inTransit = skimReader.readSkim(munich.getString("pt.in.skim.file") + simulationName + ".omx", "mat1");
@@ -189,27 +170,30 @@ public class TransitSkimPostProcessing {
         });
     }
 
-    public Matrix getInTransitCompleteMatrix() {
-        return inTransitCompleteMatrix;
+    public void writeFilledMatrices(){
+
+        String omxPtFileName = munich.getString("pt.total.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(totalTimeCompleteMatrix, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.in.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(inTransitCompleteMatrix, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.access.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(accessTimeCompleteMatrix, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.egress.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(egressTimeCompleteMatrix, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.transfer.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(transfersCompleteMatrix, locationList, omxPtFileName, "mat1");
+
+        omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + simulationName + "Complete.omx";
+        TravelTimeMatrix.createOmxSkimMatrix(inVehicleTimeCompleteMatrix, locationList, omxPtFileName, "mat1");
+
+
+
     }
 
-    public Matrix getTotalTimeCompleteMatrix() {
-        return totalTimeCompleteMatrix;
-    }
 
-    public Matrix getAccessTimeCompleteMatrix() {
-        return accessTimeCompleteMatrix;
-    }
 
-    public Matrix getEgressTimeCompleteMatrix() {
-        return egressTimeCompleteMatrix;
-    }
-
-    public Matrix getTransfersCompleteMatrix() {
-        return transfersCompleteMatrix;
-    }
-
-    public Matrix getInVehicleTimeCompleteMatrix() {
-        return inVehicleTimeCompleteMatrix;
-    }
 }
