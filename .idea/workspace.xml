@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a15e1a17-0473-40da-a7d8-a5224804c518" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/ODTripAnalyzer.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitEventHandler.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/PtEventHandler.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimCreator.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitModeMatrixPostProcessing.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java" />
     </list>
     <ignored path="MATSim.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1727,7 +1723,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TransitSkimCreator.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TransitSkimCreator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimCreator.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="140">
@@ -1753,6 +1749,28 @@
             <state relative-caret-position="259">
               <caret line="143" column="0" lean-forward="true" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TransitSkimPostProcessing.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="48">
+              <caret line="100" column="55" lean-forward="false" selection-start-line="100" selection-start-column="47" selection-end-line="100" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TransitModeMatrixPostProcessing.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitModeMatrixPostProcessing.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1823,7 +1841,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/ActivityStartEndAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/AgentTripDurationEventAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/ActivityStartEndAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/tripDurationAnalyzer/AllModesTripAnalyzer.java" />
@@ -1865,7 +1882,6 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/ReadZonesServedByTransit.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/PtEventHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/multimodal/AddCyclingHighway.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" />
@@ -1874,6 +1890,8 @@
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitEventsAfterRun.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitEventHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitModeMatrixPostProcessing.java" />
       </list>
     </option>
   </component>
@@ -2086,7 +2104,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MatsimExecuter">
+  <component name="RunManager" selected="Application.TransitSkimPostProcess">
     <configuration name="AccCalc" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="org.matsim.munichArea.outputCreation.accessibilityCalculator.AcessCalculator" />
@@ -2134,6 +2152,25 @@
       <option name="MAIN_CLASS_NAME" value="org.matsim.munichArea.configMatsim.networkTools.NetworkEditor" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="munich.properties" />
+      <option name="WORKING_DIRECTORY" value="file://C:/models/munich" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="MATSim" />
+      <envs />
+    </configuration>
+    <configuration name="CleanMatricesOfDiversePtModes" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="org.matsim.munichArea.configMatsim.planCreation.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="org.matsim.munichArea.outputCreation.transitSkim.TransitModeMatrixPostProcessing" />
+      <option name="VM_PARAMETERS" value="-Xmx55G" />
+      <option name="PROGRAM_PARAMETERS" value="C:\models\munich\munich.properties" />
       <option name="WORKING_DIRECTORY" value="file://C:/models/munich" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -2542,7 +2579,7 @@
       </MavenSettings>
       <method />
     </configuration>
-    <list size="14">
+    <list size="15">
       <item index="0" class="java.lang.String" itemvalue="Application.MunichNetwork" />
       <item index="1" class="java.lang.String" itemvalue="Application.StudyArea" />
       <item index="2" class="java.lang.String" itemvalue="Application.BayernBigRoads" />
@@ -2554,9 +2591,10 @@
       <item index="8" class="java.lang.String" itemvalue="Application.AnalyzeAllModeTripDuration" />
       <item index="9" class="java.lang.String" itemvalue="Application.BuildRoads" />
       <item index="10" class="java.lang.String" itemvalue="Application.TransitSkimPostProcess" />
-      <item index="11" class="java.lang.String" itemvalue="Application.MatsimExecuter" />
-      <item index="12" class="java.lang.String" itemvalue="Application.RunNetworkEditor" />
-      <item index="13" class="java.lang.String" itemvalue="Application.NetworkCleaner" />
+      <item index="11" class="java.lang.String" itemvalue="Application.CleanMatricesOfDiversePtModes" />
+      <item index="12" class="java.lang.String" itemvalue="Application.MatsimExecuter" />
+      <item index="13" class="java.lang.String" itemvalue="Application.RunNetworkEditor" />
+      <item index="14" class="java.lang.String" itemvalue="Application.NetworkCleaner" />
     </list>
     <recent_temporary>
       <list size="3">
@@ -2579,20 +2617,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1473665247616</updated>
-    </task>
-    <task id="LOCAL-00016" summary="rename package">
-      <created>1481555869149</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1481555869149</updated>
-    </task>
-    <task id="LOCAL-00017" summary="rename package">
-      <created>1481556055668</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1481556055668</updated>
     </task>
     <task id="LOCAL-00018" summary="added pt + auto travel times compatibility&#10;set up TripModeChange strategy ON">
       <created>1482165003295</created>
@@ -2923,7 +2947,21 @@
       <option name="project" value="LOCAL" />
       <updated>1507878462222</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="transit skims collecting distance too - not validated">
+      <created>1507893223510</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1507893223510</updated>
+    </task>
+    <task id="LOCAL-00066" summary="reorganize class">
+      <created>1507893759568</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1507893759568</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2937,7 +2975,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998884" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2947,7 +2984,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33044422" sideWeight="0.15" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18333334" sideWeight="0.49317408" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33044422" sideWeight="0.85" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33044422" sideWeight="0.85" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32887402" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32887402" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2957,7 +2994,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48754063" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48754063" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -3015,8 +3052,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="multimodal now can read csv with header, first attempt to add manually links" />
-    <MESSAGE value="multimodal: added a tool to create cycling highways" />
     <MESSAGE value="fail getautotraveldistance corrected" />
     <MESSAGE value="re-structured packages" />
     <MESSAGE value="rename package for AVs" />
@@ -3040,7 +3075,9 @@
     <MESSAGE value="added pt route matrix computation" />
     <MESSAGE value="minor changes to use v10" />
     <MESSAGE value="skim post processing separated from main class" />
-    <option name="LAST_COMMIT_MESSAGE" value="skim post processing separated from main class" />
+    <MESSAGE value="transit skims collecting distance too - not validated" />
+    <MESSAGE value="reorganize class" />
+    <option name="LAST_COMMIT_MESSAGE" value="reorganize class" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3066,13 +3103,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/automated/RunAVExample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="36" lean-forward="false" selection-start-line="23" selection-start-column="36" selection-end-line="23" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/lang/Object.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="298">
@@ -3210,14 +3240,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-15">
-          <caret line="71" column="9" lean-forward="false" selection-start-line="71" selection-start-column="9" selection-end-line="71" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/matsim/0.10.0-SNAPSHOT/matsim-0.10.0-20171011.223023-240.jar!/org/matsim/core/router/Dijkstra.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -3258,14 +3280,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="552">
           <caret line="232" column="101" lean-forward="false" selection-start-line="232" selection-start-column="78" selection-end-line="232" selection-end-column="101" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="23" column="44" lean-forward="true" selection-start-line="23" selection-start-column="44" selection-end-line="23" selection-end-column="44" />
           <folding />
         </state>
       </provider>
@@ -3487,6 +3501,32 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
           <caret line="189" column="0" lean-forward="false" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitModeMatrixPostProcessing.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="100" column="55" lean-forward="false" selection-start-line="100" selection-start-column="47" selection-end-line="100" selection-end-column="55" />
           <folding />
         </state>
       </provider>
