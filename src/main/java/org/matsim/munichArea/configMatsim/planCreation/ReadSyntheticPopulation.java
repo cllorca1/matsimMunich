@@ -95,7 +95,7 @@ public class ReadSyntheticPopulation {
         SkimMatrixReader skmReader1 = new SkimMatrixReader();
         autoTravelTime = skmReader1.readSkim(rb.getString("base.skim.file"), "mat1");
         SkimMatrixReader skmReader2 = new SkimMatrixReader();
-        travelDistances = skmReader2.readSkim(rb.getString("out.skim.auto.dist.base") + "Test.omx", "mat1");
+        travelDistances = skmReader2.readSkim(rb.getString("out.skim.auto.dist.base") + ".omx", "mat1");
         matsimConfig = ConfigUtils.createConfig();
         matsimScenario = ScenarioUtils.createScenario(matsimConfig);
         matsimNetwork = matsimScenario.getNetwork();
