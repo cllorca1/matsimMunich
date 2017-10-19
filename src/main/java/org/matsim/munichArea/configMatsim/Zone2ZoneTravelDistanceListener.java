@@ -24,6 +24,7 @@ import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.router.util.TravelTime;
 import org.matsim.munichArea.outputCreation.EuclideanDistanceCalculator;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.utils.leastcostpathtree.LeastCostPathTree;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
@@ -93,7 +94,6 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
 
             ;
 
-
             for (Location loc : locationList) {
                 Coord originCoord = new Coord(loc.getX(), loc.getY());
                 Link originLink = NetworkUtils.getNearestLink(network, originCoord);
@@ -103,100 +103,36 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
 
             //int counter = 0;
 
-
             long startTime = System.currentTimeMillis();
-
             for (Location originZone : locationList) { // going over all origin zones
-
                 Node originNode = zoneCalculationNodesMap.get(originZone.getId());
                 //leastCoaptPathTree.calculate(network, originNode, departureTime);
 
-
                 //Map<Id<Node>, LeastCostPathTree.NodeData> tree = leastCoastPathTree.getTree();
+                DijkstraTree dijkstra = new DijkstraTree(network, travelDisutility, travelTime);
+                dijkstra.calcLeastCostPathTree(originNode, departureTime);
 
                 locationList.parallelStream().forEach((Location destinationZone) -> {
-
 
                     //for (Location destinationZone : locationList) { // going over all destination zones
                     //nex line to fill only half matrix and use half time
                     if (originZone.getId() <= destinationZone.getId()) {
                         //alternative 1
                         //Node destinationNode = zoneCalculationNodesMap.get(destinationZone.getId());
-                        Person person = new Person() {
-                            @Override
-                            public Attributes getAttributes() {
-                                return null;
-                            }
-
-                            @Override
-                            public Map<String, Object> getCustomAttributes() {
-                                return null;
-                            }
-
-                            @Override
-                            public List<? extends Plan> getPlans() {
-                                return null;
-                            }
-
-                            @Override
-                            public boolean addPlan(Plan plan) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean removePlan(Plan plan) {
-                                return false;
-                            }
-
-                            @Override
-                            public Plan getSelectedPlan() {
-                                return null;
-                            }
-
-                            @Override
-                            public void setSelectedPlan(Plan plan) {
-
-                            }
-
-                            @Override
-                            public Plan createCopyOfSelectedPlanAndMakeSelected() {
-                                return null;
-                            }
-
-                            @Override
-                            public Id<Person> getId() {
-                                return null;
-                            }
-                        };
-                        Vehicle vehicle = new Vehicle() {
-                            @Override
-                            public VehicleType getType() {
-                                return null;
-                            }
-
-                            @Override
-                            public Id<Vehicle> getId() {
-                                return null;
-                            }
-                        };
-
-                        //original
 //                      double arrivalTime = leastCoastPathTree.getTree().get(zoneCalculationNodesMap.get(destinationZone.getId()).getId()).getTime();
                         Node destinationNode = zoneCalculationNodesMap.get(destinationZone.getId());
-
                         //with the next if tense it is possible to limit the distance calculation to certain threshold, over it --> eucl.dist.
                         float euclideanDistance = euclideanDistanceCalculator.getDistanceFrom(originZone, destinationZone);
                         if (euclideanDistance < 5e3) {
 
 
-                            Dijkstra dijkstra = new DijkstraTree(network, travelDisutility, travelTime);
-                            LeastCostPathCalculator.Path path = dijkstra.calcLeastCostPath(originNode, destinationNode, departureTime, person, vehicle);
+                            //Dijkstra dijkstra = new Dijkstra(network, travelDisutility, travelTime);
+                            LeastCostPathCalculator.Path path = dijkstra.getLeastCostPath(destinationNode);
                             float distance = 0;
                             for (Link link : path.links) {
                                 distance += link.getLength();
                             }
                             ;
-
                             //double arrivalTime = tree.get(destinationNode.getId()).getTime();
                             //congested car travel times in minutes
                             //float congestedTravelTimeMin = (float) ((arrivalTime - departureTime) / 60.);
