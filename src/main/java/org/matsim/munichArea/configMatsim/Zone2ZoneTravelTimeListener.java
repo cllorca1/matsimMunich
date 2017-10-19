@@ -105,63 +105,6 @@ public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
                     //for (Location destinationZone : locationList) { // going over all destination zones
                     //nex line to fill only half matrix and use half time
                     if (originZone.getId() <= destinationZone.getId()) {
-                        //alternative 1
-                        //Node destinationNode = zoneCalculationNodesMap.get(destinationZone.getId());
-/*                    Person person = new Person() {
-                        @Override
-                        public Map<String, Object> getCustomAttributes() {
-                            return null;
-                        }
-
-                        @Override
-                        public List<? extends Plan> getPlans() {
-                            return null;
-                        }
-
-                        @Override
-                        public boolean addPlan(Plan plan) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean removePlan(Plan plan) {
-                            return false;
-                        }
-
-                        @Override
-                        public Plan getSelectedPlan() {
-                            return null;
-                        }
-
-                        @Override
-                        public void setSelectedPlan(Plan plan) {
-
-                        }
-
-                        @Override
-                        public Plan createCopyOfSelectedPlanAndMakeSelected() {
-                            return null;
-                        }
-
-                        @Override
-                        public Id<Person> getId() {
-                            return null;
-                        }
-                    };
-                    Vehicle vehicle = new Vehicle() {
-                        @Override
-                        public VehicleType getType() {
-                            return null;
-                        }
-
-                        @Override
-                        public Id<Vehicle> getId() {
-                            return null;
-                        }
-                    };*/
-                        //LeastCostPathCalculator.Path path = dijkstra.calcLeastCostPath(originNode,destinationNode,departureTime, person, vehicle);
-                        //original
-//                    double arrivalTime = leastCoastPathTree.getTree().get(zoneCalculationNodesMap.get(destinationZone.getId()).getId()).getTime();
                         Node destinationNode = zoneCalculationNodesMap.get(destinationZone.getId());
 
                         double arrivalTime = tree.get(destinationNode.getId()).getTime();
