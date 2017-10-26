@@ -21,7 +21,7 @@ import org.matsim.munichArea.outputCreation.accessibilityCalculator.Accessibilit
 import org.matsim.munichArea.configMatsim.planCreation.Location;
 import com.pb.common.matrix.Matrix;
 
-import static org.matsim.munichArea.MatsimExecuter.rb;
+
 
 
 /**
@@ -31,9 +31,14 @@ public class MatsimPopulationCreator {
 
     public static boolean ASC = true;
     public static boolean DESC = false;
+    private ResourceBundle rb;
 
     private Population matsimPopulation;
     private Map<Id, PtSyntheticTraveller> ptSyntheticTravellerMap;
+
+    public MatsimPopulationCreator(ResourceBundle rb) {
+        this.rb = rb;
+    }
 
     public void createMatsimPopulation(ArrayList<Location> locationList, /*HouseholdDataManager householdDataManager,*/ int year,
                                                     /*Map<Integer,SimpleFeature>zoneFeatureMap, String crs, */ boolean writePopulation,

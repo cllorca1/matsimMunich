@@ -157,7 +157,7 @@ public class MatsimExecuter {
                             readSp.printSyntheticPlansList("./sp/plansCycle.csv" , 2);
                             readSp.printSyntheticPlansList("./sp/plansTransit.csv" , 3);
                         } else{
-                            MatsimPopulationCreator matsimPopulationCreator = new MatsimPopulationCreator();
+                            MatsimPopulationCreator matsimPopulationCreator = new MatsimPopulationCreator(rb);
                             matsimPopulationCreator.createMatsimPopulation(locationList, 2013, true, tripScalingFactor);
                             matsimPopulation= matsimPopulationCreator.getMatsimPopulation();
                             if (ptSkimsFromEvents) {
