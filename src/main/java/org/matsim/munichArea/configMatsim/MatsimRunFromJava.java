@@ -66,14 +66,9 @@ public class MatsimRunFromJava {
         transitModes.add("pt");
         config.transit().setTransitModes(transitModes);
 
-
-        // Plans
-        //		config.plans().setInputFile(inputPlansFile);
-
         // Simulation
-        //		config.qsim().setFlowCapFactor(0.01);
+
         config.qsim().setFlowCapFactor(flowCapacityFactor);
-        //		config.qsim().setStorageCapFactor(0.018);
         config.qsim().setStorageCapFactor(storageCapacityFactor);
         config.qsim().setRemoveStuckVehicles(false);
 
@@ -81,10 +76,9 @@ public class MatsimRunFromJava {
         config.qsim().setEndTime(24*60*60);
 
         //todo test the direction of the scaling of the stuck time!!
-        config.qsim().setStuckTime(10 * scaleFactor);
+        config.qsim().setStuckTime(10);
 
         // Controller
-        //		String siloRunId = "run_09";
         String runId = siloRunId + "_" + year;
         String outputDirectory = outputDirectoryRoot;
         config.controler().setRunId(runId);
@@ -154,17 +148,12 @@ public class MatsimRunFromJava {
 
         config.vspExperimental().setVspDefaultsCheckingLevel(VspExperimentalConfigGroup.VspDefaultsCheckingLevel.warn);
 
-        // Scenario //chose between population file and population creator in java
+        // Scenario
         MutableScenario scenario = (MutableScenario) ScenarioUtils.loadScenario(config);
-//        		PopulationReader populationReader = new PopulationReaderMatsimV5(scenario);
-//        		populationReader.readFile("./input/population_2013.xml");
-
-
         scenario.setPopulation(population);
 
         // Initialize controller
         final Controler controler = new Controler(scenario);
-
 
         Zone2ZoneTravelTimeListener zone2zoneTravelTimeListener = new Zone2ZoneTravelTimeListener(
                 controler, scenario.getNetwork(), config.controler().getLastIteration(),
@@ -181,7 +170,6 @@ public class MatsimRunFromJava {
 
         if (autoTimeSkims){
             controler.addControlerListener(zone2zoneTravelTimeListener);
-            // yyyyyy feedback will not work without the above, will it?  kai, apr'16
         }
 
         // Run controller
@@ -190,7 +178,6 @@ public class MatsimRunFromJava {
         autoTravelTime = zone2zoneTravelTimeListener.getAutoTravelTime();
         autoTravelDistance = zone2ZoneTravelDistanceListener.getAutoTravelDistance();
 
-        // Return collected travel times
 
     }
 

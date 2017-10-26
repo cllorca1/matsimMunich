@@ -2,21 +2,19 @@ package org.matsim.munichArea;
 
 import com.pb.common.matrix.Matrix;
 import com.pb.common.util.ResourceUtil;
-import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.munichArea.configMatsim.MatsimRunFromJava;
 import org.matsim.munichArea.configMatsim.createDemandPt.MatsimPopulationCreator;
-import org.matsim.munichArea.configMatsim.createDemandPt.PtSyntheticTraveller;
 import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
 import org.matsim.munichArea.configMatsim.planCreation.ReadSyntheticPopulation;
 import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
+
+//class to run single matsim scenarios and collect travel time matrices (road network)
 
 public class RunMATSim {
 
@@ -26,7 +24,6 @@ public class RunMATSim {
 
         File propFile = new File(args[0]);
         rb = ResourceUtil.getPropertyBundle(propFile);
-
 
         boolean autoTimeSkims = ResourceUtil.getBooleanProperty(rb, "skim.auto.times");
         boolean autoDistSkims = ResourceUtil.getBooleanProperty(rb, "skim.auto.dist");
@@ -39,11 +36,9 @@ public class RunMATSim {
 
         boolean useSp = ResourceUtil.getBooleanProperty(rb, "use.sp");
 
-
         //read centroids and get list of locations
         CentroidsToLocations centroidsToLocations = new CentroidsToLocations(rb);
         ArrayList<Location> locationList = centroidsToLocations.readCentroidList();
-
 
         //get parameters for single run
         double[] tripScalingFactorVector = ResourceUtil.getDoubleArray(rb, "trip.scaling.factor");
