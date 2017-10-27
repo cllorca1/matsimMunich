@@ -23,6 +23,7 @@ import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.router.util.TravelTime;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.outputCreation.EuclideanDistanceCalculator;
 import org.matsim.utils.leastcostpathtree.LeastCostPathTree;
 import org.matsim.vehicles.Vehicle;
 
@@ -39,10 +40,9 @@ public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
     //private Map<Integer, SimpleFeature> zoneFeatureMap;
     private ArrayList<Location> locationList;
     private int departureTime;
-    private int numberOfCalcPoints;
+    private int maxNumberOfCalcPoints;
     //	private CoordinateTransformation ct;
     private Matrix autoTravelTime;
-
 
 
     public Zone2ZoneTravelTimeListener(Controler controler, Network network,
@@ -50,14 +50,14 @@ public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
                                        ArrayList<Location> locationList,
                                        int timeOfDay,
                                        int numberOfCalcPoints //CoordinateTransformation ct,
-                                       ) {
+    ) {
         this.controler = controler;
         this.network = network;
         this.finalIteration = finalIteration;
         //this.zoneFeatureMap = zoneFeatureMap;
         this.locationList = locationList;
         this.departureTime = timeOfDay;
-        this.numberOfCalcPoints = numberOfCalcPoints;
+        this.maxNumberOfCalcPoints = numberOfCalcPoints;
 //		this.ct = ct;
     }
 
@@ -65,71 +65,75 @@ public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
     @Override
     public void notifyIterationEnds(IterationEndsEvent event) {
         if (event.getIteration() == this.finalIteration) {
-
+            float startTime = System.currentTimeMillis();
+            EuclideanDistanceCalculator euclideanDistanceCalculator = new EuclideanDistanceCalculator();
             log.info("Starting to calculate average zone-to-zone travel times based on MATSim.");
             TravelTime travelTime = controler.getLinkTravelTimes();
             TravelDisutility travelDisutility = controler.getTravelDisutilityFactory().createTravelDisutility(travelTime);
 //            TravelDisutility travelTimeAsTravelDisutility = new MyTravelTimeDisutility(controler.getLinkTravelTimes());
-
-            LeastCostPathTree leastCoastPathTree = new LeastCostPathTree(travelTime, travelDisutility);
-
 //            Dijkstra dijkstra = new Dijkstra(network, travelTimeAsTravelDisutility, travelTime);
 
             autoTravelTime = new Matrix(locationList.size(), locationList.size());
 
-            //Map to assign a node to each zone
-            Map<Integer, Node> zoneCalculationNodesMap = new HashMap<>();
+            //Maps to assign a node/tree to each zone
+            Map<Integer, ArrayList<Node>> nodeMap = new HashMap<>();
+            Map<Integer, ArrayList<Map<Id<Node>, LeastCostPathTree.NodeData>>> treeMap = new HashMap<>();
 
-            //TODO re-clean the network will remove all pt links and will make possible getting auto travel times
-            //NetworkCleaner networkCleaner = new NetworkCleaner();
-            //networkCleaner.run(network);
+            locationList.parallelStream().forEach(loc -> {
+                //for (Location loc : locationList) {
+                LeastCostPathTree leastCoastPathTree = new LeastCostPathTree(travelTime, travelDisutility);
+                ArrayList<Map<Id<Node>, LeastCostPathTree.NodeData>> treesByZone = new ArrayList<>();
+                ArrayList<Node> nodesByZone = new ArrayList<>();
+                for (int nnode = 0; nnode < maxNumberOfCalcPoints; nnode++) {
+                    Coord originCoord = new Coord(loc.getX() + (Math.random() - 1) * loc.getSize(), loc.getY() + (Math.random() - 1) * loc.getSize());
+                    Node originNode = NetworkUtils.getNearestLink(network, originCoord).getFromNode();
+                    nodesByZone.add(originNode);
+                    leastCoastPathTree.calculate(network, originNode, departureTime);
+                    Map<Id<Node>, LeastCostPathTree.NodeData> tree = leastCoastPathTree.getTree();
+                    treesByZone.add(tree);
+                }
+                treeMap.put(loc.getId(), treesByZone);
+                nodeMap.put(loc.getId(), nodesByZone);
+                //log.info("assigned nodes and trees for zone: " + loc.getId());
+                //}
+            });
 
-            for (Location loc : locationList) {
-                Coord originCoord = new Coord(loc.getX(), loc.getY());
-                Link originLink = NetworkUtils.getNearestLink(network, originCoord);
-                Node originNode = originLink.getFromNode();
-                zoneCalculationNodesMap.put(loc.getId(), originNode);
-            }
+            float duration = (System.currentTimeMillis() - startTime) / 1000 / 60;
+            log.info("assigned nodes and trees in " + duration + " minutes");
 
-            int counter = 0;
-
-            long startTime = System.currentTimeMillis();
-
+            //locationList.parallelStream().forEach((Location originZone) -> {
             for (Location originZone : locationList) { // going over all origin zones
-
-                Node originNode = zoneCalculationNodesMap.get(originZone.getId());
-                leastCoastPathTree.calculate(network, originNode, departureTime);
-                Map<Id<Node>, LeastCostPathTree.NodeData> tree = leastCoastPathTree.getTree();
-
-                locationList.parallelStream().forEach((Location destinationZone) -> {
-                    //for (Location destinationZone : locationList) { // going over all destination zones
-                    //nex line to fill only half matrix and use half time
+                locationList.parallelStream().forEach(destinationZone -> {
                     if (originZone.getId() <= destinationZone.getId()) {
-                        Node destinationNode = zoneCalculationNodesMap.get(destinationZone.getId());
 
-                        double arrivalTime = tree.get(destinationNode.getId()).getTime();
-                        //congested car travel times in minutes
-                        float congestedTravelTimeMin = (float) ((arrivalTime - departureTime) / 60.);
-                        //float congestedTravelTimeMin = (float) (path.travelTime/60);
-                        autoTravelTime.setValueAt(originZone.getId(), destinationZone.getId(), congestedTravelTimeMin);
+                        //for (Location destinationZone : locationList) {
+                        //here could check the number of calculated points depending on the distance if wanted to keep a better accuracy
+                        float congestedTravelTimeMin = 0;
+                        for (int i = 0; i < maxNumberOfCalcPoints; i++) {
+                            for (int j = 0; j < maxNumberOfCalcPoints; j++) {
+                                Map<Id<Node>, LeastCostPathTree.NodeData> tree = treeMap.get(originZone.getId()).get(i);
+                                Node destinationNode = nodeMap.get(destinationZone.getId()).get(j);
+                                double arrivalTime = tree.get(destinationNode.getId()).getTime();
+                                //congested car travel times in minutes
+                                congestedTravelTimeMin += (float) ((arrivalTime - departureTime) / 60.);
+                            }
+                        }
+                        autoTravelTime.setValueAt(originZone.getId(), destinationZone.getId(), congestedTravelTimeMin / maxNumberOfCalcPoints / maxNumberOfCalcPoints);
                         //if only done half matrix need to add next line
-                        autoTravelTime.setValueAt(destinationZone.getId(), originZone.getId(), congestedTravelTimeMin);
-
-                       /* counter++;
-                        if (counter % 100000 == 0) {
-                            log.info("pairs already calculated = " + counter);
-                        }*/
+                        autoTravelTime.setValueAt(destinationZone.getId(), originZone.getId(), congestedTravelTimeMin / maxNumberOfCalcPoints / maxNumberOfCalcPoints);
 
                     }
-                    //}
                 });
-                log.info("Completed origin zone: " + originZone.getId());
-           }
+//              }
+                //log.info("Completed origin zone: " + originZone.getId());
+            }
+//          });
+            duration = (System.currentTimeMillis() - startTime) / 1000 / 60;
+            log.info("Completed in: " + duration + " minutes");
 
-
-            long duration = (System.currentTimeMillis() - startTime)/1000;
-            log.info("Completed in: " + duration);
         }
+
+
     }
 
 
@@ -152,12 +156,12 @@ public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
         public double getLinkMinimumTravelDisutility(Link link) {
             return link.getLength() / link.getFreespeed(); // minimum travel time
         }
+
     }
 
     public Matrix getAutoTravelTime() {
         return autoTravelTime;
     }
-
 
 
     /**

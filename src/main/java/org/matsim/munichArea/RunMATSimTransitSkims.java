@@ -28,8 +28,6 @@ public class RunMATSimTransitSkims {
         File propFile = new File(args[0]);
         rb = ResourceUtil.getPropertyBundle(propFile);
 
-        boolean createNetwork = ResourceUtil.getBooleanProperty(rb, "create.network");
-
         boolean autoTimeSkims = ResourceUtil.getBooleanProperty(rb, "skim.auto.times");
         boolean autoDistSkims = ResourceUtil.getBooleanProperty(rb, "skim.auto.dist");
         boolean ptSkimsFromEvents = ResourceUtil.getBooleanProperty(rb, "skim.pt.events");

@@ -83,7 +83,7 @@ public class RunMATSim {
 
         //run Matsim and get travel times
         MatsimRunFromJava matsimRunner = new MatsimRunFromJava(rb);
-        matsimRunner.runMatsim(hourOfDay * 60 * 60, 1,
+        matsimRunner.runMatsim(hourOfDay * 60 * 60, Integer.parseInt(rb.getString("max.calc.points")),
                 networkFile, matsimPopulation, year,
                 TransformationFactory.WGS84, iterations, simulationName,
                 outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor, locationList, autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile);
