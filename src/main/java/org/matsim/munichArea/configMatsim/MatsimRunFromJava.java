@@ -44,7 +44,8 @@ public class MatsimRunFromJava {
                                                                                    double flowCapacityFactor,
                                                                                    double storageCapacityFactor,
                                                                                    ArrayList<Location> locationList, boolean autoTimeSkims, boolean autoDistSkims,
-                                                                                   String scheduleFile, String vehicleFile) {
+                                                                                   String scheduleFile, String vehicleFile, float stuckTime,
+                                                                                   boolean useTransit) {
         // String populationFile, int year, String crs, int numberOfIterations) {
 
 
@@ -61,7 +62,7 @@ public class MatsimRunFromJava {
         //public transport
         config.transit().setTransitScheduleFile(scheduleFile);
         config.transit().setVehiclesFile(vehicleFile);
-        config.transit().setUseTransit(Boolean.parseBoolean(rb.getString("use.transit")));
+        config.transit().setUseTransit(useTransit);
         Set<String> transitModes = new TreeSet<>();
         transitModes.add("pt");
         config.transit().setTransitModes(transitModes);
@@ -75,8 +76,7 @@ public class MatsimRunFromJava {
         config.qsim().setStartTime(0);
         config.qsim().setEndTime(24*60*60);
 
-        //todo test the direction of the scaling of the stuck time!!
-        config.qsim().setStuckTime(10);
+        config.qsim().setStuckTime(stuckTime);
 
         // Controller
         String runId = siloRunId + "_" + year;

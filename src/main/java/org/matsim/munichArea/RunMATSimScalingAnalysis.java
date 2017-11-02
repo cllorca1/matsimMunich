@@ -101,13 +101,19 @@ public class RunMATSimScalingAnalysis {
 
                 }
 
+                //calculate stuck time based on assumptions for scaling - default = 10
+                double stuckTime;
+                //scale up:
+                stuckTime = 10 / tripScalingFactor;
+
 
                 //get travel times and run Matsim
                 MatsimRunFromJava matsimRunner = new MatsimRunFromJava(rb);
                 matsimRunner.runMatsim(hourOfDay * 60 * 60, 1,
                         networkFile, matsimPopulation, year,
                         TransformationFactory.WGS84, iterations, simulationName,
-                        outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor, locationList, autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile);
+                        outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor, locationList,
+                        autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile, (float) stuckTime, false);
 
                 if (autoTimeSkims) autoTravelTime = matsimRunner.getAutoTravelTime();
                 if (autoDistSkims) autoTravelDistance = matsimRunner.getAutoTravelDistance();

@@ -86,7 +86,8 @@ public class RunMATSim {
         matsimRunner.runMatsim(hourOfDay * 60 * 60, Integer.parseInt(rb.getString("max.calc.points")),
                 networkFile, matsimPopulation, year,
                 TransformationFactory.WGS84, iterations, simulationName,
-                outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor, locationList, autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile);
+                outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor, locationList, autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile,
+                10, Boolean.parseBoolean(rb.getString("use.transit")));
 
         if (autoTimeSkims) autoTravelTime = matsimRunner.getAutoTravelTime();
         if (autoDistSkims) autoTravelDistance = matsimRunner.getAutoTravelDistance();
