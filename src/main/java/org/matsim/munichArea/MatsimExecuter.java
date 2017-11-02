@@ -173,7 +173,7 @@ public class MatsimExecuter {
                                 networkFile, matsimPopulation, year,
                                 TransformationFactory.WGS84, iterations, simulationName,
                                 outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor , locationList,
-                                autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile, 10);
+                                autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile, 10, Boolean.parseBoolean(rb.getString("use.transit")));
 
                         if (autoTimeSkims) autoTravelTime = matsimRunner.getAutoTravelTime();
                         if (autoDistSkims) autoTravelDistance = matsimRunner.getAutoTravelDistance();
