@@ -2,6 +2,7 @@ package org.matsim.munichArea.configMatsim.planCreation;
 
 
 import org.apache.log4j.Logger;
+import org.matsim.munichArea.Util;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -45,12 +46,12 @@ public class CentroidsToLocations {
             String headerLine = bufferReader.readLine();
             String[] header = headerLine.split("\\s*,\\s*");
 
-            posId = findPositionInArray("id", header);
-            posX = findPositionInArray("x", header);
-            posY = findPositionInArray("y", header);
-            posPop = findPositionInArray("population", header);
-            posEmp = findPositionInArray("employment", header);
-            posSize = findPositionInArray("size", header);
+            posId = Util.findPositionInArray("id", header);
+            posX = Util.findPositionInArray("x", header);
+            posY = Util.findPositionInArray("y", header);
+            posPop =  Util.findPositionInArray("population", header);
+            posEmp =  Util.findPositionInArray("employment", header);
+            posSize =  Util.findPositionInArray("size", header);
 
             while ((line = bufferReader.readLine()) != null ) {
                 Location location = CSVtoLocation(line);
@@ -96,14 +97,7 @@ public class CentroidsToLocations {
         }
     }
 
-    public static int findPositionInArray(String element, String[] arr) {
-        // return index position of element in array arr
-        int ind = -1;
-        for (int a = 0; a < arr.length; a++) if (arr[a].equalsIgnoreCase(element)) ind = a;
-        if (ind == -1) logger.error("Could not find element " + element +
-                " in array (see method <findPositionInArray> in class <SiloUtil>");
-        return ind;
-    }
+
 
 
 }

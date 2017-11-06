@@ -61,14 +61,6 @@ public class ReadSyntheticPopulation {
 
     private int[][] frequencies = new int[60][4];
 
-    //maps to store duration of H2W trips
-//    private Map<Integer, Double> jobArrivalsMap = new HashMap<>();
-//    private Map<Integer, Double> jobDeparturesMap = new HashMap<>();
-//    private Map<Integer, Double> otherDeparturesMap = new HashMap<>();
-//    private Map<Integer, Double> otherArrivalsMap = new HashMap<>();
-//    private Map<Integer, Float> jobDistances = new HashMap<>();
-//    private Map<Integer, Float> otherDistances = new HashMap<>();
-
     Random rnd = new Random();
 
     private float b_auto;
@@ -115,8 +107,8 @@ public class ReadSyntheticPopulation {
         oDistanceProb = oDistanceDistribution.getColumnAsDouble("H20_length");
         oTripRatePerPerson = Double.parseDouble(rb.getString("mid.other.trip.rate"));
         oTripRateDispersion = 1; //this parameter is needed to set to 0 the number of H2O trips
-        occupancyW = new double[] {1,1,1,1};
-        occupancyO = new double[] {1,1,1,1};
+        occupancyW = new double[]{1, 1, 1, 1};
+        occupancyO = new double[]{1, 1, 1, 1};
         occupancyO[0] = Double.parseDouble(rb.getString("mid.other.car.occup"));
         occupancyW[0] = Double.parseDouble(rb.getString("mid.work.car.occup"));
         h2wTripCount = 0;
@@ -138,7 +130,7 @@ public class ReadSyntheticPopulation {
     public void demandFromSyntheticPopulation(float avPenetrationRate, float scalingFactor, String plansFileName) {
 
         String fileName = rb.getString("syn.pop.file");
-        String cvsSplitBy = ",";
+        String csvSplitBy = ",";
         BufferedReader br = null;
         String line = "";
 
@@ -146,128 +138,134 @@ public class ReadSyntheticPopulation {
 
             br = new BufferedReader(new FileReader(fileName));
 
+            String[] header = br.readLine().split(csvSplitBy);
+
+            int posId = Util.findPositionInArray("id", header);
+            int posHome = Util.findPositionInArray("homeZone", header);
+            int posWork = Util.findPositionInArray("workplace", header);
+            int posAge = Util.findPositionInArray("age", header);
+
+
             int lines = 0;
             while ((line = br.readLine()) != null) {
-                if (lines > 0 ) {
+                sequence = 0;
+                String[] row = line.split(csvSplitBy);
+                int origin = Integer.parseInt(row[posHome]);
+                int destinationWork = Integer.parseInt(row[posWork]);
+                int age = Integer.parseInt(row[posAge]);
+                boolean occupation = destinationWork == 0 ? false : true;
+                //only for adults
+                if (age > 17) {
+                    time = 0;
+                    matsimPlan = matsimPopulationFactory.createPlan();
+                    matsimPerson = createMatsimPerson(row[posId]);
+                    matsimPerson.addPlan(matsimPlan);
+                    boolean storePerson = false; // do not store persons that do not travel or discarded because of scaling
+                    //be at home
+                    Location origLoc = locationMap.get(origin);
+                    Coord homeCoordinates = new Coord(origLoc.getX() + origLoc.getSize() * (Math.random() - 0.5), origLoc.getY() + origLoc.getSize() * (Math.random() - 0.5));
+                    //generate H-2-W-2
+                    if (occupation) {
+                        float travelDistance = travelDistances.getValueAt(origin, destinationWork);
+                        int mode = selectMode(travelDistance);
+                        boolean automatedVehicle = chooseAv(avPenetrationRate);
+                        if (travelDistance < 80000) {
+                            plannedTrip = new InputTrip(matsimPerson);
+                            trips.add(plannedTrip);
+                            plannedTrip.setMode(mode);
+                            time = Math.max(new EnumeratedIntegerDistribution(timeClasses, departure2WProb).sample() * 60
+                                    + (rnd.nextDouble() - .5) * 60 * 60, 0);
+                            boolean simulated = rnd.nextFloat() < scalingFactor / occupancyW[mode];
+                            plannedTrip.setOrigin(origLoc);
+                            plannedTrip.setOrigCoord(homeCoordinates);
+                            plannedTrip.setDepartureTime(time);
+                            plannedTrip.setPurpose("h-w");
+                            plannedTrip.setDistance(travelDistance);
+                            plannedTrip.setSequence(sequence);
+                            plannedTrip.setSimulated(simulated);
+                            sequence++;
+                            Activity activity1 = matsimPopulationFactory.createActivityFromCoord("home", homeCoordinates);
+                            activity1.setEndTime(time);
+                            if (simulated && mode == selectedMode) matsimPlan.addActivity(activity1);
+                            time += autoTravelTime.getValueAt(origin, destinationWork) * 60;
+                            plannedTrip.setArrivalTime(time);
 
-                    sequence = 0;
-                    String[] row = line.split(cvsSplitBy);
-                    //int origin = Integer.parseInt(row[12]); //old version
-                    int origin = Integer.parseInt(row[11]); //new version
-                    int destinationWork = Integer.parseInt(row[7]);
-                    int age = Integer.parseInt(row[2]);
-                    boolean occupation = destinationWork == 0 ? false : true;
-                    //only for adults
-                    if (age > 17) {
-                        time = 0;
-                        matsimPlan = matsimPopulationFactory.createPlan();
-                        matsimPerson = createMatsimPerson(row);
-                        matsimPerson.addPlan(matsimPlan);
-                        boolean storePerson = false; // do not store persons that do not travel or discarded because of scaling
-                        //be at home
-                        Location origLoc = locationMap.get(origin);
-                        Coord homeCoordinates = new Coord(origLoc.getX() + origLoc.getSize() * (Math.random() - 0.5), origLoc.getY() + origLoc.getSize() * (Math.random() - 0.5));
-                        //generate H-2-W-2
-                        if (occupation) {
-                            float travelDistance = travelDistances.getValueAt(origin, destinationWork);
-                            int mode = selectMode(travelDistance);
-                            boolean automatedVehicle = chooseAv(avPenetrationRate);
-                            if (travelDistance < 80000 && rnd.nextFloat() < 1 / occupancyW[mode]) {
-                                plannedTrip = new InputTrip(matsimPerson);
-                                trips.add(plannedTrip);
-                                plannedTrip.setMode(mode);
-                                time = Math.max(new EnumeratedIntegerDistribution(timeClasses, departure2WProb).sample() * 60
-                                        + (rnd.nextDouble() - .5) * 60 * 60, 0);
-                                boolean simulated = rnd.nextFloat()<scalingFactor? true:false;
-                                plannedTrip.setOrigin(origLoc);
-                                plannedTrip.setOrigCoord(homeCoordinates);
-                                plannedTrip.setDepartureTime(time);
-                                plannedTrip.setPurpose("h-w");
-                                plannedTrip.setDistance(travelDistance);
-                                plannedTrip.setSequence(sequence);
-                                plannedTrip.setSimulated(simulated);
-                                sequence++;
-                                Activity activity1 = matsimPopulationFactory.createActivityFromCoord("home", homeCoordinates);
-                                activity1.setEndTime(time);
-                                matsimPlan.addActivity(activity1);
-                                time += autoTravelTime.getValueAt(origin, destinationWork) * 60;
-                                plannedTrip.setArrivalTime(time);
+                            createMatsimWorkTrip(origin, destinationWork, automatedVehicle, simulated, mode);
 
-                                createMatsimWorkTrip(origin, destinationWork, automatedVehicle);
+                            plannedTrip.setPurpose("w-h");
+                            plannedTrip.setMode(mode);
+                            plannedTrip.setDestination(origLoc);
+                            plannedTrip.setDestCoord(homeCoordinates);
+                            plannedTrip.setDistance(travelDistance);
+                            plannedTrip.setSimulated(simulated);
+                            time += autoTravelTime.getValueAt(destinationWork, origin) * 60;
+                            plannedTrip.setArrivalTime(time);
 
-                                plannedTrip.setPurpose("w-h");
-                                plannedTrip.setMode(mode);
-                                plannedTrip.setDestination(origLoc);
-                                plannedTrip.setDestCoord(homeCoordinates);
-                                plannedTrip.setDistance(travelDistance);
-                                plannedTrip.setSimulated(simulated);
-                                time += autoTravelTime.getValueAt(destinationWork, origin) * 60;
-                                plannedTrip.setArrivalTime(time);
-
-                                if (simulated  && mode == selectedMode) {
-                                    storePerson = true;
-                                }
+                            if (simulated && mode == selectedMode) {
+                                storePerson = true;
+                                h2wTripCount++;
                             }
-                        }
-
-                        //generate H-2-O-2- for all adults
-                        for (int trip = 0; trip < Math.round(oTripRateDispersion * rnd.nextGaussian() + oTripRatePerPerson); trip++) {
-
-                            float travelDistance = selectDistanceOtherTrip();
-                            int mode = selectMode(travelDistance);
-                            if (time < 20 * 60 * 60 && travelDistance < 80000 && rnd.nextFloat() < 1 / occupancyO[mode]) {
-                                plannedTrip = new InputTrip(matsimPerson);
-                                trips.add(plannedTrip);
-                                plannedTrip.setMode(mode);
-                                boolean simulated = rnd.nextFloat()<scalingFactor? true:false;
-                                //todo if the trip is not simulated just assign intrazonal trip and do not perform DC to increase speed
-                                int destinationOther = simulated? selectDestionationOtherTrip(origin, travelDistance) : origin;
-                                plannedTrip.setSequence(sequence);
-                                sequence++;
-                                plannedTrip.setSimulated(simulated);
-                                plannedTrip.setDistance(travelDistances.getValueAt(origin, destinationOther));
-                                time = Math.max(time, new EnumeratedIntegerDistribution(timeClasses, departure2OProb).sample() * 60 +
-                                        (rnd.nextDouble() - 0.5) * 60 * 60);
-                                plannedTrip.setDepartureTime(time);
-                                plannedTrip.setOrigin(origLoc);
-                                plannedTrip.setOrigCoord(homeCoordinates);
-                                Activity activity10 = matsimPopulationFactory.createActivityFromCoord("home", homeCoordinates);
-                                activity10.setEndTime(time);
-                                matsimPlan.addActivity(activity10);
-                                time += autoTravelTime.getValueAt(origin, destinationOther) * 60;
-                                plannedTrip.setArrivalTime(time);
-                                plannedTrip.setPurpose("h-o");
-
-                                createMatsimOtherTrip(destinationOther);
-
-                                time += autoTravelTime.getValueAt(destinationOther, origin) * 60;
-                                plannedTrip.setPurpose("o-h");
-                                plannedTrip.setDistance(travelDistances.getValueAt(origin, destinationOther));
-                                plannedTrip.setArrivalTime(time);
-                                plannedTrip.setDestination(origLoc);
-                                plannedTrip.setDestCoord(homeCoordinates);
-                                plannedTrip.setMode(mode);
-                                plannedTrip.setSimulated(simulated);
-                                if (simulated  && mode == selectedMode) {
-                                    storePerson = true;
-                                }
-                            }
-                        }
-                        //add the person to the matsim population
-                        if (storePerson) {
-                            //generate -H
-                            Activity activity100 = matsimPopulationFactory.createActivityFromCoord("home", homeCoordinates);
-                            matsimPlan.addActivity(activity100);
-                            travelerCount++;
-                            matsimPopulation.addPerson(matsimPerson);
                         }
                     }
+
+                    int numberOfOtherTrips = (int) Math.round(oTripRateDispersion * rnd.nextGaussian() + oTripRatePerPerson);
+                    //generate H-2-O-2- for all adults
+                    for (int trip = 0; trip < numberOfOtherTrips; trip++) {
+                        float travelDistance = selectDistanceOtherTrip();
+                        int mode = selectMode(travelDistance);
+                        if (time < 20 * 60 * 60 && travelDistance < 80000) {
+                            plannedTrip = new InputTrip(matsimPerson);
+                            trips.add(plannedTrip);
+                            plannedTrip.setMode(mode);
+                            boolean simulated = rnd.nextFloat() < scalingFactor / occupancyO[mode];
+                            //todo if the trip is not simulated just assign intrazonal trip and do not perform DC to increase speed
+                            int destinationOther = simulated ? selectDestionationOtherTrip(origin, travelDistance) : origin;
+                            plannedTrip.setSequence(sequence);
+                            sequence++;
+                            plannedTrip.setSimulated(simulated);
+                            plannedTrip.setDistance(travelDistances.getValueAt(origin, destinationOther));
+                            time = Math.max(time, new EnumeratedIntegerDistribution(timeClasses, departure2OProb).sample() * 60 +
+                                    (rnd.nextDouble() - 0.5) * 60 * 60);
+                            plannedTrip.setDepartureTime(time);
+                            plannedTrip.setOrigin(origLoc);
+                            plannedTrip.setOrigCoord(homeCoordinates);
+                            Activity activity10 = matsimPopulationFactory.createActivityFromCoord("home", homeCoordinates);
+                            activity10.setEndTime(time);
+                            if (simulated && mode == selectedMode) matsimPlan.addActivity(activity10);
+                            time += autoTravelTime.getValueAt(origin, destinationOther) * 60;
+                            plannedTrip.setArrivalTime(time);
+                            plannedTrip.setPurpose("h-o");
+
+                            createMatsimOtherTrip(destinationOther, simulated, mode);
+
+                            time += autoTravelTime.getValueAt(destinationOther, origin) * 60;
+                            plannedTrip.setPurpose("o-h");
+                            plannedTrip.setDistance(travelDistances.getValueAt(origin, destinationOther));
+                            plannedTrip.setArrivalTime(time);
+                            plannedTrip.setDestination(origLoc);
+                            plannedTrip.setDestCoord(homeCoordinates);
+                            plannedTrip.setMode(mode);
+                            plannedTrip.setSimulated(simulated);
+
+                            if (simulated && mode == selectedMode) {
+                                storePerson = true;
+                                h2oTripCount++;
+                            }
+                        }
+                    }
+                    //add the person to the matsim population
+                    if (storePerson) {
+                        //generate -H
+                        Activity activity100 = matsimPopulationFactory.createActivityFromCoord("home", homeCoordinates);
+                        matsimPlan.addActivity(activity100);
+                        travelerCount++;
+                        matsimPopulation.addPerson(matsimPerson);
+                    }
                 }
-                lines++;
+
 
             }
 
-            System.out.println("Read " + lines + "lines from the SP csv file");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -291,9 +289,9 @@ public class ReadSyntheticPopulation {
     }
 
 
-    private org.matsim.api.core.v01.population.Person createMatsimPerson(String[] row) {
+    private org.matsim.api.core.v01.population.Person createMatsimPerson(String id) {
         org.matsim.api.core.v01.population.Person matsimPerson =
-                matsimPopulationFactory.createPerson(Id.create(row[0], org.matsim.api.core.v01.population.Person.class));
+                matsimPopulationFactory.createPerson(Id.create(id, org.matsim.api.core.v01.population.Person.class));
         return matsimPerson;
     }
 
@@ -346,9 +344,9 @@ public class ReadSyntheticPopulation {
 
     }
 
-    private void createMatsimOtherTrip(int destination) {
+    private void createMatsimOtherTrip(int destination, boolean simulated, int mode) {
 
-        matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.car));
+        if (simulated && mode == selectedMode) matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.car));
         Location destLoc = locationMap.get(destination);
         Coord destCoordinate = new Coord(destLoc.getX() + destLoc.getSize() * (Math.random() - 0.5), destLoc.getY() + destLoc.getSize() * (Math.random() - 0.5));
         plannedTrip.setDestCoord(destCoordinate);
@@ -358,8 +356,8 @@ public class ReadSyntheticPopulation {
         time = Math.max(time, Math.min(time + new EnumeratedIntegerDistribution(timeClasses, oDurationProb).sample() * 60, 22 * 60 * 60 +
                 (rnd.nextDouble() - 0.5) * 60 * 60));
         activity4.setEndTime(time);
-        matsimPlan.addActivity(activity4);
-        matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.car));
+        if (simulated && mode == selectedMode) matsimPlan.addActivity(activity4);
+        if (simulated && mode == selectedMode) matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.car));
 
         plannedTrip = new InputTrip(matsimPerson);
         trips.add(plannedTrip);
@@ -369,7 +367,7 @@ public class ReadSyntheticPopulation {
         plannedTrip.setOrigin(destLoc);
         plannedTrip.setDepartureTime(time);
         plannedTrip.setPurpose("o-h");
-        h2oTripCount++;
+
 
     }
 
@@ -395,14 +393,14 @@ public class ReadSyntheticPopulation {
     }
 
 
-    private void createMatsimWorkTrip(int origin, int destinationWork, boolean automatedVehicle) {
+    private void createMatsimWorkTrip(int origin, int destinationWork, boolean automatedVehicle, boolean simulated, int mode) {
         //Location origLoc = locationMap.get(origin);
         Location destLoc = locationMap.get(destinationWork);
         plannedTrip.setDestination(destLoc);
         if (automatedVehicle) {
-            matsimPlan.addLeg(matsimPopulationFactory.createLeg("taxi"));
+            if (simulated && mode == selectedMode) matsimPlan.addLeg(matsimPopulationFactory.createLeg("taxi"));
         } else {
-            matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.car));
+            if (simulated && mode == selectedMode) matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.car));
             //todo manually change of mode only for multimodal - tests
 //                matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.bike));
 //                matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.walk));
@@ -410,24 +408,24 @@ public class ReadSyntheticPopulation {
         }
         Coord workCoordinates = new Coord(destLoc.getX() + destLoc.getSize() * (Math.random() - 0.5), destLoc.getY() + destLoc.getSize() * (Math.random() - 0.5));
         plannedTrip.setDestCoord(workCoordinates);
-       Activity activity2 = matsimPopulationFactory.createActivityFromCoord("work", workCoordinates);
+        Activity activity2 = matsimPopulationFactory.createActivityFromCoord("work", workCoordinates);
         activity2.setStartTime(time);
         //add the duration of the job to time and send person back home
         time = Math.max(time, Math.min(time + new EnumeratedIntegerDistribution(timeClasses, wDurationProb).sample() * 60, 20 * 60 * 60 +
                 (rnd.nextDouble() - 0.5) * 60 * 60));
         activity2.setEndTime(time);
-        matsimPlan.addActivity(activity2);
+        if (simulated && mode == selectedMode) matsimPlan.addActivity(activity2);
         if (automatedVehicle) {
-            matsimPlan.addLeg(matsimPopulationFactory.createLeg("taxi"));
+            if (simulated && mode == selectedMode) matsimPlan.addLeg(matsimPopulationFactory.createLeg("taxi"));
         } else {
-            matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.car));
+            if (simulated && mode == selectedMode) matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.car));
             //todo manually change of mode only for multimodal - tests
 //                matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.bike));
 //                matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.walk));
             //matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.pt));
         }
 
-        h2wTripCount++;
+        //h2wTripCount++;
         plannedTrip = new InputTrip(matsimPerson);
         trips.add(plannedTrip);
         plannedTrip.setSequence(sequence);
@@ -457,13 +455,14 @@ public class ReadSyntheticPopulation {
             e.printStackTrace();
         }
     }
+
     public void printSyntheticPlansList(String fileName, int mode) {
         BufferedWriter bw = IOUtils.getBufferedWriter(fileName);
         try {
             bw.write(InputTrip.getHeader());
             bw.newLine();
 
-            for (InputTrip plannedTrip : trips){
+            for (InputTrip plannedTrip : trips) {
 
                 if (plannedTrip.getMode() == mode) {
                     bw.write(plannedTrip.toString());
