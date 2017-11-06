@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -60,8 +61,10 @@ public class Accessibility {
 
         SkimMatrixReader skmReader1 = new SkimMatrixReader();
         autoTravelTime = skmReader1.readSkim(skimFileName, matrixName);
-
         autoTravelTime = TravelTimeMatrix.assignIntrazonals(autoTravelTime);
+
+        travelTimeMap = new HashMap<>();
+        accessibilityMap = new HashMap<>();
 
 
     }
@@ -102,12 +105,15 @@ public class Accessibility {
 
         BufferedWriter bw = IOUtils.getBufferedWriter(fileName);
         try {
-            bw.write("ID, X, Y, access, timeToZone");
+            bw.write("id,x,y,population,employments,size,access,timeToZone");
             bw.newLine();
             for (Location loc : locationList) {
                 bw.write(loc.getId() + "," +
                         loc.getX() + "," +
                         loc.getY() + "," +
+                        loc.getPopulation() + "," +
+                        loc.getEmployment() + "," +
+                        loc.getSize() + "," +
                         accessibilityMap.get(loc.getId()) +"," +
                         travelTimeMap.get(loc.getId()));
                 bw.newLine();

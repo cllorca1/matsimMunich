@@ -120,11 +120,11 @@ public class TravelTimeMatrix {
         for (int i : matrix.getExternalRowNumbers()){
             float[] minRowValues = new float [numberOfNeighbours];
 
-            for (float minRowValue : minRowValues){
-                minRowValue = 999;
+            for (int k = 0; k < numberOfNeighbours; k++){
+                minRowValues[k] = 20000;
             }
 
-            //fin the neighbours
+            //find the neighbours
             for (int j : matrix.getExternalRowNumbers()){
                 if (minRowValues[0] > matrix.getValueAt(i,j) && matrix.getValueAt(i,j)!=0){
                     for (int k = numberOfNeighbours-1; k >0; k--){

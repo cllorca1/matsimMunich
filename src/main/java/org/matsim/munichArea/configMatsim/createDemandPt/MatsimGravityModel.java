@@ -15,6 +15,7 @@ import org.matsim.api.core.v01.population.*;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.munichArea.SkimMatrixReader;
 import org.matsim.munichArea.outputCreation.accessibilityCalculator.Accessibility;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
 
@@ -52,9 +53,8 @@ public class MatsimGravityModel {
 
         int personId = 0;
 
-        Accessibility acc = new Accessibility(rb.getString("base.skim.file"), "mat1", rb);
-        acc.readSkim();
-        Matrix autoTravelTime = acc.getAutoTravelTimeMatrix();
+        SkimMatrixReader acc = new SkimMatrixReader();
+        Matrix autoTravelTime = acc.readSkim(rb.getString("base.skim.file"), "mat1");
 
         Random rnd = new Random();
         double alpha = 1.5;
@@ -86,7 +86,7 @@ public class MatsimGravityModel {
             //first loop to calculate weights
             for (Location origLoc : origList) {
                 double weight;
-                double travelTime = acc.getAutoTravelTime(origLoc.getId(), destLoc.getId(), autoTravelTime);
+                double travelTime = autoTravelTime.getValueAt(origLoc.getId(), destLoc.getId());
                 float trips;
                 if (travelTime < minTravelTime) {
 //                    origRate[origLoc.getId() - 1] = (origLoc.getPopulation() * g / Math.pow(minTravelTime, alpha));
