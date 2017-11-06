@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a15e1a17-0473-40da-a7d8-a5224804c518" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/AcessCalculator.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSimScalingAnalysis.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSimScalingAnalysis.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelTimeListener.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelTimeListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java" />
     </list>
@@ -1753,8 +1749,8 @@
       <file leaf-file-name="TravelTimeMatrix.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1479">
-              <caret line="146" column="13" lean-forward="false" selection-start-line="146" selection-start-column="13" selection-end-line="146" selection-end-column="13" />
+            <state relative-caret-position="153">
+              <caret line="116" column="18" lean-forward="false" selection-start-line="116" selection-start-column="18" selection-end-line="116" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -1763,8 +1759,8 @@
       <file leaf-file-name="Accessibility.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1241">
-              <caret line="92" column="62" lean-forward="false" selection-start-line="92" selection-start-column="62" selection-end-line="92" selection-end-column="62" />
+            <state relative-caret-position="476">
+              <caret line="63" column="76" lean-forward="false" selection-start-line="63" selection-start-column="76" selection-end-line="63" selection-end-column="76" />
               <folding />
             </state>
           </provider>
@@ -1925,10 +1921,10 @@
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/CentroidsToLocations.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/ReadSyntheticPopulation.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelTimeListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSimScalingAnalysis.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimExecuter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java" />
       </list>
     </option>
   </component>
@@ -2687,13 +2683,6 @@
       <option name="presentableId" value="Default" />
       <updated>1473665247616</updated>
     </task>
-    <task id="LOCAL-00034" summary="corrected some errors in transit skim matrices v2">
-      <created>1491316515856</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1491316515856</updated>
-    </task>
     <task id="LOCAL-00035" summary="small corrections">
       <created>1491981291840</created>
       <option name="number" value="00035" />
@@ -3030,7 +3019,14 @@
       <option name="project" value="LOCAL" />
       <updated>1509978557277</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="refine accessibility calculator - not matsim">
+      <created>1509981993767</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1509981993767</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="TodoView">
@@ -3148,7 +3144,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="minor change in agent trip duration event analyzer" />
     <MESSAGE value="improved level of detail of reporting input plans" />
     <MESSAGE value="first version of a simple road building tool" />
     <MESSAGE value="check intersection into link" />
@@ -3173,7 +3168,8 @@
     <MESSAGE value="skip dest choice if not simulated to increase speed of SP reading" />
     <MESSAGE value="debug sp reading (occupationW)" />
     <MESSAGE value="debug zone2zone travelTime listener (unverfied)" />
-    <option name="LAST_COMMIT_MESSAGE" value="debug zone2zone travelTime listener (unverfied)" />
+    <MESSAGE value="refine accessibility calculator - not matsim" />
+    <option name="LAST_COMMIT_MESSAGE" value="refine accessibility calculator - not matsim" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3508,14 +3504,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1479">
-          <caret line="146" column="13" lean-forward="false" selection-start-line="146" selection-start-column="13" selection-end-line="146" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSimScalingAnalysis.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="756">
@@ -3564,10 +3552,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="116" column="18" lean-forward="false" selection-start-line="116" selection-start-column="18" selection-end-line="116" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1241">
-          <caret line="92" column="62" lean-forward="false" selection-start-line="92" selection-start-column="62" selection-end-line="92" selection-end-column="62" />
+        <state relative-caret-position="476">
+          <caret line="63" column="76" lean-forward="false" selection-start-line="63" selection-start-column="76" selection-end-line="63" selection-end-column="76" />
           <folding />
         </state>
       </provider>

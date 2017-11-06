@@ -9,6 +9,7 @@ import org.matsim.core.utils.io.IOUtils;
 import org.matsim.munichArea.SkimMatrixReader;
 import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 
 
 import java.io.BufferedWriter;
@@ -59,6 +60,8 @@ public class Accessibility {
 
         SkimMatrixReader skmReader1 = new SkimMatrixReader();
         autoTravelTime = skmReader1.readSkim(skimFileName, matrixName);
+
+        autoTravelTime = TravelTimeMatrix.assignIntrazonals(autoTravelTime);
 
 
     }

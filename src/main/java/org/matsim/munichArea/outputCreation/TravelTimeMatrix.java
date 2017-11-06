@@ -114,7 +114,7 @@ public class TravelTimeMatrix {
 
     }
 
-    public Matrix assignIntrazonals(Matrix matrix){
+    public static Matrix assignIntrazonals(Matrix matrix){
         int numberOfNeighbours = 3;
 
         for (int i : matrix.getExternalRowNumbers()){
