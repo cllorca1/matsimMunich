@@ -85,7 +85,7 @@ public class RunMATSim {
         MatsimRunFromJava matsimRunner = new MatsimRunFromJava(rb);
         matsimRunner.runMatsim(hourOfDay * 60 * 60, Integer.parseInt(rb.getString("max.calc.points")),
                 networkFile, matsimPopulation, year,
-                TransformationFactory.WGS84, iterations, simulationName,
+                TransformationFactory.DHDN_GK4, iterations, simulationName,
                 outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor, locationList, autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile,
                 10, Boolean.parseBoolean(rb.getString("use.transit")));
 
