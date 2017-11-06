@@ -5,6 +5,7 @@ package org.matsim.munichArea.configMatsim;
  */
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 import com.pb.common.matrix.Matrix;
@@ -66,7 +67,7 @@ public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
     public void notifyIterationEnds(IterationEndsEvent event) {
         if (event.getIteration() == this.finalIteration) {
             float startTime = System.currentTimeMillis();
-            EuclideanDistanceCalculator euclideanDistanceCalculator = new EuclideanDistanceCalculator();
+            //EuclideanDistanceCalculator euclideanDistanceCalculator = new EuclideanDistanceCalculator();
             log.info("Starting to calculate average zone-to-zone travel times based on MATSim.");
             TravelTime travelTime = controler.getLinkTravelTimes();
             TravelDisutility travelDisutility = controler.getTravelDisutilityFactory().createTravelDisutility(travelTime);
@@ -76,8 +77,8 @@ public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
             autoTravelTime = new Matrix(locationList.size(), locationList.size());
 
             //Maps to assign a node/tree to each zone
-            Map<Integer, ArrayList<Node>> nodeMap = new HashMap<>();
-            Map<Integer, ArrayList<Map<Id<Node>, LeastCostPathTree.NodeData>>> treeMap = new HashMap<>();
+            Map<Integer, ArrayList<Node>> nodeMap = new ConcurrentHashMap<>();
+            Map<Integer, ArrayList<Map<Id<Node>, LeastCostPathTree.NodeData>>> treeMap = new ConcurrentHashMap<>();
 
             locationList.parallelStream().forEach(loc -> {
                 //for (Location loc : locationList) {

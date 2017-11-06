@@ -262,16 +262,7 @@ public class MatsimExecuter {
 
 
 
-        if (analyzeAccessibility) {
 
-            String omxFile = rb.getString("omx.access.calc") + ".omx";
-            Accessibility acc = new Accessibility(omxFile, "mat1", rb);
-            acc.calculateAccessibility(locationList);
-            acc.calculateTravelTimesToZone(locationList, 3611);
-
-            //acc.calculateTransfersToZone(servedZoneList, 3612);
-            acc.printAccessibility(locationList);
-        }
 
 
         //run MATSim from file configs

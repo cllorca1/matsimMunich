@@ -1,17 +1,22 @@
 package org.matsim.munichArea.outputCreation.accessibilityCalculator;
 
 import com.pb.common.matrix.Matrix;
+import com.pb.common.util.ResourceUtil;
 import omx.OmxFile;
 import omx.OmxMatrix;
 import omx.hdf5.OmxHdf5Datatype;
 import org.matsim.core.utils.io.IOUtils;
+import org.matsim.munichArea.SkimMatrixReader;
+import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
 
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import static java.lang.System.exit;
@@ -21,50 +26,63 @@ import static java.lang.System.exit;
  */
 public class Accessibility {
 
-    private ResourceBundle rb;
+    private static ResourceBundle rb;
     private Matrix autoTravelTime;
     private String skimFileName;
     private String matrixName;
+    private ArrayList<Location> locationList;
+    private Map<Integer, Float> travelTimeMap;
+    private Map<Integer, Float> accessibilityMap;
 
-    public Accessibility(String skimFileName, String matrixName, ResourceBundle rb) {
-        this.skimFileName = skimFileName;
-        this.matrixName = matrixName;
-        this.rb = rb;
+
+    public static void main (String[] args){
+
+        File propFile = new File(args[0]);
+        rb = ResourceUtil.getPropertyBundle(propFile);
+
+        Accessibility acc = new Accessibility();
+        acc.loadData();
+        acc.calculateAccessibility();
+        acc.calculateIntrazonalTimes();
+        acc.printAccessibility(rb.getString("output.accessibility.file"));
+
+
     }
 
-    public void calculateTravelTimesToZone(ArrayList<Location> locationList, int destinationId) {
 
-        readSkim();
+    public void loadData() {
+
+        skimFileName = rb.getString("omx.access.calc") + ".omx";
+        matrixName = "mat1";
+        CentroidsToLocations centroidsToLocations = new CentroidsToLocations(rb);
+        locationList = centroidsToLocations.readCentroidList();
+
+        SkimMatrixReader skmReader1 = new SkimMatrixReader();
+        autoTravelTime = skmReader1.readSkim(skimFileName, matrixName);
+
+
+    }
+
+
+
+    public void calculateIntrazonalTimes() {
+
         for (Location orig : locationList){
-            double travelTime = getAutoTravelTime(orig.getId(), destinationId, autoTravelTime);
-            orig.setTravelTime(travelTime);
+            float travelTime = autoTravelTime.getValueAt(orig.getId(), orig.getId());
+            travelTimeMap.put(orig.getId(), travelTime);
         }
 
     }
 
-    //this is test only
-    public void calculateTransfersToZone(ArrayList<Location> locationList, int destinationId) {
-
-        readSkim();
-        for (Location orig : locationList){
-            double transfers = 0;
-            double cellValue = getAutoTravelTime(orig.getId(), destinationId, autoTravelTime);
-            if (cellValue >=0)  transfers += cellValue;
-            orig.setTravelTime(transfers);
-        }
-
-    }
 
 
-    public void calculateAccessibility(ArrayList<Location> locationList) {
-
-        readSkim();
+    public void calculateAccessibility() {
 
         for (Location orig : locationList) {
             float accessibility = 0;
             for (Location dest : locationList) {
 
-                double travelTime = getAutoTravelTime(orig.getId(), dest.getId(), autoTravelTime);
+                double travelTime = autoTravelTime.getValueAt(orig.getId(), dest.getId());
 
                 if (travelTime == -1) {
                     travelTime = Double.POSITIVE_INFINITY;
@@ -72,19 +90,23 @@ public class Accessibility {
 
                 accessibility += Math.pow(dest.getPopulation(), 1.25) * Math.exp(-0.1 * travelTime);
             }
-            orig.setAccessibility(accessibility);
+            accessibilityMap.put(orig.getId(), accessibility);
         }
 
     }
 
-    public void printAccessibility(ArrayList<Location> locationList) {
+    public void printAccessibility(String fileName) {
 
-        BufferedWriter bw = IOUtils.getBufferedWriter(rb.getString("output.accessibility.file"));
+        BufferedWriter bw = IOUtils.getBufferedWriter(fileName);
         try {
             bw.write("ID, X, Y, access, timeToZone");
             bw.newLine();
             for (Location loc : locationList) {
-                bw.write(loc.getId() + "," + loc.getX() + "," + loc.getY() + "," + loc.getAccessibility()+"," + loc.getTravelTime());
+                bw.write(loc.getId() + "," +
+                        loc.getX() + "," +
+                        loc.getY() + "," +
+                        accessibilityMap.get(loc.getId()) +"," +
+                        travelTimeMap.get(loc.getId()));
                 bw.newLine();
             }
             bw.flush();
@@ -93,56 +115,8 @@ public class Accessibility {
         }
     }
 
-    public void readSkim() {
-        // read skim file
-
-        OmxFile hSkim = new OmxFile(skimFileName);
-        hSkim.openReadOnly();
-        OmxMatrix timeOmxSkimAutos = hSkim.getMatrix(matrixName);
-
-        autoTravelTime = convertOmxToMatrix(timeOmxSkimAutos);
 
 
-//        OmxLookup omxLookUp = hSkim.getLookup("lookup1");
-//        int[] externalNumbers = (int[]) omxLookUp.getLookup();
-
-    }
-
-    public double getAutoTravelTime(int orig, int dest, Matrix autoTravelTime){
-        return autoTravelTime.getValueAt(orig,dest);
-    }
-
-    public static Matrix convertOmxToMatrix (OmxMatrix omxMatrix) {
-        // convert OMX matrix into java matrix
-
-        OmxHdf5Datatype.OmxJavaType type = omxMatrix.getOmxJavaType();
-        String name = omxMatrix.getName();
-        int[] dimensions = omxMatrix.getShape();
-
-        if (type.equals(OmxHdf5Datatype.OmxJavaType.FLOAT)) {
-            float[][] fArray = (float[][]) omxMatrix.getData();
-            Matrix mat = new Matrix(name, name, dimensions[0], dimensions[1]);
-            for (int i = 0; i < dimensions[0]; i++)
-                for (int j = 0; j < dimensions[1]; j++)
-                    mat.setValueAt(i + 1, j + 1, fArray[i][j]);
-            return mat;
-        } else if (type.equals(OmxHdf5Datatype.OmxJavaType.DOUBLE)) {
-            double[][] dArray = (double[][]) omxMatrix.getData();
-            Matrix mat = new Matrix(name, name, dimensions[0], dimensions[1]);
-            for (int i = 0; i < dimensions[0]; i++)
-                for (int j = 0; j < dimensions[1]; j++)
-                    mat.setValueAt(i + 1, j + 1, (float) dArray[i][j]);
-            return mat;
-        } else {
-            System.out.println("OMX Matrix type " + type.toString() + " not yet implemented. Program exits.");
-            exit(1);
-            return null;
-        }
-    }
-
-    public Matrix getAutoTravelTimeMatrix() {
-        return autoTravelTime;
-    }
 }
 
 

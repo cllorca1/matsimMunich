@@ -3,6 +3,7 @@ package org.matsim.munichArea.outputCreation;
 import com.pb.common.matrix.Matrix;
 import omx.*;
 import omx.hdf5.*;
+import org.apache.log4j.Logger;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
 
 
@@ -20,6 +21,8 @@ import java.util.Set;
  * Created by carlloga on 9/14/2016.
  */
 public class TravelTimeMatrix {
+
+    public static Logger logger = Logger.getLogger(TravelTimeMatrix.class);
 
 
     public static void createOmxSkimMatrix(Matrix autoTravelTime, ArrayList<Location> locationList, String omxFileName, String omxMatrixName){
@@ -109,6 +112,42 @@ public class TravelTimeMatrix {
             e.printStackTrace();
         }
 
+    }
+
+    public Matrix assignIntrazonals(Matrix matrix){
+        int numberOfNeighbours = 3;
+
+        for (int i : matrix.getExternalRowNumbers()){
+            float[] minRowValues = new float [numberOfNeighbours];
+
+            for (float minRowValue : minRowValues){
+                minRowValue = 999;
+            }
+
+            //fin the neighbours
+            for (int j : matrix.getExternalRowNumbers()){
+                if (minRowValues[0] > matrix.getValueAt(i,j) && matrix.getValueAt(i,j)!=0){
+                    for (int k = numberOfNeighbours-1; k >0; k--){
+                        minRowValues[k] = minRowValues[k-1];
+                    }
+                    minRowValues[0] = matrix.getValueAt(i,j);
+                }
+            }
+            //get the average
+            float globalMin = 0;
+            for (float minRowValue : minRowValues){
+                globalMin += minRowValue;
+            }
+            globalMin = globalMin/numberOfNeighbours;
+            //put the value in cells with 0
+            for (int j : matrix.getExternalRowNumbers()){
+                if (matrix.getValueAt(i,j)==0){
+                    matrix.setValueAt(i,j,globalMin);
+                }
+            }
+        }
+        logger.info("Calculated intrazonal values - nearest neighbour");
+        return matrix;
     }
 
 
