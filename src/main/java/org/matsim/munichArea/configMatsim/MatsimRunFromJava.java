@@ -26,13 +26,13 @@ public class MatsimRunFromJava {
     private ResourceBundle rb;
     private Matrix autoTravelTime;
     private Matrix autoTravelDistance;
-    private Network network;
     private final Config config;
+    private Zone2ZoneTravelTimeListener zone2zoneTravelTimeListener;
+    private Zone2ZoneTravelDistanceListener zone2ZoneTravelDistanceListener;
 
     public MatsimRunFromJava(ResourceBundle rb) {
         this.rb = rb;
         config = ConfigUtils.createConfig();
-
     }
 
     public void runMatsim(
@@ -46,8 +46,6 @@ public class MatsimRunFromJava {
                                                                                    ArrayList<Location> locationList, boolean autoTimeSkims, boolean autoDistSkims,
                                                                                    String scheduleFile, String vehicleFile, float stuckTime,
                                                                                    boolean useTransit) {
-        // String populationFile, int year, String crs, int numberOfIterations) {
-
 
         autoTravelTime = new Matrix(locationList.size(), locationList.size());
 
@@ -56,8 +54,6 @@ public class MatsimRunFromJava {
 
         // Network
         config.network().setInputFile(inputNetworkFile);
-
-
 
         //public transport
         config.transit().setTransitScheduleFile(scheduleFile);
@@ -68,14 +64,11 @@ public class MatsimRunFromJava {
         config.transit().setTransitModes(transitModes);
 
         // Simulation
-
         config.qsim().setFlowCapFactor(flowCapacityFactor);
         config.qsim().setStorageCapFactor(storageCapacityFactor);
         config.qsim().setRemoveStuckVehicles(false);
-
         config.qsim().setStartTime(0);
         config.qsim().setEndTime(24*60*60);
-
         config.qsim().setStuckTime(stuckTime);
 
         // Controller
@@ -90,10 +83,6 @@ public class MatsimRunFromJava {
         config.controler().setWriteEventsInterval(numberOfIterations);
         config.controler().setRoutingAlgorithmType(ControlerConfigGroup.RoutingAlgorithmType.Dijkstra);
         config.controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists);
-
-        //linkstats
-//        config.linkStats().setWriteLinkStatsInterval(1);
-//        config.linkStats().setAverageLinkStatsOverIterations(0);
 
         // QSim and other
         config.qsim().setTrafficDynamics(QSimConfigGroup.TrafficDynamics.withHoles);
@@ -124,7 +113,6 @@ public class MatsimRunFromJava {
 //        strategySettings4.setDisableAfter((int) (numberOfIterations * 0.7));
 //        config.strategy().addStrategySettings(strategySettings4);
 
-
         config.strategy().setMaxAgentPlanMemorySize(4);
 
         // Plan Scoring (planCalcScore)
@@ -145,7 +133,6 @@ public class MatsimRunFromJava {
         config.parallelEventHandling().setNumberOfThreads(16);
         config.qsim().setUsingThreadpool(false);
 
-
         config.vspExperimental().setVspDefaultsCheckingLevel(VspExperimentalConfigGroup.VspDefaultsCheckingLevel.warn);
 
         // Scenario
@@ -155,11 +142,11 @@ public class MatsimRunFromJava {
         // Initialize controller
         final Controler controler = new Controler(scenario);
 
-        Zone2ZoneTravelTimeListener zone2zoneTravelTimeListener = new Zone2ZoneTravelTimeListener(
+        zone2zoneTravelTimeListener = new Zone2ZoneTravelTimeListener(
                 controler, scenario.getNetwork(), config.controler().getLastIteration(),
                 locationList, timeOfDay, numberOfCalcPoints);
 
-        Zone2ZoneTravelDistanceListener zone2ZoneTravelDistanceListener = new Zone2ZoneTravelDistanceListener(
+        zone2ZoneTravelDistanceListener = new Zone2ZoneTravelDistanceListener(
                 controler, scenario.getNetwork(), config.controler().getLastIteration(),
                 locationList, timeOfDay, numberOfCalcPoints);
 

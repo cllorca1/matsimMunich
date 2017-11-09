@@ -89,17 +89,16 @@ public class RunMATSim {
                 outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor, locationList, autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile,
                 10, Boolean.parseBoolean(rb.getString("use.transit")));
 
-        if (autoTimeSkims) autoTravelTime = matsimRunner.getAutoTravelTime();
-        if (autoDistSkims) autoTravelDistance = matsimRunner.getAutoTravelDistance();
-
 
         //skim matrices if needed
         if (autoTimeSkims) {
+            autoTravelTime = matsimRunner.getAutoTravelTime();
             String omxFileName = rb.getString("out.skim.auto.time") + singleRunName + ".omx";
             TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, locationList, omxFileName, "mat1");
 
         }
         if (autoDistSkims) {
+            autoTravelDistance = matsimRunner.getAutoTravelDistance();
             String omxFileName = rb.getString("out.skim.auto.dist") + simulationName + ".omx";
             TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistance, locationList, omxFileName, "mat1");
         }

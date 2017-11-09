@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a15e1a17-0473-40da-a7d8-a5224804c518" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSim.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSim.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java" />
     </list>
     <ignored path="MATSim.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1725,11 +1725,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Accessibility.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Accessibility.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="252">
-              <caret line="70" column="66" lean-forward="false" selection-start-line="70" selection-start-column="66" selection-end-line="70" selection-end-column="66" />
+              <caret line="70" column="80" lean-forward="true" selection-start-line="70" selection-start-column="80" selection-end-line="70" selection-end-column="80" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Zone2ZoneTravelDistanceListener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="246">
+              <caret line="82" column="36" lean-forward="true" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
+              <folding>
+                <element signature="e#8321#8322#0" expanded="true" />
+                <element signature="e#8373#8374#0" expanded="true" />
+                <element signature="e#9142#9143#0" expanded="true" />
+                <element signature="e#9212#9213#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RunMATSim.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSim.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="680">
+              <caret line="91" column="0" lean-forward="true" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -1888,9 +1913,7 @@
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitModeMatrixPostProcessing.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/createDemandPt/PtSyntheticTraveller.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSimTransitSkims.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSim.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/Util.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/CentroidsToLocations.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/ReadSyntheticPopulation.java" />
@@ -1902,6 +1925,8 @@
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/MatsimRunFromJava.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/TravelTimeMatrix.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSim.java" />
       </list>
     </option>
   </component>
@@ -2095,7 +2120,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.AccCalc">
+  <component name="RunManager" selected="Application.MATSimSingleRun">
     <configuration name="AccCalc" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="org.matsim.munichArea.outputCreation.accessibilityCalculator.Accessibility" />
@@ -2670,13 +2695,6 @@
       <option name="presentableId" value="Default" />
       <updated>1473665247616</updated>
     </task>
-    <task id="LOCAL-00040" summary="fail getautotraveldistance corrected">
-      <created>1495009417387</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1495009417387</updated>
-    </task>
     <task id="LOCAL-00041" summary="re-structured packages">
       <created>1495009444786</created>
       <option name="number" value="00041" />
@@ -3013,7 +3031,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510231014331</updated>
     </task>
-    <option name="localTasksCounter" value="89" />
+    <task id="LOCAL-00089" summary="add the proportion of neighbors tt to the caluclation of intrazonals">
+      <created>1510243311726</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1510243311726</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="TodoView">
@@ -3131,7 +3156,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="skim post processing separated from main class" />
     <MESSAGE value="transit skims collecting distance too - not validated" />
     <MESSAGE value="reorganize class" />
     <MESSAGE value="transit matric for multiple modes are cleaned" />
@@ -3156,7 +3180,8 @@
     <MESSAGE value="renamed properties in accessibility calculator" />
     <MESSAGE value="improved finding of closest neighbors" />
     <MESSAGE value="reassign properties for calculation of intrazonal" />
-    <option name="LAST_COMMIT_MESSAGE" value="reassign properties for calculation of intrazonal" />
+    <MESSAGE value="add the proportion of neighbors tt to the caluclation of intrazonals" />
+    <option name="LAST_COMMIT_MESSAGE" value="add the proportion of neighbors tt to the caluclation of intrazonals" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3332,13 +3357,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/contrib/dvrp/0.10.0-SNAPSHOT/dvrp-0.10.0-20171011.234001-220.jar!/org/matsim/contrib/dvrp/router/DijkstraTree.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="26" column="37" lean-forward="false" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitModeMatrixPostProcessing.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-391">
@@ -3403,14 +3421,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="66" column="21" lean-forward="true" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/Location.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="428">
@@ -3445,14 +3455,6 @@
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSim.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="104" column="9" lean-forward="true" selection-start-line="104" selection-start-column="9" selection-end-line="104" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3551,7 +3553,36 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/accessibilityCalculator/Accessibility.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
-          <caret line="70" column="66" lean-forward="false" selection-start-line="70" selection-start-column="66" selection-end-line="70" selection-end-column="66" />
+          <caret line="70" column="80" lean-forward="true" selection-start-line="70" selection-start-column="80" selection-end-line="70" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/matsim/contrib/dvrp/0.10.0-SNAPSHOT/dvrp-0.10.0-20171011.234001-220.jar!/org/matsim/contrib/dvrp/router/DijkstraTree.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="18" column="54" lean-forward="false" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/Zone2ZoneTravelDistanceListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="82" column="36" lean-forward="true" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
+          <folding>
+            <element signature="e#8321#8322#0" expanded="true" />
+            <element signature="e#8373#8374#0" expanded="true" />
+            <element signature="e#9142#9143#0" expanded="true" />
+            <element signature="e#9212#9213#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunMATSim.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="91" column="0" lean-forward="true" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
           <folding />
         </state>
       </provider>
