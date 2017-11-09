@@ -67,7 +67,8 @@ public class Accessibility {
         if (Boolean.parseBoolean(rb.getString("acc.intrazonal"))){
             autoTravelTime = TravelTimeMatrix.assignIntrazonals(autoTravelTime,
                     Integer.parseInt(rb.getString("acc.intrazonal.neighbors")),
-                    Float.parseFloat(rb.getString("acc.intrazonal.maxval")));
+                    Float.parseFloat(rb.getString("acc.intrazonal.maxval")),
+                    Float.parseFloat(rb.getString("acc.intrazonal.proportion")));
         }
 
         travelTimeMap = new HashMap<>();

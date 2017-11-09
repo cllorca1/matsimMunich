@@ -114,8 +114,8 @@ public class TravelTimeMatrix {
 
     }
 
-    public static Matrix assignIntrazonals(Matrix matrix, int numberOfNeighbours, float maximum){
-        
+    public static Matrix assignIntrazonals(Matrix matrix, int numberOfNeighbours, float maximum, float proportionOfTime){
+
         for (int i : matrix.getExternalRowNumbers()){
             float[] minRowValues = new float [numberOfNeighbours];
 
@@ -142,7 +142,7 @@ public class TravelTimeMatrix {
             for (float minRowValue : minRowValues){
                 globalMin += minRowValue;
             }
-            globalMin = globalMin/numberOfNeighbours;
+            globalMin = globalMin/numberOfNeighbours * proportionOfTime;
 
             for (int j : matrix.getExternalRowNumbers()){
                 if (matrix.getValueAt(i,j)==0){
