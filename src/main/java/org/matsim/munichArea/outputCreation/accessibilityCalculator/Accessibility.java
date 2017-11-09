@@ -35,18 +35,20 @@ public class Accessibility {
     private ArrayList<Location> locationList;
     private Map<Integer, Float> travelTimeMap;
     private Map<Integer, Float> accessibilityMap;
+    private SkimMatrixReader skmReader1;
 
 
-    public static void main (String[] args){
+    public static void main(String[] args) {
 
         File propFile = new File(args[0]);
         rb = ResourceUtil.getPropertyBundle(propFile);
 
         Accessibility acc = new Accessibility();
         acc.loadData();
+        acc.writeOutMatrix();
         acc.calculateAccessibility();
         acc.calculateIntrazonalTimes();
-        acc.printAccessibility(rb.getString("output.accessibility.file"));
+        acc.printAccessibility(rb.getString("acc.output.file"));
 
 
     }
@@ -54,12 +56,12 @@ public class Accessibility {
 
     public void loadData() {
 
-        skimFileName = rb.getString("omx.access.calc") + ".omx";
+        skimFileName = rb.getString("acc.omx.input.file") + ".omx";
         matrixName = "mat1";
         CentroidsToLocations centroidsToLocations = new CentroidsToLocations(rb);
         locationList = centroidsToLocations.readCentroidList();
 
-        SkimMatrixReader skmReader1 = new SkimMatrixReader();
+        skmReader1 = new SkimMatrixReader();
         autoTravelTime = skmReader1.readSkim(skimFileName, matrixName);
         autoTravelTime = TravelTimeMatrix.assignIntrazonals(autoTravelTime);
 
@@ -69,17 +71,23 @@ public class Accessibility {
 
     }
 
+    public void writeOutMatrix() {
+
+        if (Boolean.parseBoolean(rb.getString("acc.omx.output"))) {
+            String newSkimFileName = rb.getString("acc.omx.output.file");
+            TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, locationList, newSkimFileName, "mat1");
+        }
+    }
 
 
     public void calculateIntrazonalTimes() {
 
-        for (Location orig : locationList){
+        for (Location orig : locationList) {
             float travelTime = autoTravelTime.getValueAt(orig.getId(), orig.getId());
             travelTimeMap.put(orig.getId(), travelTime);
         }
 
     }
-
 
 
     public void calculateAccessibility() {
@@ -114,7 +122,7 @@ public class Accessibility {
                         loc.getPopulation() + "," +
                         loc.getEmployment() + "," +
                         loc.getSize() + "," +
-                        accessibilityMap.get(loc.getId()) +"," +
+                        accessibilityMap.get(loc.getId()) + "," +
                         travelTimeMap.get(loc.getId()));
                 bw.newLine();
             }
@@ -123,7 +131,6 @@ public class Accessibility {
             e.printStackTrace();
         }
     }
-
 
 
 }
