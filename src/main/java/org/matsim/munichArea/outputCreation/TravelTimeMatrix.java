@@ -115,31 +115,38 @@ public class TravelTimeMatrix {
     }
 
     public static Matrix assignIntrazonals(Matrix matrix){
+
         int numberOfNeighbours = 3;
+        float maximum = 20000;
 
         for (int i : matrix.getExternalRowNumbers()){
             float[] minRowValues = new float [numberOfNeighbours];
 
             for (int k = 0; k < numberOfNeighbours; k++){
-                minRowValues[k] = 20000;
+                minRowValues[k] = maximum;
             }
 
-            //find the neighbours
+            //find the  n closest neighbors
             for (int j : matrix.getExternalRowNumbers()){
-                if (minRowValues[0] > matrix.getValueAt(i,j) && matrix.getValueAt(i,j)!=0){
-                    for (int k = numberOfNeighbours-1; k >0; k--){
-                        minRowValues[k] = minRowValues[k-1];
+                int minimumPosition = 0;
+                while (minimumPosition < numberOfNeighbours){
+                    if (minRowValues[minimumPosition] >  matrix.getValueAt(i,j) && matrix.getValueAt(i,j)!=0){
+                        for (int k = numberOfNeighbours-1; k > minimumPosition; k--){
+                            minRowValues[k] = minRowValues[k-1];
+                        }
+                        minRowValues[minimumPosition] = matrix.getValueAt(i,j);
+                        break;
                     }
-                    minRowValues[0] = matrix.getValueAt(i,j);
+                    minimumPosition++;
                 }
             }
-            //get the average
+
             float globalMin = 0;
             for (float minRowValue : minRowValues){
                 globalMin += minRowValue;
             }
             globalMin = globalMin/numberOfNeighbours;
-            //put the value in cells with 0
+
             for (int j : matrix.getExternalRowNumbers()){
                 if (matrix.getValueAt(i,j)==0){
                     matrix.setValueAt(i,j,globalMin);
