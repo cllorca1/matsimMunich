@@ -114,11 +114,8 @@ public class TravelTimeMatrix {
 
     }
 
-    public static Matrix assignIntrazonals(Matrix matrix){
-
-        int numberOfNeighbours = 3;
-        float maximum = 20000;
-
+    public static Matrix assignIntrazonals(Matrix matrix, int numberOfNeighbours, float maximum){
+        
         for (int i : matrix.getExternalRowNumbers()){
             float[] minRowValues = new float [numberOfNeighbours];
 

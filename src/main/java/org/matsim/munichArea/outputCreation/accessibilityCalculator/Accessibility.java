@@ -63,7 +63,12 @@ public class Accessibility {
 
         skmReader1 = new SkimMatrixReader();
         autoTravelTime = skmReader1.readSkim(skimFileName, matrixName);
-        autoTravelTime = TravelTimeMatrix.assignIntrazonals(autoTravelTime);
+
+        if (Boolean.parseBoolean(rb.getString("acc.intrazonal"))){
+            autoTravelTime = TravelTimeMatrix.assignIntrazonals(autoTravelTime,
+                    Integer.parseInt(rb.getString("acc.intrazonal.neighbors")),
+                    Float.parseFloat(rb.getString("acc.intrazonal.maxval")));
+        }
 
         travelTimeMap = new HashMap<>();
         accessibilityMap = new HashMap<>();
