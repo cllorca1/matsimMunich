@@ -48,6 +48,7 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
     private ArrayList<Location> locationList;
     private int departureTime;
     private int numberOfCalcPoints;
+    private float upperDistanceThreshold;
     //	private CoordinateTransformation ct;
     private Matrix autoTravelDistance;
 
@@ -56,15 +57,16 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
                                            int finalIteration, /*Map<Integer, SimpleFeature> zoneFeatureMap*/
                                            ArrayList<Location> locationList,
                                            int timeOfDay,
-                                           int numberOfCalcPoints) {
+                                           int numberOfCalcPoints,
+                                           float upperDistanceThreshold) {
         this.controler = controler;
         this.network = network;
         this.finalIteration = finalIteration;
-        //this.zoneFeatureMap = zoneFeatureMap;
         this.locationList = locationList;
         this.departureTime = timeOfDay;
         this.numberOfCalcPoints = numberOfCalcPoints;
-//		this.ct = ct;
+        this.upperDistanceThreshold = upperDistanceThreshold;
+
     }
 
 
@@ -75,24 +77,25 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
             EuclideanDistanceCalculator euclideanDistanceCalculator = new EuclideanDistanceCalculator();
 
             log.info("Starting to calculate average zone-to-zone travel distances based on MATSim.");
-            TravelTime travelTime = controler.getLinkTravelTimes();
-            TravelDisutility travelDisutility = controler.getTravelDisutilityFactory().createTravelDisutility(travelTime);
-            //TravelDisutility travelTimeAsTravelDisutility = new MyTravelTimeDisutility(controler.getLinkTravelTimes());
 
-            //LeastCostPathTree leastCoastPathTree = new LeastCostPathTree(travelTime, travelDisutility);
+            TravelTime travelTime;
+            TravelDisutility travelDisutility;
 
+            boolean distanceDisutility = Boolean.parseBoolean("distance.is.disutility");
 
+            if (distanceDisutility) {
+                travelDisutility = new DistanceAsDisutility();
+                travelTime = new TravelDistanceAsTime();
+            } else {
+                travelTime = controler.getLinkTravelTimes();
+                travelDisutility = controler.getTravelDisutilityFactory().createTravelDisutility(travelTime);
+            }
+
+            DijkstraTree dijkstra = new DijkstraTree(network, travelDisutility, travelTime);
             autoTravelDistance = new Matrix(locationList.size(), locationList.size());
 
             //Map to assign a node to each zone
             Map<Integer, Node> zoneCalculationNodesMap = new HashMap<>();
-
-            //TODO re-clean the network will remove all pt links and will make possible getting auto travel times
-            //NetworkCleaner networkCleaner = new NetworkCleaner();
-            //networkCleaner.run(network);
-
-
-            ;
 
             for (Location loc : locationList) {
                 Coord originCoord = new Coord(loc.getX(), loc.getY());
@@ -101,50 +104,37 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
                 zoneCalculationNodesMap.put(loc.getId(), originNode);
             }
 
-            //int counter = 0;
-
             long startTime = System.currentTimeMillis();
+
+
             for (Location originZone : locationList) { // going over all origin zones
                 Node originNode = zoneCalculationNodesMap.get(originZone.getId());
                 //leastCoaptPathTree.calculate(network, originNode, departureTime);
 
                 //Map<Id<Node>, LeastCostPathTree.NodeData> tree = leastCoastPathTree.getTree();
-                DijkstraTree dijkstra = new DijkstraTree(network, travelDisutility, travelTime);
+
                 dijkstra.calcLeastCostPathTree(originNode, departureTime);
 
                 locationList.parallelStream().forEach((Location destinationZone) -> {
-
-                    //for (Location destinationZone : locationList) { // going over all destination zones
                     //nex line to fill only half matrix and use half time
                     if (originZone.getId() <= destinationZone.getId()) {
-                        //alternative 1
-                        //Node destinationNode = zoneCalculationNodesMap.get(destinationZone.getId());
-//                      double arrivalTime = leastCoastPathTree.getTree().get(zoneCalculationNodesMap.get(destinationZone.getId()).getId()).getTime();
                         Node destinationNode = zoneCalculationNodesMap.get(destinationZone.getId());
                         //with the next if tense it is possible to limit the distance calculation to certain threshold, over it --> eucl.dist.
                         float euclideanDistance = euclideanDistanceCalculator.getDistanceFrom(originZone, destinationZone);
-                        if (euclideanDistance < 5e3) {
-
-
+                        if (euclideanDistance < upperDistanceThreshold) {
                             //Dijkstra dijkstra = new Dijkstra(network, travelDisutility, travelTime);
                             LeastCostPathCalculator.Path path = dijkstra.getLeastCostPath(destinationNode);
+
                             float distance = 0;
                             for (Link link : path.links) {
                                 distance += link.getLength();
                             }
-                            ;
                             //double arrivalTime = tree.get(destinationNode.getId()).getTime();
                             //congested car travel times in minutes
                             //float congestedTravelTimeMin = (float) ((arrivalTime - departureTime) / 60.);
-
                             autoTravelDistance.setValueAt(originZone.getId(), destinationZone.getId(), distance);
                             //if only done half matrix need to add next line
                             autoTravelDistance.setValueAt(destinationZone.getId(), originZone.getId(), distance);
-
-                       /* counter++;
-                        if (counter % 100000 == 0) {
-                            log.info("pairs already calculated = " + counter);
-                        }*/
 
                         } else {
                             autoTravelDistance.setValueAt(originZone.getId(), destinationZone.getId(), euclideanDistance);
@@ -153,7 +143,6 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
                         }
                     }
 
-                    //    }
                 });
                 log.info("Completed origin zone: " + originZone.getId());
             }
@@ -167,6 +156,7 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
 
     // inner class to use travel time as travel disutility
     class MyTravelTimeDisutility implements TravelDisutility {
+
         TravelTime travelTime;
 
         public MyTravelTimeDisutility(TravelTime travelTime) {
@@ -183,6 +173,35 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
         @Override
         public double getLinkMinimumTravelDisutility(Link link) {
             return link.getLength() / link.getFreespeed(); // minimum travel time
+        }
+    }
+
+
+    class DistanceAsDisutility implements TravelDisutility {
+
+
+        public DistanceAsDisutility() {
+
+        }
+
+        @Override
+        public double getLinkTravelDisutility(Link link, double time, Person person, Vehicle vehicle) {
+            return link.getLength();
+        }
+
+
+        @Override
+        public double getLinkMinimumTravelDisutility(Link link) {
+            return link.getLength(); // minimum travel time
+        }
+    }
+
+
+    class TravelDistanceAsTime implements TravelTime {
+
+        @Override
+        public double getLinkTravelTime(Link link, double v, Person person, Vehicle vehicle) {
+            return link.getLength();
         }
     }
 

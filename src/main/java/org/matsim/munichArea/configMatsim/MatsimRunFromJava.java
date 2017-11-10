@@ -148,7 +148,7 @@ public class MatsimRunFromJava {
 
         zone2ZoneTravelDistanceListener = new Zone2ZoneTravelDistanceListener(
                 controler, scenario.getNetwork(), config.controler().getLastIteration(),
-                locationList, timeOfDay, numberOfCalcPoints);
+                locationList, timeOfDay, numberOfCalcPoints, Float.parseFloat(rb.getString("distance.threshold")));
 
         //      Add controller listener
         if (autoDistSkims) {
