@@ -15,6 +15,8 @@ import org.matsim.core.scenario.MutableScenario;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
 
+import org.matsim.munichArea.roadSafety.VKTListener;
+
 import java.util.*;
 
 
@@ -157,6 +159,12 @@ public class MatsimRunFromJava {
 
         if (autoTimeSkims){
             controler.addControlerListener(zone2zoneTravelTimeListener);
+        }
+
+        boolean roadSafetyAnalysis = true;
+        if (roadSafetyAnalysis){
+            VKTListener vktListener = new VKTListener(numberOfIterations, scenario.getNetwork(), scaleFactor, controler);
+            controler.addControlerListener(vktListener);
         }
 
         // Run controller

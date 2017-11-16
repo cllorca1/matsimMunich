@@ -220,6 +220,8 @@ public class ReadSyntheticPopulation {
                             boolean simulated = rnd.nextFloat() < scalingFactor / occupancyO[mode];
                             //todo if the trip is not simulated just assign intrazonal trip and do not perform DC to increase speed
                             int destinationOther = simulated ? selectDestionationOtherTrip(origin, travelDistance) : origin;
+                            //int destinationOther = selectDestionationOtherTrip(origin, travelDistance);
+
                             plannedTrip.setSequence(sequence);
                             sequence++;
                             plannedTrip.setSimulated(simulated);
