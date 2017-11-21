@@ -1,9 +1,7 @@
 package org.matsim.munichArea.roadSafety;
 
 import org.apache.log4j.Logger;
-import org.matsim.analysis.CalcLinkStats;
 import org.matsim.analysis.VolumesAnalyzer;
-import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
@@ -11,20 +9,18 @@ import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 //test class to analyze the vkt or major/minor flows at intersections
 
-public class VKTListener implements IterationEndsListener {
+public class VolumeAnalysisListener implements IterationEndsListener {
 
-    private static Logger log = Logger.getLogger(VKTListener.class);
+    private static Logger log = Logger.getLogger(VolumeAnalysisListener.class);
     private int finalIteration;
     private Controler controler;
     private Network network;
     private double scaleFactor;
 
-    public VKTListener(int finalIteration, Network network, double scaleFactor, Controler controler) {
+    public VolumeAnalysisListener(int finalIteration, Network network, double scaleFactor, Controler controler) {
         this.finalIteration = finalIteration;
         this.network = network;
         this.scaleFactor = scaleFactor;
