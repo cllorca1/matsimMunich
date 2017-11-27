@@ -66,12 +66,14 @@ public class MultiModalMATSim {
 
 
             Config config = ConfigUtils.loadConfig("input/config_multimodal.xml", new MultiModalConfigGroup());
+
+//            Config config = ConfigUtils.loadConfig("input/config_for_transit.xml");
+
             config.controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists);
             config.controler().setOutputDirectory(rb.getString("out.folder"));
 
 
             config.network().setInputFile(rb.getString("run.network.file"));
-
 
             config.plans().setInputFile(rb.getString("plan.file"));
 
@@ -103,17 +105,14 @@ public class MultiModalMATSim {
             strategySettings3.setDisableAfter((int) (numberOfIterations * 0.7));
             config.strategy().addStrategySettings(strategySettings3);
 
-            config.transit().setTransitScheduleFile("C:/models/munich/input/pt/scheduleAll.xml");
-            config.transit().setVehiclesFile("C:/models/munich/input/pt/vehiclesAll.xml");
+            config.transit().setTransitScheduleFile("C:/models/munich/input/current/schedule20171026.xml");
+            config.transit().setVehiclesFile("C:/models/munich/input/current/vehicles20171026.xml");
             config.transit().setUseTransit(Boolean.parseBoolean(rb.getString("use.transit")));
             Set<String> transitModes = new TreeSet<>();
             transitModes.add("pt");
             config.transit().setTransitModes(transitModes);
 
-
             //start matsim simulation
-
-
 
             //add scenario preparation
             Scenario scenario = ScenarioUtils.loadScenario(config);

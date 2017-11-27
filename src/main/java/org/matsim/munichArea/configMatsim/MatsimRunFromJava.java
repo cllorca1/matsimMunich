@@ -10,12 +10,11 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.*;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
-import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.scenario.MutableScenario;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.munichArea.configMatsim.planCreation.Location;
 
-import org.matsim.munichArea.roadSafety.VKTListener;
+import org.matsim.munichArea.roadSafety.VolumeAnalysisListener;
 
 import java.util.*;
 
@@ -163,8 +162,8 @@ public class MatsimRunFromJava {
 
         boolean roadSafetyAnalysis = true;
         if (roadSafetyAnalysis){
-            VKTListener vktListener = new VKTListener(numberOfIterations, scenario.getNetwork(), scaleFactor, controler);
-            controler.addControlerListener(vktListener);
+            VolumeAnalysisListener volumeAnalysisListener = new VolumeAnalysisListener(numberOfIterations, scenario.getNetwork(), scaleFactor, controler);
+            controler.addControlerListener(volumeAnalysisListener);
         }
 
         // Run controller
