@@ -15,10 +15,12 @@ public class Trip {
     private Id id;
     private String mode;
     private boolean atHome;
+    private boolean traveling;
     private boolean atWorkPlace;
     private boolean atOther;
     private char purpose;
     private ArrayList<Id<Link>> listOfLinks;
+    private double arrivalAtTransitStop = 0;
 
 
     public Trip(Id id) {
@@ -26,6 +28,7 @@ public class Trip {
         atWorkPlace = false;
         atHome = true;
         atOther = false;
+        traveling = false;
         listOfLinks = new ArrayList<>();
     }
 
@@ -104,5 +107,21 @@ public class Trip {
 
     public void addLinkToList(Id id) {
         this.listOfLinks.add(id);
+    }
+
+    public double getArrivalAtTransitStop() {
+        return arrivalAtTransitStop;
+    }
+
+    public void setArrivalAtTransitStop(double arrivalAtTransitStop) {
+        this.arrivalAtTransitStop = arrivalAtTransitStop;
+    }
+
+    public boolean isTraveling() {
+        return traveling;
+    }
+
+    public void setTraveling(boolean traveling) {
+        this.traveling = traveling;
     }
 }

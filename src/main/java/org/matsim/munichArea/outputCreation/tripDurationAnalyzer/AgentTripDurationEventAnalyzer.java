@@ -61,7 +61,7 @@ public class AgentTripDurationEventAnalyzer {
         BufferedWriter bw = IOUtils.getBufferedWriter(eventsFile + ".csv");
         try {
 
-            bw.write("id,mode,departure,arrival,tripDuration,waitingTime,purpose");
+            bw.write("id,mode,departure,arrival,tripDuration,waitingTime,purpose,timeAtFirstStation");
             bw.write(",dist,distOnCh");
             bw.newLine();
 
@@ -76,7 +76,8 @@ public class AgentTripDurationEventAnalyzer {
                         tripMap.get(id).getArrivalTime() + "," +
                         tripDuration + "," +
                         waitingTimeBefore + "," +
-                        tripMap.get(id).getPurpose());
+                        tripMap.get(id).getPurpose() + "," +
+                        tripMap.get(id).getArrivalAtTransitStop());
 
 
 
