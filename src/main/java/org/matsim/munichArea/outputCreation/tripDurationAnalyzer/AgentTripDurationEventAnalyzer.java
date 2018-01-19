@@ -39,8 +39,9 @@ public class AgentTripDurationEventAnalyzer {
         //load the matsim network
         Config config = ConfigUtils.createConfig();
         //todo manually input the desired network!!
+        config.network().setInputFile("C:/Users/carlloga/Desktop/2SS_matsim_results/2012_without/mitoMatsim2012.output_network.xml.gz");
         //config.network().setInputFile("./input/studyNetworkLight.xml");
-        config.network().setInputFile("./multimodal/input/studyNetworkCyclingV2.xml");
+        //config.network().setInputFile("./multimodal/input/studyNetworkCyclingV2.xml");
         Scenario scenario = ScenarioUtils.loadScenario(config);
         network = scenario.getNetwork();
 
@@ -63,6 +64,7 @@ public class AgentTripDurationEventAnalyzer {
 
             bw.write("id,mode,departure,arrival,tripDuration,waitingTime,purpose,timeAtFirstStation");
             bw.write(",dist,distOnCh");
+            bw.write(",x_orig,y_orig,x_dest,y_dest");
             bw.newLine();
 
         for (Id id : tripMap.keySet()){
@@ -80,8 +82,6 @@ public class AgentTripDurationEventAnalyzer {
                         tripMap.get(id).getArrivalAtTransitStop());
 
 
-
-
                 double dist = 0;
                 double distOnCH = 0;
                 for (Link l : NetworkUtils.getLinks(network,tripMap.get(id).getListOfLinks())){
@@ -95,6 +95,29 @@ public class AgentTripDurationEventAnalyzer {
                 }
 
                 bw.write("," + dist + "," +distOnCH);
+
+                //origin link
+
+
+                Link originLink = network.getLinks().get(tripMap.get(id).getOrigLinkId());
+                bw.write( "," +
+                        originLink.getFromNode().getCoord().getX() + "," +
+                        originLink.getFromNode().getCoord().getY());
+
+
+                //destination link
+                try {
+                    Link destLink = network.getLinks().get(tripMap.get(id).getDestLinkId());
+                    bw.write("," +
+                            destLink.getToNode().getCoord().getX() + "," +
+                            destLink.getToNode().getCoord().getY());
+                } catch (Exception e){
+                    bw.write("," +
+                            -1 + "," +
+                            -1);
+                }
+
+
                 bw.newLine();
 
             }

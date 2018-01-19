@@ -50,7 +50,9 @@ public class ActivityStartEndHandler implements ActivityEndEventHandler,
         //fails at the second activity we are collecting
         if (event.getActType().equals("home")){
             Trip t = new Trip(event.getPersonId());
+            t.setOrigLinkId(event.getLinkId());
             tripMap.put(event.getPersonId(), t);
+
         }
 
     }
@@ -125,12 +127,14 @@ public class ActivityStartEndHandler implements ActivityEndEventHandler,
             t.setAtWorkPlace(true);
             t.setAtHome(false);
             t.setTraveling(false);
+            t.setDestLinkId(event.getLinkId());
             t.setPurpose('w');
         } else if (event.getActType().equals("other")){
             Trip t = tripMap.get(event.getPersonId());
             t.setAtOther(true);
             t.setAtHome(false);
             t.setTraveling(false);
+            t.setDestLinkId(event.getLinkId());
             t.setPurpose('o');
         }
 

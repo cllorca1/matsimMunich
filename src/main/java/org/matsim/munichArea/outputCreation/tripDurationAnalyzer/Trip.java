@@ -1,5 +1,6 @@
 package org.matsim.munichArea.outputCreation.tripDurationAnalyzer;
 
+import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 
@@ -21,6 +22,8 @@ public class Trip {
     private char purpose;
     private ArrayList<Id<Link>> listOfLinks;
     private double arrivalAtTransitStop = 0;
+    private Id origLinkId;
+    private Id destLinkId;
 
 
     public Trip(Id id) {
@@ -123,5 +126,21 @@ public class Trip {
 
     public void setTraveling(boolean traveling) {
         this.traveling = traveling;
+    }
+
+    public Id getOrigLinkId() {
+        return origLinkId;
+    }
+
+    public void setOrigLinkId(Id origLinkId) {
+        this.origLinkId = origLinkId;
+    }
+
+    public Id getDestLinkId() {
+        return destLinkId;
+    }
+
+    public void setDestLinkId(Id destLinkId) {
+        this.destLinkId = destLinkId;
     }
 }
