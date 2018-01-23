@@ -442,6 +442,14 @@ public class ReadSyntheticPopulation {
         return matsimPopulation;
     }
 
+    public void printSyntheticPlansAsXml(){
+
+        PopulationWriter populationWriter = new PopulationWriter(matsimPopulation);
+        populationWriter.write("plansOutput.xml");
+
+
+    }
+
     public void printHistogram() {
 
         BufferedWriter bw = IOUtils.getBufferedWriter(rb.getString("td.hist.file"));
