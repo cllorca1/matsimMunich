@@ -6,14 +6,15 @@ package org.matsim.munichArea;
         import com.pb.common.datafile.TableDataSet;
         import com.pb.common.matrix.Matrix;
         import com.pb.common.util.ResourceUtil;
-        import com.vividsolutions.jts.geom.Coordinate;
-        import com.vividsolutions.jts.geom.LineString;
+        import com.vividsolutions.jts.geom.*;
 
         import omx.OmxMatrix;
         import omx.hdf5.OmxHdf5Datatype;
         import org.apache.log4j.Logger;
         import org.geotools.geometry.jts.JTS;
         import org.geotools.referencing.CRS;
+        import org.matsim.api.core.v01.Coord;
+        import org.opengis.feature.simple.SimpleFeature;
         import org.opengis.referencing.FactoryException;
         import org.opengis.referencing.operation.TransformException;
 
@@ -36,6 +37,7 @@ package org.matsim.munichArea;
 public class Util {
 
     static Logger logger = Logger.getLogger(Util.class);
+    private final static GeometryFactory geometryFactory = new GeometryFactory();
 
     public static TableDataSet readCSVfile (String fileName) {
         // read csv file and return as TableDataSet
@@ -68,6 +70,23 @@ public class Util {
         if (ind == -1) logger.error("Could not find element " + element +
                 " in array (see method <findPositionInArray> in class <SiloUtil>");
         return ind;
+    }
+
+    public static final Coord getRandomCoordinateInGeometry(SimpleFeature feature) {
+        Geometry geometry = (Geometry) feature.getDefaultGeometry();
+        Envelope envelope = geometry.getEnvelopeInternal();
+        while (true) {
+            Point point = getRandomPointInEnvelope(envelope);
+            if (point.within(geometry)) {
+                return new Coord(point.getX(), point.getY());
+            }
+        }
+    }
+
+    public static final Point getRandomPointInEnvelope(Envelope envelope) {
+        double x = envelope.getMinX() + Math.random() * envelope.getWidth();
+        double y = envelope.getMinY() + Math.random() * envelope.getHeight();
+        return geometryFactory.createPoint(new Coordinate(x,y));
     }
 
 

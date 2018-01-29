@@ -35,6 +35,8 @@ public class TransitSkimPostProcessing {
     private Matrix autoTravelDistance;
     private Matrix inVehicle;
 
+    public double minutesThreshold = 200;
+
     private static String simulationName;
 
 
@@ -113,12 +115,10 @@ public class TransitSkimPostProcessing {
                     int finalZoneIndex = 0;
                     for (Location k : servedZoneList) {
                         access = (float) (autoTravelDistance.getValueAt(i, k.getId()) / 1.4 / 60);
-                        if (access < 30 ) {
-                            //there is a location k which one can get to transit by walk in less than 30 min
+                        if (access < minutesThreshold ) {
                             for (Location l : servedZoneList) {
                                 egress = (float) (autoTravelDistance.getValueAt(l.getId(), j) / 1.4 / 60);
-                                if (egress < 30) {
-                                    //there is a location l from which one can get dest by walk in less than 30 min
+                                if (egress < minutesThreshold) {
                                     if (totalTime.getValueAt(k.getId(), l.getId()) > 0) {
                                         if (tt > totalTime.getValueAt(k.getId(), l.getId()) + access + egress) {
                                             //a better OD tranist pair has been found
@@ -138,7 +138,7 @@ public class TransitSkimPostProcessing {
 
                     if (startZoneIndex != 0 & finalZoneIndex != 0){
 
-                        if (tt < 500 & tt > 0) {
+                        if (tt < minutesThreshold & tt > 0) {
                         //found the best k and l that link i and j by transit inn tt mins
                         inTransitCompleteMatrix.setValueAt(i,j,inTransit.getValueAt(startZoneIndex, finalZoneIndex));
                         inTransitCompleteMatrix.setValueAt(j,i,inTransit.getValueAt(startZoneIndex, finalZoneIndex));
