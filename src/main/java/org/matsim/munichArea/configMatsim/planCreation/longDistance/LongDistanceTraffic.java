@@ -50,6 +50,14 @@ public class LongDistanceTraffic {
     private int[] hours = new int[24];
     private double[] probabilities = new double[24];
 
+    //for pre-analysis only
+    private Map<Integer, Float> totalGeneratedFlows = new HashMap<>();
+    private Map<Integer, Float> totalAttractedFlows = new HashMap<>();
+    private float internalFlow = 0;
+    private  float outboundFlow = 0;
+    private float inboundFlow = 0;
+    private float thruFlow = 0;
+
 
     public LongDistanceTraffic(){
 
@@ -124,12 +132,13 @@ public class LongDistanceTraffic {
                 ExternalFlowZoneType type = ExternalFlowZoneType.getExternalFlowZoneTypeFromInt(Integer.parseInt(line.split(",")[positionType]));
                 Coord coordinates = new Coord(Float.parseFloat(line.split(",")[positionX]),Float.parseFloat(line.split(",")[positionY]));
                 SimpleFeature feature;
-                if (type.equals(ExternalFlowZoneType.NUTS3)) {
+                if (!type.equals(ExternalFlowZoneType.BORDER)) {
                      feature = features.get(id);
                 } else {
                     feature = null;
                 }
                 zones.put(id, new ExternalFlowZone(id, coordinates, type, feature));
+                initialize(id);
             }
 
             br.close();
@@ -215,8 +224,9 @@ public class LongDistanceTraffic {
                 for (int destId : matrix.columnKeySet()){
 
                     if (matrix.contains(originId, destId)){
+                        addFlow(originId, destId, matrix.get(originId, destId));
+                        countTotals(originId, destId, matrix.get(originId, destId));
                         long trips = Math.round(matrix.get(originId, destId) * scalingFactor);
-
                         for (long trip = 0; trip < trips; trip++){
                             Plan matsimPlan = matsimPopulationFactory.createPlan();
                             Person matsimPerson = matsimPopulationFactory.createPerson(Id.createPersonId("ld" + personId));
@@ -257,9 +267,51 @@ public class LongDistanceTraffic {
 
         return (new EnumeratedIntegerDistribution(hours, probabilities).sample()  + Math.random())*3600;
 
-
-
     }
 
+
+    public void initialize(int zone){
+        //for analysis
+        totalGeneratedFlows.put(zone, 0f);
+        totalAttractedFlows.put(zone, 0f);
+    }
+
+
+    public void addFlow(int origin, int dest, float flow){
+        //for analysis
+        totalGeneratedFlows.put(origin, totalGeneratedFlows.get(origin) + flow);
+        totalAttractedFlows.put(dest, totalAttractedFlows.get(dest) + flow);
+    }
+
+    public void printOutTripGenerationAndAttraction(){
+        logger.info("zoneId,generated,attracted");
+        for (int zoneId: zones.keySet()){
+            logger.info(zoneId + "," + totalGeneratedFlows.get(zoneId) + "," + totalAttractedFlows.get(zoneId) );
+        }
+    }
+
+    public void countTotals(int origin, int dest, float flow){
+        ExternalFlowZoneType origType = zones.get(origin).getZoneType();
+        ExternalFlowZoneType destType = zones.get(dest).getZoneType();
+
+        if (origType.equals(ExternalFlowZoneType.BORDER) && destType.equals(ExternalFlowZoneType.BORDER)){
+            thruFlow += flow;
+        } else if ((origType.equals(ExternalFlowZoneType.BEZIRKE)|| origType.equals(ExternalFlowZoneType.NUTS3))
+                && destType.equals(ExternalFlowZoneType.BORDER)){
+            outboundFlow += flow;
+        } else if ((destType.equals(ExternalFlowZoneType.BEZIRKE)|| destType.equals(ExternalFlowZoneType.NUTS3))
+                && origType.equals(ExternalFlowZoneType.BORDER)){
+            inboundFlow += flow;
+        } else {
+            internalFlow += flow;
+        }
+    }
+
+    public void printOutTotals(){
+        logger.info("thru flow: " + thruFlow);
+        logger.info("outbound " + outboundFlow);
+        logger.info("inbound " + inboundFlow);
+        logger.info("internal " + internalFlow);
+    }
 
 }

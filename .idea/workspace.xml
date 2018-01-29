@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a15e1a17-0473-40da-a7d8-a5224804c518" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunExternalFlowsOnly.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowType.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZone.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZoneType.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/LongDistanceTraffic.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/LongDistanceTraffic.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/Util.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/Util.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/outputCreation/transitSkim/TransitSkimPostProcessing.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunExternalFlowsOnly.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunExternalFlowsOnly.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZone.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZone.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/LongDistanceTraffic.java" afterPath="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/LongDistanceTraffic.java" />
     </list>
     <ignored path="MATSim.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1729,13 +1725,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LongDistanceTraffic.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="LongDistanceTraffic.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/LongDistanceTraffic.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
-              <caret line="34" column="75" lean-forward="false" selection-start-line="34" selection-start-column="75" selection-end-line="34" selection-end-column="75" />
+            <state relative-caret-position="463">
+              <caret line="313" column="34" lean-forward="false" selection-start-line="313" selection-start-column="34" selection-end-line="313" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#readDepartureTimeDistribution#0;class#LongDistanceTraffic#0" expanded="false" />
                 <element signature="method#readMatrices#0;class#LongDistanceTraffic#0" expanded="false" />
                 <element signature="method#validate#0;class#LongDistanceTraffic#0" expanded="false" />
               </folding>
@@ -1746,8 +1743,8 @@
       <file leaf-file-name="RunExternalFlowsOnly.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunExternalFlowsOnly.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="34" lean-forward="false" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
+            <state relative-caret-position="306">
+              <caret line="36" column="45" lean-forward="true" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1755,7 +1752,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MatsimRunFromFile.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MatsimRunFromFile.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimRunFromFile.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
@@ -1788,10 +1785,11 @@
       <file leaf-file-name="ExternalFlowZone.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZone.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="24" column="63" lean-forward="false" selection-start-line="24" selection-start-column="63" selection-end-line="24" selection-end-column="63" />
+            <state relative-caret-position="310">
+              <caret line="35" column="47" lean-forward="false" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1300#1301#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1810,8 +1808,8 @@
       <file leaf-file-name="Util.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/Util.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="75" column="46" lean-forward="false" selection-start-line="75" selection-start-column="39" selection-end-line="75" selection-end-column="46" />
+            <state relative-caret-position="143">
+              <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -1951,8 +1949,8 @@
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/LongDistanceTraffic.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZoneType.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/Util.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZone.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowType.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZone.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunExternalFlowsOnly.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/LongDistanceTraffic.java" />
       </list>
@@ -2194,7 +2192,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MatsimFromFile">
+  <component name="RunManager" selected="Application.RunExternalFlowsOnly">
     <configuration name="AccCalc" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="org.matsim.munichArea.outputCreation.accessibilityCalculator.Accessibility" />
@@ -2811,13 +2809,6 @@
       <option name="presentableId" value="Default" />
       <updated>1473665247616</updated>
     </task>
-    <task id="LOCAL-00049" summary="add omx dependency and remove old file to create xml plans">
-      <created>1495204637713</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1495204637713</updated>
-    </task>
     <task id="LOCAL-00050" summary="remove eclipse plugin ??">
       <created>1495205146799</created>
       <option name="number" value="00050" />
@@ -3154,7 +3145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1516697616938</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="first version of external flows processing">
+      <created>1517223722997</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1517223722997</updated>
+    </task>
+    <option name="localTasksCounter" value="99" />
     <servers />
   </component>
   <component name="TodoView">
@@ -3178,7 +3176,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44203684" sideWeight="0.1078125" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1828125" sideWeight="0.49317408" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.496208" sideWeight="0.8921875" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.47995666" sideWeight="0.8921875" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32887402" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -3275,7 +3273,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="first steps on restructuring matsim run modes" />
     <MESSAGE value="format changes" />
     <MESSAGE value="format changes (ii)" />
     <MESSAGE value="divide implementations for scaling and transit skims" />
@@ -3300,7 +3297,8 @@
     <MESSAGE value="transit trips in agent trip duration analyzer" />
     <MESSAGE value="include origin adn destination coordinates" />
     <MESSAGE value="framework for LD flows" />
-    <option name="LAST_COMMIT_MESSAGE" value="framework for LD flows" />
+    <MESSAGE value="first version of external flows processing" />
+    <option name="LAST_COMMIT_MESSAGE" value="first version of external flows processing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3607,6 +3605,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1984">
           <caret line="37" column="41" lean-forward="false" selection-start-line="37" selection-start-column="41" selection-end-line="37" selection-end-column="41" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3664,21 +3663,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/Util.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimRunFromFile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="75" column="46" lean-forward="false" selection-start-line="75" selection-start-column="39" selection-end-line="75" selection-end-column="46" />
+        <state relative-caret-position="119">
+          <caret line="12" column="32" lean-forward="true" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZone.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/Util.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="24" column="63" lean-forward="false" selection-start-line="24" selection-start-column="63" selection-end-line="24" selection-end-column="63" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="143">
+          <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3698,33 +3695,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/LongDistanceTraffic.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/ExternalFlowZone.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="34" column="75" lean-forward="false" selection-start-line="34" selection-start-column="75" selection-end-line="34" selection-end-column="75" />
+        <state relative-caret-position="310">
+          <caret line="35" column="47" lean-forward="false" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#readMatrices#0;class#LongDistanceTraffic#0" expanded="false" />
-            <element signature="method#validate#0;class#LongDistanceTraffic#0" expanded="false" />
+            <element signature="e#1300#1301#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/RunExternalFlowsOnly.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="34" lean-forward="false" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
+        <state relative-caret-position="306">
+          <caret line="36" column="45" lean-forward="true" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/MatsimRunFromFile.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/matsim/munichArea/configMatsim/planCreation/longDistance/LongDistanceTraffic.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="12" column="32" lean-forward="true" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
-          <folding />
+        <state relative-caret-position="463">
+          <caret line="313" column="34" lean-forward="false" selection-start-line="313" selection-start-column="34" selection-end-line="313" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#readDepartureTimeDistribution#0;class#LongDistanceTraffic#0" expanded="false" />
+            <element signature="method#readMatrices#0;class#LongDistanceTraffic#0" expanded="false" />
+            <element signature="method#validate#0;class#LongDistanceTraffic#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -32,6 +32,9 @@ public class RunExternalFlowsOnly {
         PopulationWriter populationWriter = new PopulationWriter(matsimPopulation);
         populationWriter.write("input/externalFlows/population.xml");
 
+        //only for debugging
+        //longDistanceTraffic.printOutTripGenerationAndAttraction();
+        longDistanceTraffic.printOutTotals();
 
     }
 }
