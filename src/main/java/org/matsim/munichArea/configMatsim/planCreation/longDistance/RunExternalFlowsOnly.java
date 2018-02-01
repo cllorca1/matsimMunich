@@ -1,15 +1,13 @@
-package org.matsim.munichArea;
+package org.matsim.munichArea.configMatsim.planCreation.longDistance;
 
 import org.apache.log4j.Logger;
 
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.Population;
-import org.matsim.api.core.v01.population.PopulationFactory;
 import org.matsim.api.core.v01.population.PopulationWriter;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.munichArea.configMatsim.planCreation.longDistance.LongDistanceTraffic;
 
 public class RunExternalFlowsOnly {
 

@@ -2750,13 +2750,6 @@
       <option name="presentableId" value="Default" />
       <updated>1473665247616</updated>
     </task>
-    <task id="LOCAL-00052" summary="children don't travel + roundtrips not counted in event analyzer">
-      <created>1495800691632</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1495800691633</updated>
-    </task>
     <task id="LOCAL-00053" summary="java from file class">
       <created>1496241839730</created>
       <option name="number" value="00053" />
@@ -3093,7 +3086,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517474613657</updated>
     </task>
-    <option name="localTasksCounter" value="101" />
+    <task id="LOCAL-00101" summary="testing synthetic schedule issues">
+      <created>1517500251963</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1517500251963</updated>
+    </task>
+    <option name="localTasksCounter" value="102" />
     <servers />
   </component>
   <component name="TodoView">
@@ -3214,7 +3214,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="divide implementations for scaling and transit skims" />
     <MESSAGE value="speed up skim matrix calculation" />
     <MESSAGE value="pass stuck time and use transit properties to matsim" />
     <MESSAGE value="set use transit prop" />
@@ -3239,7 +3238,8 @@
     <MESSAGE value="first version of external flows processing" />
     <MESSAGE value="added summary of external flows for first analyses" />
     <MESSAGE value="tool to add opposing links to some missing roads (manual)" />
-    <option name="LAST_COMMIT_MESSAGE" value="tool to add opposing links to some missing roads (manual)" />
+    <MESSAGE value="testing synthetic schedule issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="testing synthetic schedule issues" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
