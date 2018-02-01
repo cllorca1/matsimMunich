@@ -108,4 +108,18 @@ public class RoadBuilder {
     public Network getNetwork() {
         return network;
     }
+
+    public Network addNewLink(Network network){
+
+        Link referenceLink = network.getLinks().get(Id.createLinkId(rb.getString("new.link.reference")));
+        Node fromNode = network.getNodes().get(Id.createNodeId(rb.getString("new.link.from")));
+        Node toNode = network.getNodes().get(Id.createNodeId(rb.getString("new.link.to")));
+
+        NetworkUtils.createAndAddLink(network, Id.createLinkId(referenceLink.getId() + "new"),fromNode, toNode,
+                referenceLink.getLength(), referenceLink.getFreespeed(), referenceLink.getCapacity(), referenceLink.getNumberOfLanes());
+
+        log.info("A new single link has been created between " + fromNode.toString() + " and " + toNode.getId().toString());
+
+        return network;
+    }
 }
