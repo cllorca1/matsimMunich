@@ -59,6 +59,9 @@ public class LongDistanceTraffic {
         this.rb = rb;
 
         zones = new HashMap<>();
+
+        fileNameZones = rb.getString("external.zones.names");
+
         externalFlows = new HashMap<>();
         matrixFileNames = new HashMap<>();
 
