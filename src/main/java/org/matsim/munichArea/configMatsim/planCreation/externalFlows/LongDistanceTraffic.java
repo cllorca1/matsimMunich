@@ -26,22 +26,23 @@ public class LongDistanceTraffic {
     private PopulationFactory matsimPopulationFactory;
     private Map<Integer, ExternalFlowZone> zones;
     private Map<ExternalFlowType, HashBasedTable<Integer, Integer, Float>> externalFlows;
-    private String fileNameZones = "input/externalFlows/centroidsWithoutComma.csv";
-    private String shapeFileZones = "input/externalFlows/zonesExternalFlows.shp";
-    private String idFieldName = "NO";
-    private String fileNamePkw = "input/externalFlows/matrices/Pkw.mtx";
-    private String fileNameGV = "input/externalFlows/matrices/GV_andere.mtx";
-    private String fileNamePkwPWV = "input/externalFlows/matrices/Pkw_PWV.mtx";
-    private String fileNameSZM = "input/externalFlows/matrices/SZM.mtx";
+    private String fileNameZones;
+    private String shapeFileZones;
+    private String idFieldName;
+    private String fileNamePkw ;
+    private String fileNameGV;
+    private String fileNamePkwPWV;
+    private String fileNameSZM;
     private Map<ExternalFlowType, String> matrixFileNames;
 
+    //hard coded for the specific format of matrices
     private int startOrigId = 3;
     private int endOrigId = 11  ;
     private int startDestId = 14 ;
     private int endDestId = 21;
     private int startFlow = 23;
 
-    private String departureTimeFileName = "input/externalFlows/depTimeDist.csv";
+    private String departureTimeFileName;
     private int[] hours = new int[24];
     private double[] probabilities = new double[24];
 
@@ -60,19 +61,24 @@ public class LongDistanceTraffic {
 
         zones = new HashMap<>();
 
-        fileNameZones = rb.getString("external.zones.names");
+        fileNameZones = rb.getString("external.zones.list");
+        shapeFileZones = rb.getString("external.zones.shp");
+        idFieldName = rb.getString("external.zones.shp.idname");
+        fileNamePkw = rb.getString("external.matrix.pkw");
+        fileNameGV = rb.getString("external.matrix.gv");
+        fileNamePkwPWV = rb.getString("external.matrix.pkw_pwv");
+        fileNameSZM = rb.getString("external.matrix.szm");
+
+        departureTimeFileName = rb.getString("external.departure.time");
 
         externalFlows = new HashMap<>();
         matrixFileNames = new HashMap<>();
-
         matrixFileNames.put(ExternalFlowType.GV_andere, fileNameGV);
         matrixFileNames.put(ExternalFlowType.Pkw, fileNamePkw);
         matrixFileNames.put(ExternalFlowType.Pkw_PWV, fileNamePkwPWV);
         matrixFileNames.put(ExternalFlowType.SZM, fileNameSZM);
 
         readDepartureTimeDistribution(departureTimeFileName);
-
-
 
     }
 
