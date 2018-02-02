@@ -10,6 +10,7 @@ import org.matsim.munichArea.configMatsim.createDemandPt.MatsimPopulationCreator
 import org.matsim.munichArea.configMatsim.MatsimRunFromJava;
 import org.matsim.munichArea.configMatsim.createDemandPt.PtSyntheticTraveller;
 import org.matsim.munichArea.configMatsim.createDemandPt.ReadZonesServedByTransit;
+import org.matsim.munichArea.configMatsim.networkTools.CreateNetwork;
 import org.matsim.munichArea.outputCreation.EuclideanDistanceCalculator;
 import org.matsim.munichArea.outputCreation.transitSkim.TransitSkimCreator;
 import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
@@ -36,7 +37,7 @@ public class MatsimExecuter {
         File propFile = new File(args[0]);
         rb = ResourceUtil.getPropertyBundle(propFile);
 
-        boolean createNetwork = ResourceUtil.getBooleanProperty(rb, "create.network");
+
         boolean runMatsim = ResourceUtil.getBooleanProperty(rb, "run.matsim");
         boolean runGravityModel = ResourceUtil.getBooleanProperty(rb, "run.gravity.model");
         boolean autoTimeSkims = ResourceUtil.getBooleanProperty(rb, "skim.auto.times");
@@ -54,8 +55,8 @@ public class MatsimExecuter {
 
         boolean useSp = ResourceUtil.getBooleanProperty(rb, "use.sp");
 
-        //create network from OSM file
-        if (createNetwork) CreateNetwork.createNetwork();
+
+
 
         //read centroids and get list of locations
         CentroidsToLocations centroidsToLocations = new CentroidsToLocations(rb);

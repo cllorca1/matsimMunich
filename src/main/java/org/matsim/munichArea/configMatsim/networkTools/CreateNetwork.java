@@ -1,4 +1,4 @@
-package org.matsim.munichArea;
+package org.matsim.munichArea.configMatsim.networkTools;
 
 import com.pb.common.util.ResourceUtil;
 import org.matsim.api.core.v01.Id;
@@ -15,9 +15,11 @@ import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.core.utils.io.OsmNetworkReader;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import static org.matsim.munichArea.MatsimExecuter.rb;
 
@@ -26,6 +28,19 @@ import static org.matsim.munichArea.MatsimExecuter.rb;
  * "P" has to do with "Potsdam" and "Z" with "Zurich", but P and Z are mostly used to show which classes belong together.
  */
 public class CreateNetwork {
+
+
+    public static ResourceBundle rb;
+
+    public static void main (String[] args){
+
+        File propFile = new File(args[0]);
+        rb = ResourceUtil.getPropertyBundle(propFile);
+
+        createNetwork();
+
+    }
+
 
     public static void createNetwork() {
 
@@ -60,8 +75,6 @@ public class CreateNetwork {
         Scenario scenario = ScenarioUtils.createScenario(config);
 
 
-
-
 		/*
 		 * Pick the Network from the Scenario for convenience.
 		 */
@@ -70,48 +83,11 @@ public class CreateNetwork {
         OsmNetworkReader onr = new OsmNetworkReader(network,ct);
         onr.parse(osm);
 
-
-
-        boolean cleanEmpty = ResourceUtil.getBooleanProperty(rb,"clean.empty.link");
-        if (cleanEmpty) {
-            String emptyLinksFileName = networkFolder + rb.getString("empty.links.file");
-
-            BufferedReader bufferReader = null;
-            ArrayList<Integer> emptyLinkList = new ArrayList<>();
-
-            try {
-                String line;
-                bufferReader = new BufferedReader(new FileReader(emptyLinksFileName));
-
-                while ((line = bufferReader.readLine()) != null) {
-                    int emptyLink = Integer.parseInt(line);
-                    emptyLinkList.add(emptyLink);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (bufferReader != null) bufferReader.close();
-                } catch (IOException crunchifyException) {
-                    crunchifyException.printStackTrace();
-                }
-            }
-
-            for (int i : emptyLinkList) {
-                Id linkId = Id.createLinkId(i);
-                network.removeLink(linkId);
-            }
-        }
-
         /*
 		 * Clean the Network. Cleaning means removing disconnected components, so that afterwards there is a route from every link
 		 * to every other link. This may not be the case in the initial network converted from OpenStreetMap.
 		 */
         new NetworkCleaner().run(network);
-
-
-
 
 		/*
 		 * Write the Network to a MATSim network file.
