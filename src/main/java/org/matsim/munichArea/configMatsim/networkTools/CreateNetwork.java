@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import static org.matsim.munichArea.MatsimExecuter.rb;
 
 
 /**

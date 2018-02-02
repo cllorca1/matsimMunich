@@ -27,29 +27,18 @@ public class MatsimRunFromJava {
     private ResourceBundle rb;
     private Matrix autoTravelTime;
     private Matrix autoTravelDistance;
-    private final Config config;
-    private Zone2ZoneTravelTimeListener zone2zoneTravelTimeListener;
-    private Zone2ZoneTravelDistanceListener zone2ZoneTravelDistanceListener;
+    private final Config config = ConfigUtils.createConfig();
+
+    private MutableScenario scenario;
+    private Controler controler;
 
     public MatsimRunFromJava(ResourceBundle rb) {
         this.rb = rb;
-        config = ConfigUtils.createConfig();
     }
 
-    public void runMatsim(
-                                                                                   int timeOfDay, int numberOfCalcPoints /*, Map<Integer,SimpleFeature> zoneFeatureMap*/, //CoordinateTransformation ct,
-                                                                                   String inputNetworkFile,
-                                                                                   Population population, int year,
-                                                                                   String crs, int numberOfIterations, String siloRunId, String outputDirectoryRoot,
-                                                                                   double scaleFactor,
-                                                                                   double flowCapacityFactor,
-                                                                                   double storageCapacityFactor,
-                                                                                   ArrayList<Location> locationList, boolean autoTimeSkims, boolean autoDistSkims,
-                                                                                   String scheduleFile, String vehicleFile, float stuckTime,
-                                                                                   boolean useTransit) {
-
-        autoTravelTime = new Matrix(locationList.size(), locationList.size());
-
+    public void configureMatsim(String inputNetworkFile, int year, String crs, int numberOfIterations, String runId,
+                                String outputDirectoryRoot, double flowCapacityFactor, double storageCapacityFactor,
+                                String scheduleFile, String vehicleFile, float stuckTime, boolean useTransit){
         // Global
         config.global().setCoordinateSystem(crs);
 
@@ -57,12 +46,14 @@ public class MatsimRunFromJava {
         config.network().setInputFile(inputNetworkFile);
 
         //public transport
-        config.transit().setTransitScheduleFile(scheduleFile);
-        config.transit().setVehiclesFile(vehicleFile);
         config.transit().setUseTransit(useTransit);
-        Set<String> transitModes = new TreeSet<>();
-        transitModes.add("pt");
-        config.transit().setTransitModes(transitModes);
+        if (useTransit) {
+            config.transit().setTransitScheduleFile(scheduleFile);
+            config.transit().setVehiclesFile(vehicleFile);
+            Set<String> transitModes = new TreeSet<>();
+            transitModes.add("pt");
+            config.transit().setTransitModes(transitModes);
+        }
 
         // Simulation
         config.qsim().setFlowCapFactor(flowCapacityFactor);
@@ -73,7 +64,7 @@ public class MatsimRunFromJava {
         config.qsim().setStuckTime(stuckTime);
 
         // Controller
-        String runId = siloRunId + "_" + year;
+        runId = runId + "_" + year;
         String outputDirectory = outputDirectoryRoot;
         config.controler().setRunId(runId);
         config.controler().setOutputDirectory(outputDirectory);
@@ -135,57 +126,47 @@ public class MatsimRunFromJava {
         config.qsim().setUsingThreadpool(false);
 
         config.vspExperimental().setVspDefaultsCheckingLevel(VspExperimentalConfigGroup.VspDefaultsCheckingLevel.warn);
+    }
 
-        //until here only uses the config!
-
-        // Scenario
-        MutableScenario scenario = (MutableScenario) ScenarioUtils.loadScenario(config);
+    public void setMatsimPopulationAndInitialize(Population population){
+        scenario = (MutableScenario) ScenarioUtils.loadScenario(config);
         scenario.setPopulation(population);
+        controler = new Controler(scenario);
+    }
 
+    public void addRoadSafetyAnalyzer(double tripScalingFactor){
+        VolumeAnalysisListener volumeAnalysisListener = new VolumeAnalysisListener(config.controler().getLastIteration(), scenario.getNetwork(), tripScalingFactor, controler);
+        controler.addControlerListener(volumeAnalysisListener);
+    }
 
+    public Matrix addTimeSkimMatrixCalculator(int timeOfDay, int numberOfCalcPoints,
+                                                    ArrayList<Location> locationList){
 
-
-        // Initialize controller
-        final Controler controler = new Controler(scenario);
-
-        zone2zoneTravelTimeListener = new Zone2ZoneTravelTimeListener(
+        TimeListener timeListener = new TimeListener(
                 controler, scenario.getNetwork(), config.controler().getLastIteration(),
                 locationList, timeOfDay, numberOfCalcPoints);
 
-        zone2ZoneTravelDistanceListener = new Zone2ZoneTravelDistanceListener(
+        controler.addControlerListener(timeListener);
+
+        return timeListener.getAutoTravelTime();
+    }
+
+    public Matrix addDistanceSkimMatrixCalculator(int timeOfDay, int numberOfCalcPoints,
+                                                        ArrayList<Location> locationList){
+
+        DistListener distListener = new DistListener(
                 controler, scenario.getNetwork(), config.controler().getLastIteration(),
                 locationList, timeOfDay, numberOfCalcPoints, Float.parseFloat(rb.getString("distance.threshold")));
+        controler.addControlerListener(distListener);
 
-        //      Add controller listener
-        if (autoDistSkims) {
-            controler.addControlerListener(zone2ZoneTravelDistanceListener);
-        }
+        return distListener.getAutoTravelDistance();
+    }
 
-        if (autoTimeSkims){
-            controler.addControlerListener(zone2zoneTravelTimeListener);
-        }
 
-        boolean roadSafetyAnalysis = true;
-        if (roadSafetyAnalysis){
-            VolumeAnalysisListener volumeAnalysisListener = new VolumeAnalysisListener(numberOfIterations, scenario.getNetwork(), scaleFactor, controler);
-            controler.addControlerListener(volumeAnalysisListener);
-        }
+    public void runMatsim(){
 
-        // Run controller
         controler.run();
 
-        autoTravelTime = zone2zoneTravelTimeListener.getAutoTravelTime();
-        autoTravelDistance = zone2ZoneTravelDistanceListener.getAutoTravelDistance();
-
-
-    }
-
-    public Matrix getAutoTravelTime() {
-        return autoTravelTime;
-    }
-
-    public Matrix getAutoTravelDistance() {
-        return autoTravelDistance;
     }
 
     public Network getNetwork() {

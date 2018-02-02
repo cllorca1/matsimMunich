@@ -17,7 +17,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static org.matsim.munichArea.MatsimExecuter.rb;
 
 /**
  * Created by carlloga on 17-05-17.

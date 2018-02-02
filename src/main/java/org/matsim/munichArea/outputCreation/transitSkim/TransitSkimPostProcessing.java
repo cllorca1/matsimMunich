@@ -173,22 +173,28 @@ public class TransitSkimPostProcessing {
     public void writeFilledMatrices(){
 
         String omxPtFileName = munich.getString("pt.total.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(totalTimeCompleteMatrix, locationList, omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxSkimMatrix(totalTimeCompleteMatrix,  omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.in.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(inTransitCompleteMatrix, locationList, omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxSkimMatrix(inTransitCompleteMatrix,  omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.access.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(accessTimeCompleteMatrix, locationList, omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxSkimMatrix(accessTimeCompleteMatrix,  omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.egress.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(egressTimeCompleteMatrix, locationList, omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxSkimMatrix(egressTimeCompleteMatrix,  omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.transfer.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(transfersCompleteMatrix, locationList, omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxSkimMatrix(transfersCompleteMatrix,  omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + simulationName + "Complete.omx";
-        TravelTimeMatrix.createOmxSkimMatrix(inVehicleTimeCompleteMatrix, locationList, omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxSkimMatrix(inVehicleTimeCompleteMatrix,  omxPtFileName, "mat1");
 
 
 

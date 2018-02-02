@@ -4,15 +4,21 @@ import com.pb.common.matrix.Matrix;
 import com.pb.common.util.ResourceUtil;
 import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.utils.geometry.transformations.TransformationFactory;
+import org.matsim.munichArea.configMatsim.DistListener;
 import org.matsim.munichArea.configMatsim.MatsimRunFromJava;
+import org.matsim.munichArea.configMatsim.TimeListener;
 import org.matsim.munichArea.configMatsim.createDemandPt.MatsimPopulationCreator;
 import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
 import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.munichArea.configMatsim.planCreation.ReadSyntheticPopulation;
 import org.matsim.munichArea.configMatsim.planCreation.externalFlows.LongDistanceTraffic;
 import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
+
 import java.io.File;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 //class to run single matsim scenarios and collect travel time matrices (road network)
@@ -34,7 +40,8 @@ public class RunMATSim {
         String vehicleFile = rb.getString("network.folder") + rb.getString("vehicle.file");
         String simulationName = rb.getString("simulation.name");
         int year = Integer.parseInt(rb.getString("simulation.year"));
-        int hourOfDay = Integer.parseInt(rb.getString("hour.of.day"));
+        //int hourOfDay = Integer.parseInt(rb.getString("hour.of.day"));
+        int[] hoursOfDay = ResourceUtil.getIntegerArray(rb, "hours.of.day");
 
         boolean useSp = ResourceUtil.getBooleanProperty(rb, "use.sp");
 
@@ -50,9 +57,14 @@ public class RunMATSim {
         double flowCapacityExponent = Double.parseDouble(rb.getString("cf.exp"));
         double stroageFactorExponent = Double.parseDouble(rb.getString("sf.exp"));
 
+        Map<Integer, Matrix> autoTravelTimes = new HashMap<>();
+        Map<Integer, Matrix> autoTravelDistances = new HashMap<>();
+        int sizeOfMatrix = locationList.size();
         //initialize auto skim matrices
-        Matrix autoTravelTime = new Matrix(locationList.size(), locationList.size());
-        Matrix autoTravelDistance = new Matrix(locationList.size(), locationList.size());
+        for (int hourOfDay : hoursOfDay) {
+            autoTravelTimes.put(hourOfDay, new Matrix(sizeOfMatrix, sizeOfMatrix));
+            autoTravelDistances.put(hourOfDay, new Matrix(sizeOfMatrix, sizeOfMatrix));
+        }
 
         //calculate capacity factors
         double flowCapacityFactor = Math.pow(tripScalingFactor, flowCapacityExponent);
@@ -83,7 +95,7 @@ public class RunMATSim {
             matsimPopulation = matsimPopulationCreator.getMatsimPopulation();
         }
 
-        if (addExternalFlows){
+        if (addExternalFlows) {
             LongDistanceTraffic longDistanceTraffic = new LongDistanceTraffic(rb);
             longDistanceTraffic.readZones();
             longDistanceTraffic.readMatrices();
@@ -91,28 +103,38 @@ public class RunMATSim {
         }
         //run Matsim and get travel times
         MatsimRunFromJava matsimRunner = new MatsimRunFromJava(rb);
-        matsimRunner.runMatsim(hourOfDay * 60 * 60, Integer.parseInt(rb.getString("max.calc.points")),
-                networkFile, matsimPopulation, year,
-                TransformationFactory.DHDN_GK4, iterations, simulationName,
-                outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor, locationList, autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile,
-                10, Boolean.parseBoolean(rb.getString("use.transit")));
+        matsimRunner.configureMatsim(networkFile, year, TransformationFactory.DHDN_GK4, iterations, simulationName, outputFolder,
+                flowCapacityFactor, storageCapacityFactor, scheduleFile, vehicleFile, 10, Boolean.parseBoolean(rb.getString("use.transit")));
 
+        matsimRunner.setMatsimPopulationAndInitialize(matsimPopulation);
 
-        //skim matrices if needed
         if (autoTimeSkims) {
-            autoTravelTime = matsimRunner.getAutoTravelTime();
-            String omxFileName = rb.getString("out.skim.auto.time") + singleRunName + ".omx";
-            TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, locationList, omxFileName, "mat1");
+            for (int hourOfDay : hoursOfDay) {
+                autoTravelTimes.put(hourOfDay, matsimRunner.addTimeSkimMatrixCalculator(hourOfDay, 1, locationList));
+            }
+        }
 
+        if (autoDistSkims) {
+            for (int hourOfDay : hoursOfDay) {
+                autoTravelDistances.put(hourOfDay, matsimRunner.addDistanceSkimMatrixCalculator(hourOfDay, 1, locationList));
+            }
+        }
+
+        matsimRunner.runMatsim();
+
+        if (autoTimeSkims) {
+            String omxFileName = rb.getString("out.skim.auto.time") + simulationName + ".omx";
+            TravelTimeMatrix.createOmxFile(omxFileName, locationList);
+            for (int hourOfDay : hoursOfDay) {
+                TravelTimeMatrix.createOmxSkimMatrix(autoTravelTimes.get(hourOfDay),  omxFileName, "tt" + hourOfDay);
+            }
         }
         if (autoDistSkims) {
-            autoTravelDistance = matsimRunner.getAutoTravelDistance();
             String omxFileName = rb.getString("out.skim.auto.dist") + simulationName + ".omx";
-            TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistance, locationList, omxFileName, "mat1");
+            TravelTimeMatrix.createOmxFile(omxFileName, locationList);
+            for (int hourOfDay : hoursOfDay) {
+                TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistances.get(hourOfDay), omxFileName, "td" + hourOfDay);
+            }
         }
-
-
-
     }
-
 }

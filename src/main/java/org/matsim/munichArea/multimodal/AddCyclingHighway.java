@@ -19,7 +19,7 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 
 import java.util.*;
 
-import static org.matsim.munichArea.MatsimExecuter.rb;
+
 
 /**
  * Created by carlloga on 12-05-17.

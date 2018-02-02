@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-
-
 /**
  * Created by carlloga on 9/14/2016.
  */
@@ -24,50 +22,47 @@ public class TravelTimeMatrix {
 
     public static Logger logger = Logger.getLogger(TravelTimeMatrix.class);
 
-
-    public static void createOmxSkimMatrix(Matrix autoTravelTime, ArrayList<Location> locationList, String omxFileName, String omxMatrixName){
-
+    public static void createOmxFile(String omxFileName, ArrayList<Location> locationList) {
 
         try (OmxFile omxFile = new OmxFile(omxFileName)) {
-
 
             int dim0 = locationList.size();
 
             int dim1 = dim0;
-            int[] shape = {dim0,dim1};
-
-            float mat1NA = -1;
-            //Matrix autoTravelTime;
-//            autoTravelTime = new Matrix(dim0,dim1);
-
-
-
-            //double[][] mat1Data = new double[dim0][dim1];
-//            for (int i = 0; i < dim0; i++)
-//                for (int j = 0; j < dim1; j++) {
-//                    Tuple<Integer, Integer> tuple = new Tuple<>(i+1,j+1);
-//                    //mat1Data[i][j] = travelTimesMap.get(tuple);
-//                    autoTravelTime.setValueAt(i,j,travelTimesMap.get(tuple));
-//                }
-
-            OmxMatrix.OmxFloatMatrix mat1 = new OmxMatrix.OmxFloatMatrix(omxMatrixName, autoTravelTime.getValues(),mat1NA);
-            mat1.setAttribute(OmxConstants.OmxNames.OMX_DATASET_TITLE_KEY.getKey(),"travelTimes");
+            int[] shape = {dim0, dim1};
 
             int lookup1NA = -1;
             int[] lookup1Data = new int[dim0];
             Set<Integer> lookup1Used = new HashSet<>();
             for (int i = 0; i < lookup1Data.length; i++) {
-                int lookup = i+1;
+                int lookup = i + 1;
                 lookup1Data[i] = lookup1Used.add(lookup) ? lookup : lookup1NA;
             }
-            OmxLookup.OmxIntLookup lookup1 = new OmxLookup.OmxIntLookup("lookup1",lookup1Data,lookup1NA);
+            OmxLookup.OmxIntLookup lookup1 = new OmxLookup.OmxIntLookup("lookup1", lookup1Data, lookup1NA);
 
             omxFile.openNew(shape);
-            omxFile.addMatrix(mat1);
             omxFile.addLookup(lookup1);
             omxFile.save();
-            System.out.println(omxFile.summary());
+            omxFile.close();
 
+        }
+
+    }
+
+    public static void createOmxSkimMatrix(Matrix autoTravelTime, String omxFileName, String omxMatrixName) {
+
+
+        try (OmxFile omxFile = new OmxFile(omxFileName)) {
+
+            omxFile.openReadWrite();
+            float mat1NA = -1;
+
+
+            OmxMatrix.OmxFloatMatrix mat1 = new OmxMatrix.OmxFloatMatrix(omxMatrixName, autoTravelTime.getValues(), mat1NA);
+            mat1.setAttribute(OmxConstants.OmxNames.OMX_DATASET_TITLE_KEY.getKey(), "travelTimes");
+            omxFile.addMatrix(mat1);
+            omxFile.save();
+            System.out.println(omxFile.summary());
 
             omxFile.close();
             System.out.println(omxMatrixName + "matrix written");
@@ -84,7 +79,7 @@ public class TravelTimeMatrix {
 
     }
 
-    public static void createStringCSVSkimMatrix(String[][] matrix, ArrayList<Location> locationList, String omxFileName, String omxMatrixName){
+    public static void createStringCSVSkimMatrix(String[][] matrix, ArrayList<Location> locationList, String omxFileName, String omxMatrixName) {
 
 
         try {
@@ -94,8 +89,8 @@ public class TravelTimeMatrix {
 
             pw.println("origin,destination,route");
 
-            for (int i =1; i < locationList.size(); i++ ){
-                for (int j = 1; j< locationList.size(); j++){
+            for (int i = 1; i < locationList.size(); i++) {
+                for (int j = 1; j < locationList.size(); j++) {
 
                     pw.print(i);
                     pw.print(",");
@@ -114,24 +109,24 @@ public class TravelTimeMatrix {
 
     }
 
-    public static Matrix assignIntrazonals(Matrix matrix, int numberOfNeighbours, float maximum, float proportionOfTime){
+    public static Matrix assignIntrazonals(Matrix matrix, int numberOfNeighbours, float maximum, float proportionOfTime) {
 
-        for (int i : matrix.getExternalRowNumbers()){
-            float[] minRowValues = new float [numberOfNeighbours];
+        for (int i : matrix.getExternalRowNumbers()) {
+            float[] minRowValues = new float[numberOfNeighbours];
 
-            for (int k = 0; k < numberOfNeighbours; k++){
+            for (int k = 0; k < numberOfNeighbours; k++) {
                 minRowValues[k] = maximum;
             }
 
             //find the  n closest neighbors
-            for (int j : matrix.getExternalRowNumbers()){
+            for (int j : matrix.getExternalRowNumbers()) {
                 int minimumPosition = 0;
-                while (minimumPosition < numberOfNeighbours){
-                    if (minRowValues[minimumPosition] >  matrix.getValueAt(i,j) && matrix.getValueAt(i,j)!=0){
-                        for (int k = numberOfNeighbours-1; k > minimumPosition; k--){
-                            minRowValues[k] = minRowValues[k-1];
+                while (minimumPosition < numberOfNeighbours) {
+                    if (minRowValues[minimumPosition] > matrix.getValueAt(i, j) && matrix.getValueAt(i, j) != 0) {
+                        for (int k = numberOfNeighbours - 1; k > minimumPosition; k--) {
+                            minRowValues[k] = minRowValues[k - 1];
                         }
-                        minRowValues[minimumPosition] = matrix.getValueAt(i,j);
+                        minRowValues[minimumPosition] = matrix.getValueAt(i, j);
                         break;
                     }
                     minimumPosition++;
@@ -139,14 +134,14 @@ public class TravelTimeMatrix {
             }
 
             float globalMin = 0;
-            for (float minRowValue : minRowValues){
+            for (float minRowValue : minRowValues) {
                 globalMin += minRowValue;
             }
-            globalMin = globalMin/numberOfNeighbours * proportionOfTime;
+            globalMin = globalMin / numberOfNeighbours * proportionOfTime;
 
-            for (int j : matrix.getExternalRowNumbers()){
-                if (matrix.getValueAt(i,j)==0){
-                    matrix.setValueAt(i,j,globalMin);
+            for (int j : matrix.getExternalRowNumbers()) {
+                if (matrix.getValueAt(i, j) == 0) {
+                    matrix.setValueAt(i, j, globalMin);
                 }
             }
         }

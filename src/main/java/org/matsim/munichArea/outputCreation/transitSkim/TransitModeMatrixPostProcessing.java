@@ -86,17 +86,23 @@ public class TransitModeMatrixPostProcessing {
         //do not write again the bus?
         for (int i = 0; i< modes.length; i++ ) {
             String fileName = "./data/" + folders[i] + "/ttTransitTotal" + rb.getString("simulation.name") + "Clean" + ".omx";
-            TravelTimeMatrix.createOmxSkimMatrix(totalTt[i], locationList, fileName, "mat1");
+            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxSkimMatrix(totalTt[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/ttTransitAccess" + rb.getString("simulation.name") + "Clean" + ".omx";
-            TravelTimeMatrix.createOmxSkimMatrix(access[i], locationList, fileName, "mat1");
+            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxSkimMatrix(access[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/ttTransitEgress" + rb.getString("simulation.name") + "Clean" + ".omx";
-            TravelTimeMatrix.createOmxSkimMatrix(egress[i], locationList, fileName, "mat1");
+            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxSkimMatrix(egress[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/ttTransitIn" + rb.getString("simulation.name") + "Clean" + ".omx";
-            TravelTimeMatrix.createOmxSkimMatrix(inTransit[i], locationList, fileName, "mat1");
+            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxSkimMatrix(inTransit[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/ttTransitInVehicle" + rb.getString("simulation.name") + "Clean" + ".omx";
-            TravelTimeMatrix.createOmxSkimMatrix(inVehicle[i], locationList, fileName, "mat1");
+            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxSkimMatrix(inVehicle[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/ttTransitTransfer" + rb.getString("simulation.name") + "Clean" + ".omx";
-            TravelTimeMatrix.createOmxSkimMatrix(transfer[i], locationList, fileName, "mat1");
+            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxSkimMatrix(transfer[i],  fileName, "mat1");
         }
     }
 

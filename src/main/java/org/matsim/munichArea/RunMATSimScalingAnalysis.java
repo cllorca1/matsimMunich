@@ -81,31 +81,48 @@ public class RunMATSimScalingAnalysis {
 
                 //get travel times and run Matsim
                 MatsimRunFromJava matsimRunner = new MatsimRunFromJava(rb);
-                matsimRunner.runMatsim(hourOfDay * 60 * 60, 1,
-                        networkFile, matsimPopulation, year,
-                        TransformationFactory.WGS84, iterations, simulationName,
-                        outputFolder, tripScalingFactor, flowCapacityFactor, storageCapacityFactor, locationList,
-                        autoTimeSkims, autoDistSkims, scheduleFile, vehicleFile, (float) stuckTime, false);
+                matsimRunner.configureMatsim(networkFile, year, TransformationFactory.DHDN_GK4, iterations, simulationName, outputFolder,
+                        flowCapacityFactor, storageCapacityFactor, scheduleFile, vehicleFile, (float) stuckTime, Boolean.parseBoolean(rb.getString("use.transit")));
 
-                if (autoTimeSkims) autoTravelTime = matsimRunner.getAutoTravelTime();
-                if (autoDistSkims) autoTravelDistance = matsimRunner.getAutoTravelDistance();
+                matsimRunner.setMatsimPopulationAndInitialize(matsimPopulation);
+
+                if (autoTimeSkims) {
+                    autoTravelTime = matsimRunner.addTimeSkimMatrixCalculator(hourOfDay, 1, locationList);
+                }
+
+                if (autoDistSkims && !autoTimeSkims) {
+                    autoTravelDistance = matsimRunner.addDistanceSkimMatrixCalculator(hourOfDay, 1, locationList);
+                }
+
+                matsimRunner.runMatsim();
+
+                if (autoTimeSkims) {
+                    String omxFileName = rb.getString("out.skim.auto.time") + singleRunName + ".omx";
+                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, omxFileName, "mat1");
+                }
+                if (autoDistSkims){
+                    String omxFileName = rb.getString("out.skim.auto.dist") + simulationName + ".omx";
+                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistance,  omxFileName, "mat1");
+                }
 
 
                 if (eucliddistSkims) {
                     EuclideanDistanceCalculator edc = new EuclideanDistanceCalculator();
                     Matrix euclideanDistanceMatrix = edc.createEuclideanDistanceMatrix(locationList);
                     String omxDistFileName = rb.getString("skim.eucliddist.file") + simulationName + ".omx";
-                    TravelTimeMatrix.createOmxSkimMatrix(euclideanDistanceMatrix, locationList, omxDistFileName, "distance");
+                    TravelTimeMatrix.createOmxSkimMatrix(euclideanDistanceMatrix,  omxDistFileName, "distance");
                 }
 
                 if (autoTimeSkims) {
 //                        String omxFileName = rb.getString("out.skim.auto.time") + simulationName + ".omx";
                     String omxFileName = rb.getString("out.skim.auto.time") + singleRunName + ".omx";
-                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, locationList, omxFileName, "mat1");
+                    TravelTimeMatrix.createOmxFile(omxFileName, locationList);
+                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, omxFileName, "mat1");
                 }
                 if (autoDistSkims) {
                     String omxFileName = rb.getString("out.skim.auto.dist") + simulationName + ".omx";
-                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistance, locationList, omxFileName, "mat1");
+                    TravelTimeMatrix.createOmxFile(omxFileName, locationList);
+                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistance,  omxFileName, "mat1");
                 }
             }
 

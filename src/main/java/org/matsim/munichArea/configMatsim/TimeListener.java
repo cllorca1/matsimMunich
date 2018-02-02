@@ -31,8 +31,8 @@ import org.matsim.vehicles.Vehicle;
 /**
  * @author dziemke
  */
-public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
-    private final static Logger log = Logger.getLogger(Zone2ZoneTravelTimeListener.class);
+public class TimeListener implements IterationEndsListener {
+    private final static Logger log = Logger.getLogger(TimeListener.class);
 
     private Controler controler;
     private Network network;
@@ -45,18 +45,20 @@ public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
     private Matrix autoTravelTime;
 
 
-    public Zone2ZoneTravelTimeListener(Controler controler, Network network,
-                                       int finalIteration, /*Map<Integer, SimpleFeature> zoneFeatureMap*/
+    public TimeListener(Controler controler, Network network,
+                        int finalIteration, /*Map<Integer, SimpleFeature> zoneFeatureMap*/
                                        ArrayList<Location> locationList,
-                                       int timeOfDay,
-                                       int numberOfCalcPoints //CoordinateTransformation ct,
+                        int timeOfDay,
+                        int numberOfCalcPoints //CoordinateTransformation ct,
     ) {
+
+        this.autoTravelTime = new Matrix(locationList.size(), locationList.size());
         this.controler = controler;
         this.network = network;
         this.finalIteration = finalIteration;
         //this.zoneFeatureMap = zoneFeatureMap;
         this.locationList = locationList;
-        this.departureTime = timeOfDay;
+        this.departureTime = timeOfDay*3600;
         this.maxNumberOfCalcPoints = numberOfCalcPoints;
 //		this.ct = ct;
     }
@@ -67,13 +69,11 @@ public class Zone2ZoneTravelTimeListener implements IterationEndsListener {
         if (event.getIteration() == this.finalIteration) {
             float startTime = System.currentTimeMillis();
             //EuclideanDistanceCalculator euclideanDistanceCalculator = new EuclideanDistanceCalculator();
-            log.info("Starting to calculate average zone-to-zone travel times based on MATSim.");
+            log.info("Starting to calculate average zone-to-zone travel times based on MATSim at " + departureTime);
             TravelTime travelTime = controler.getLinkTravelTimes();
             TravelDisutility travelDisutility = controler.getTravelDisutilityFactory().createTravelDisutility(travelTime);
 //            TravelDisutility travelTimeAsTravelDisutility = new MyTravelTimeDisutility(controler.getLinkTravelTimes());
 //            Dijkstra dijkstra = new Dijkstra(network, travelTimeAsTravelDisutility, travelTime);
-
-            autoTravelTime = new Matrix(locationList.size(), locationList.size());
 
             //Maps to assign a node/tree to each zone
             Map<Integer, ArrayList<Node>> nodeMap = new ConcurrentHashMap<>();

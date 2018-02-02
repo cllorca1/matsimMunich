@@ -31,8 +31,8 @@ import java.util.Map;
 /**
  * @author dziemke
  */
-public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
-    private final static Logger log = Logger.getLogger(Zone2ZoneTravelDistanceListener.class);
+public class DistListener implements IterationEndsListener {
+    private final static Logger log = Logger.getLogger(DistListener.class);
 
     private Controler controler;
     private Network network;
@@ -46,17 +46,20 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
     private Matrix autoTravelDistance;
 
 
-    public Zone2ZoneTravelDistanceListener(Controler controler, Network network,
-                                           int finalIteration, /*Map<Integer, SimpleFeature> zoneFeatureMap*/
+    public DistListener(Controler controler, Network network,
+                        int finalIteration, /*Map<Integer, SimpleFeature> zoneFeatureMap*/
                                            ArrayList<Location> locationList,
-                                           int timeOfDay,
-                                           int numberOfCalcPoints,
-                                           float upperDistanceThreshold) {
+                        int timeOfDay,
+                        int numberOfCalcPoints,
+                        float upperDistanceThreshold) {
+
+        autoTravelDistance = new Matrix(locationList.size(), locationList.size());
+
         this.controler = controler;
         this.network = network;
         this.finalIteration = finalIteration;
         this.locationList = locationList;
-        this.departureTime = timeOfDay;
+        this.departureTime = timeOfDay*3600;
         this.numberOfCalcPoints = numberOfCalcPoints;
         this.upperDistanceThreshold = upperDistanceThreshold;
 
@@ -85,7 +88,7 @@ public class Zone2ZoneTravelDistanceListener implements IterationEndsListener {
             }
 
             DijkstraTree dijkstra = new DijkstraTree(network, travelDisutility, travelTime);
-            autoTravelDistance = new Matrix(locationList.size(), locationList.size());
+
 
             //Map to assign a node to each zone
             Map<Integer, Node> zoneCalculationNodesMap = new HashMap<>();
