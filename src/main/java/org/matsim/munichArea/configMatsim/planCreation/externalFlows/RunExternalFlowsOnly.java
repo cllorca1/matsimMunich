@@ -1,5 +1,6 @@
-package org.matsim.munichArea.configMatsim.planCreation.longDistance;
+package org.matsim.munichArea.configMatsim.planCreation.externalFlows;
 
+import com.pb.common.util.ResourceUtil;
 import org.apache.log4j.Logger;
 
 import org.matsim.api.core.v01.Scenario;
@@ -9,13 +10,20 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
 
+import java.io.File;
+import java.util.ResourceBundle;
+
 public class RunExternalFlowsOnly {
 
     private static Logger logger = Logger.getLogger(RunExternalFlowsOnly.class);
+    private static ResourceBundle rb;
 
     public static void main (String args[]){
 
-        LongDistanceTraffic longDistanceTraffic = new LongDistanceTraffic();
+        File propFile = new File(args[0]);
+        rb = ResourceUtil.getPropertyBundle(propFile);
+
+        LongDistanceTraffic longDistanceTraffic = new LongDistanceTraffic(rb);
         longDistanceTraffic.readZones();
         longDistanceTraffic.readMatrices();
 

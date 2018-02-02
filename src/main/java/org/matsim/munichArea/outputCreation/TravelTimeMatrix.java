@@ -4,7 +4,7 @@ import com.pb.common.matrix.Matrix;
 import omx.*;
 import omx.hdf5.*;
 import org.apache.log4j.Logger;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 
 
 import java.io.FileWriter;

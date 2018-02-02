@@ -1,4 +1,4 @@
-package org.matsim.munichArea.configMatsim.planCreation;
+package org.matsim.munichArea.configMatsim.zonalData;
 
 /**
  * Created by carlloga on 9/12/2016.

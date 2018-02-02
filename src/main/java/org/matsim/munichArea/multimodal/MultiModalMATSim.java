@@ -11,8 +11,8 @@ import org.matsim.core.config.groups.StrategyConfigGroup;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.munichArea.configMatsim.planCreation.ReadSyntheticPopulation;
 
 import java.io.File;

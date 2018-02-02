@@ -11,10 +11,9 @@ import org.matsim.munichArea.configMatsim.MatsimRunFromJava;
 import org.matsim.munichArea.configMatsim.createDemandPt.PtSyntheticTraveller;
 import org.matsim.munichArea.configMatsim.createDemandPt.ReadZonesServedByTransit;
 import org.matsim.munichArea.outputCreation.EuclideanDistanceCalculator;
-import org.matsim.munichArea.outputCreation.accessibilityCalculator.Accessibility;
 import org.matsim.munichArea.outputCreation.transitSkim.TransitSkimCreator;
-import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 import org.matsim.munichArea.configMatsim.planCreation.ReadSyntheticPopulation;
 

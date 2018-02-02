@@ -1,4 +1,4 @@
-package org.matsim.munichArea.configMatsim.planCreation.longDistance;
+package org.matsim.munichArea.configMatsim.planCreation.externalFlows;
 
 public enum ExternalFlowZoneType {
 

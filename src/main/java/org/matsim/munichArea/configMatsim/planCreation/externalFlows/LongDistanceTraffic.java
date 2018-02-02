@@ -1,21 +1,13 @@
-package org.matsim.munichArea.configMatsim.planCreation.longDistance;
+package org.matsim.munichArea.configMatsim.planCreation.externalFlows;
 
-import com.google.common.collect.ArrayTable;
 import com.google.common.collect.HashBasedTable;
 import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.core.utils.gis.ShapeFileReader;
 import org.matsim.munichArea.Util;
-import org.matsim.munichArea.configMatsim.createDemandPt.MatsimPopulationCreator;
-import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
-import org.matsim.utils.objectattributes.attributable.Attributes;
-import org.matsim.vehicles.EngineInformation;
-import org.matsim.vehicles.VehicleCapacity;
-import org.matsim.vehicles.VehicleType;
 import org.opengis.feature.simple.SimpleFeature;
 
 import java.io.BufferedReader;
@@ -23,9 +15,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Pattern;
+
+
 
 public class LongDistanceTraffic {
+
+    private ResourceBundle rb;
 
     private static Logger logger = Logger.getLogger(LongDistanceTraffic.class);
     private PopulationFactory matsimPopulationFactory;
@@ -59,7 +54,9 @@ public class LongDistanceTraffic {
     private float thruFlow = 0;
 
 
-    public LongDistanceTraffic(){
+    public LongDistanceTraffic( ResourceBundle rb){
+
+        this.rb = rb;
 
         zones = new HashMap<>();
         externalFlows = new HashMap<>();

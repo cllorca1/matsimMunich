@@ -16,6 +16,7 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.munichArea.SkimMatrixReader;
 import org.matsim.munichArea.Util;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 
 import java.io.*;
 import java.util.*;

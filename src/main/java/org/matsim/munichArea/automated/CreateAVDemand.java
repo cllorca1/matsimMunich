@@ -1,8 +1,8 @@
 package org.matsim.munichArea.automated;
 
 import com.pb.common.util.ResourceUtil;
-import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.munichArea.configMatsim.planCreation.ReadSyntheticPopulation;
 
 import java.io.File;

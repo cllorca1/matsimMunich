@@ -12,7 +12,7 @@ import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.scenario.MutableScenario;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 
 import org.matsim.munichArea.roadSafety.VolumeAnalysisListener;
 
@@ -136,9 +136,14 @@ public class MatsimRunFromJava {
 
         config.vspExperimental().setVspDefaultsCheckingLevel(VspExperimentalConfigGroup.VspDefaultsCheckingLevel.warn);
 
+        //until here only uses the config!
+
         // Scenario
         MutableScenario scenario = (MutableScenario) ScenarioUtils.loadScenario(config);
         scenario.setPopulation(population);
+
+
+
 
         // Initialize controller
         final Controler controler = new Controler(scenario);

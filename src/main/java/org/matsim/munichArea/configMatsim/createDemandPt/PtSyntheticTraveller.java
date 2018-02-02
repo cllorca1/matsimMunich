@@ -1,9 +1,7 @@
 package org.matsim.munichArea.configMatsim.createDemandPt;
 
-import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
-import org.matsim.vehicles.Vehicle;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 
 import java.util.HashMap;
 

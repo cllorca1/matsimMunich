@@ -23,8 +23,7 @@ import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.router.util.TravelTime;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
-import org.matsim.munichArea.outputCreation.EuclideanDistanceCalculator;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.utils.leastcostpathtree.LeastCostPathTree;
 import org.matsim.vehicles.Vehicle;
 

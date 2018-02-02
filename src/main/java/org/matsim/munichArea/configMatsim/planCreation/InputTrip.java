@@ -2,6 +2,7 @@ package org.matsim.munichArea.configMatsim.planCreation;
 
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.population.Person;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 
 public class InputTrip {
 

@@ -11,8 +11,8 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.munichArea.Util;
-import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 
 import java.io.*;
 import java.util.ArrayList;

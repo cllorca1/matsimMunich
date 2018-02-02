@@ -18,8 +18,7 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.munichArea.SkimMatrixReader;
-import org.matsim.munichArea.outputCreation.accessibilityCalculator.Accessibility;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 import com.pb.common.matrix.Matrix;
 
 

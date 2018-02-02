@@ -1,7 +1,6 @@
-package org.matsim.munichArea.configMatsim.planCreation.longDistance;
+package org.matsim.munichArea.configMatsim.planCreation.externalFlows;
 
 import org.matsim.api.core.v01.Coord;
-import org.matsim.api.core.v01.Id;
 import org.matsim.munichArea.Util;
 import org.opengis.feature.simple.SimpleFeature;
 

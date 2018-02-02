@@ -23,7 +23,7 @@ public class MatsimRunFromFile {
         //modify configuration parameters
         config.controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists);
 
-        /*//add strategy:
+        //add strategy:
         StrategyConfigGroup.StrategySettings strategySettings3 = new StrategyConfigGroup.StrategySettings();
         strategySettings3.setStrategyName("TimeAllocationMutator");
         strategySettings3.setWeight(1); //originally 0
@@ -31,18 +31,17 @@ public class MatsimRunFromFile {
         config.strategy().addStrategySettings(strategySettings3);
 
         //rename input folder:
-        config.controler().setOutputDirectory(config.controler().getOutputDirectory() + "withDefiningActivity");
+        config.controler().setOutputDirectory(config.controler().getOutputDirectory() + "withDefiningActivityFlexible");
 
         //add the opening time, closing time and duration of activity
         PlanCalcScoreConfigGroup.ActivityParams workActivity = new PlanCalcScoreConfigGroup.ActivityParams("work");
         workActivity.setTypicalDuration(9 * 60 * 60);
         workActivity.setLatestStartTime(8 * 60 * 60);
         workActivity.setEarliestEndTime(17 *60 * 60);
-        workActivity.setClosingTime(17 * 60*60) ;
-        workActivity.setOpeningTime(8*60*60);
-        workActivity.setMinimalDuration(9*60*60);
+        workActivity.setClosingTime(17.5 * 60*60) ;
+        workActivity.setOpeningTime(7.5 * 60*60);
+        workActivity.setMinimalDuration(8.5 *60*60);
         config.planCalcScore().addActivityParams(workActivity);
-*/
 
         //load the scenario from the configuration settings
         Scenario scenario = ScenarioUtils.loadScenario(config);

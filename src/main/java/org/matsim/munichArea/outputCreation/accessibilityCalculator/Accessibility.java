@@ -2,13 +2,10 @@ package org.matsim.munichArea.outputCreation.accessibilityCalculator;
 
 import com.pb.common.matrix.Matrix;
 import com.pb.common.util.ResourceUtil;
-import omx.OmxFile;
-import omx.OmxMatrix;
-import omx.hdf5.OmxHdf5Datatype;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.munichArea.SkimMatrixReader;
-import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 
 
@@ -20,8 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import static java.lang.System.exit;
 
 /**
  * Created by carlloga on 9/15/2016.

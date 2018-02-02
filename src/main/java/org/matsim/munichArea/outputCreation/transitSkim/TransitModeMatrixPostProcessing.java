@@ -2,10 +2,9 @@ package org.matsim.munichArea.outputCreation.transitSkim;
 
 import com.pb.common.matrix.Matrix;
 import com.pb.common.util.ResourceUtil;
-import omx.OmxMatrix;
 import org.matsim.munichArea.SkimMatrixReader;
-import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 
 import java.io.File;

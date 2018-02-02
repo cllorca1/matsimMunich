@@ -6,9 +6,10 @@ import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.munichArea.configMatsim.MatsimRunFromJava;
 import org.matsim.munichArea.configMatsim.createDemandPt.MatsimPopulationCreator;
-import org.matsim.munichArea.configMatsim.planCreation.CentroidsToLocations;
-import org.matsim.munichArea.configMatsim.planCreation.Location;
+import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
+import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.munichArea.configMatsim.planCreation.ReadSyntheticPopulation;
+import org.matsim.munichArea.configMatsim.planCreation.externalFlows.LongDistanceTraffic;
 import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class RunMATSim {
 
         boolean autoTimeSkims = ResourceUtil.getBooleanProperty(rb, "skim.auto.times");
         boolean autoDistSkims = ResourceUtil.getBooleanProperty(rb, "skim.auto.dist");
+        boolean addExternalFlows = ResourceUtil.getBooleanProperty(rb, "add.external.flows");
         String networkFile = rb.getString("network.folder") + rb.getString("xml.network.file");
         String scheduleFile = rb.getString("network.folder") + rb.getString("schedule.file");
         String vehicleFile = rb.getString("network.folder") + rb.getString("vehicle.file");
@@ -81,6 +83,12 @@ public class RunMATSim {
             matsimPopulation = matsimPopulationCreator.getMatsimPopulation();
         }
 
+        if (addExternalFlows){
+            LongDistanceTraffic longDistanceTraffic = new LongDistanceTraffic(rb);
+            longDistanceTraffic.readZones();
+            longDistanceTraffic.readMatrices();
+            matsimPopulation = longDistanceTraffic.addLongDistancePlans(tripScalingFactor, matsimPopulation);
+        }
         //run Matsim and get travel times
         MatsimRunFromJava matsimRunner = new MatsimRunFromJava(rb);
         matsimRunner.runMatsim(hourOfDay * 60 * 60, Integer.parseInt(rb.getString("max.calc.points")),
