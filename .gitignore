@@ -31,3 +31,10 @@ hs_err_pid*
 .idea/libraries/Maven__org_geotools_gt_referencing_14_0.xml
 .idea/libraries/Maven__org_geotools_gt_shapefile_14_0.xml
 .idea/libraries/Maven__org_hsqldb_hsqldb_2_3_0.xml
+/.idea/compiler.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/uiDesigner.xml
+/.idea/MATSim.iml
+/.idea/workspace.xml
