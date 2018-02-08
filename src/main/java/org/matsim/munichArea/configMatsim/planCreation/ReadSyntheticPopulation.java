@@ -446,7 +446,7 @@ public class ReadSyntheticPopulation {
     public void printSyntheticPlansAsXml(){
 
         PopulationWriter populationWriter = new PopulationWriter(matsimPopulation);
-        populationWriter.write("plansOutput.xml");
+        populationWriter.write("output/plansOutput.xml");
 
 
     }

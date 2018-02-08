@@ -96,16 +96,6 @@ public class RunMATSimScalingAnalysis {
 
                 matsimRunner.runMatsim();
 
-                if (autoTimeSkims) {
-                    String omxFileName = rb.getString("out.skim.auto.time") + singleRunName + ".omx";
-                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, omxFileName, "mat1");
-                }
-                if (autoDistSkims){
-                    String omxFileName = rb.getString("out.skim.auto.dist") + simulationName + ".omx";
-                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistance,  omxFileName, "mat1");
-                }
-
-
                 if (eucliddistSkims) {
                     EuclideanDistanceCalculator edc = new EuclideanDistanceCalculator();
                     Matrix euclideanDistanceMatrix = edc.createEuclideanDistanceMatrix(locationList);
@@ -114,13 +104,13 @@ public class RunMATSimScalingAnalysis {
                 }
 
                 if (autoTimeSkims) {
-//                        String omxFileName = rb.getString("out.skim.auto.time") + simulationName + ".omx";
+//                  String omxFileName = rb.getString("out.skim.auto.time") + simulationName + ".omx";
                     String omxFileName = rb.getString("out.skim.auto.time") + singleRunName + ".omx";
                     TravelTimeMatrix.createOmxFile(omxFileName, locationList);
                     TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, omxFileName, "mat1");
                 }
                 if (autoDistSkims) {
-                    String omxFileName = rb.getString("out.skim.auto.dist") + simulationName + ".omx";
+                    String omxFileName = rb.getString("out.skim.auto.dist") + singleRunName + ".omx";
                     TravelTimeMatrix.createOmxFile(omxFileName, locationList);
                     TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistance,  omxFileName, "mat1");
                 }

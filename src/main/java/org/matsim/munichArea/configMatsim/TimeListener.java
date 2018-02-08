@@ -69,7 +69,7 @@ public class TimeListener implements IterationEndsListener {
         if (event.getIteration() == this.finalIteration) {
             float startTime = System.currentTimeMillis();
             //EuclideanDistanceCalculator euclideanDistanceCalculator = new EuclideanDistanceCalculator();
-            log.info("Starting to calculate average zone-to-zone travel times based on MATSim at " + departureTime);
+            log.info("Starting to calculate average zone-to-zone travel times based on MATSim at " + departureTime/3600);
             TravelTime travelTime = controler.getLinkTravelTimes();
             TravelDisutility travelDisutility = controler.getTravelDisutilityFactory().createTravelDisutility(travelTime);
 //            TravelDisutility travelTimeAsTravelDisutility = new MyTravelTimeDisutility(controler.getLinkTravelTimes());
