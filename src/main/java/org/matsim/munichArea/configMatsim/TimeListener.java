@@ -79,13 +79,16 @@ public class TimeListener implements IterationEndsListener {
             Map<Integer, ArrayList<Node>> nodeMap = new ConcurrentHashMap<>();
             Map<Integer, ArrayList<Map<Id<Node>, LeastCostPathTree.NodeData>>> treeMap = new ConcurrentHashMap<>();
 
+            double randomnessFactor = 0;
+
             locationList.parallelStream().forEach(loc -> {
                 //for (Location loc : locationList) {
                 LeastCostPathTree leastCoastPathTree = new LeastCostPathTree(travelTime, travelDisutility);
                 ArrayList<Map<Id<Node>, LeastCostPathTree.NodeData>> treesByZone = new ArrayList<>();
                 ArrayList<Node> nodesByZone = new ArrayList<>();
                 for (int nNode = 0; nNode < maxNumberOfCalcPoints; nNode++) {
-                    Coord originCoord = new Coord(loc.getX() + (Math.random() - 0.5) * loc.getSize(), loc.getY() + (Math.random() - 0.5) * loc.getSize());
+                    Coord originCoord = new Coord(loc.getX() + randomnessFactor*(Math.random() - 0.5) * loc.getSize(),
+                            loc.getY() + randomnessFactor* (Math.random() - 0.5) * loc.getSize());
                     Node originNode = NetworkUtils.getNearestLink(network, originCoord).getToNode();
                     nodesByZone.add(originNode);
                     leastCoastPathTree.calculate(network, originNode, departureTime);
