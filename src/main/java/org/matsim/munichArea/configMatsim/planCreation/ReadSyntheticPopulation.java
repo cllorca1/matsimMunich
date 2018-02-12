@@ -171,6 +171,7 @@ public class ReadSyntheticPopulation {
                         int mode = selectMode(travelDistance);
                         boolean automatedVehicle = chooseAv(avPenetrationRate);
                         if (travelDistance < 80000) {
+                            //discarding trips longer than 80 km
                             plannedTrip = new InputTrip(matsimPerson);
                             trips.add(plannedTrip);
                             plannedTrip.setMode(mode);

@@ -39,8 +39,8 @@ public class AgentTripDurationEventAnalyzer {
         //load the matsim network
         Config config = ConfigUtils.createConfig();
         //todo manually input the desired network!!
-        config.network().setInputFile("C:/Users/carlloga/Desktop/2SS_matsim_results/2012_without/mitoMatsim2012.output_network.xml.gz");
-        //config.network().setInputFile("./input/studyNetworkLight.xml");
+        //config.network().setInputFile("C:/Users/carlloga/Desktop/2SS_matsim_results/2012_without/mitoMatsim2012.output_network.xml.gz");
+        config.network().setInputFile("./input/studyNetworkLight.xml");
         //config.network().setInputFile("./multimodal/input/studyNetworkCyclingV2.xml");
         Scenario scenario = ScenarioUtils.loadScenario(config);
         network = scenario.getNetwork();
