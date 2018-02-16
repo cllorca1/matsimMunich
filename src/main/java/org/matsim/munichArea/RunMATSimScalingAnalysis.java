@@ -74,6 +74,9 @@ public class RunMATSimScalingAnalysis {
                 readSp.printSyntheticPlansList("./sp/plansCycle.csv", 2);
                 readSp.printSyntheticPlansList("./sp/plansTransit.csv", 3);
 
+
+
+
                 //calculate stuck time based on assumptions for scaling - default = 10
                 double stuckTime;
                 //scale up:
