@@ -29,19 +29,20 @@ public class NetworkEditor {
 
         //edit the network and return it to be written again
         //example of edition
-        RoadBuilder roadBuilder = new RoadBuilder(rb);
+//        RoadBuilder roadBuilder = new RoadBuilder(rb);
 //        roadBuilder.buildRoads(network);
 //        Network newNetwork = roadBuilder.getNetwork();
-
-        //add opposing direction
-        OpposingDirectionGenerator opposingDirectionGenerator = new OpposingDirectionGenerator(rb);
-
-        Network newNetwork;
-        newNetwork = opposingDirectionGenerator.addOpposingDirection(network);
-
-        if (Boolean.parseBoolean(rb.getString("add.single.link"))) {
-            newNetwork = roadBuilder.addNewLink(newNetwork);
-        }
+//
+//        //add opposing direction
+//        OpposingDirectionGenerator opposingDirectionGenerator = new OpposingDirectionGenerator(rb);
+//
+        RemovePtNetwork removePtNetwork = new RemovePtNetwork();
+        Network newNetwork = removePtNetwork.removePublicTransport(network);
+//        newNetwork = opposingDirectionGenerator.addOpposingDirection(network);
+//
+//        if (Boolean.parseBoolean(rb.getString("add.single.link"))) {
+//            newNetwork = roadBuilder.addNewLink(newNetwork);
+//        }
 
         new NetworkWriter(newNetwork).write(rb.getString("editor.new.network.file"));
 
