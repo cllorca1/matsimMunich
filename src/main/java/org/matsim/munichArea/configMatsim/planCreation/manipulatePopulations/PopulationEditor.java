@@ -7,11 +7,14 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.NetworkFactory;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.contrib.util.PopulationUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.mobsim.qsim.PopulationPlugin;
+import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.population.io.PopulationReader;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.facilities.ActivityFacility;
@@ -21,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 // this class is to convert an open data scenario population into a usable population file with the Munich Config
 
@@ -41,27 +45,45 @@ public class PopulationEditor {
 
         Population newPopulation;
         PopulationWriter populationWriter;
-        //WRITES THE ORIGINAL 10%
-        newPopulation = populationEditor.filterCarTripsAndRescale(population, 1);
-        populationEditor.summarizePopulation(newPopulation);
-        populationWriter = new PopulationWriter(newPopulation);
-        populationWriter.write(args[2]);
-        //WRITES THE 5%
-        newPopulation = populationEditor.filterCarTripsAndRescale(population, 0.5);
-        populationEditor.summarizePopulation(newPopulation);
-        populationWriter = new PopulationWriter(newPopulation);
-        populationWriter.write(args[3]);
-        //WRITES A 1%
-        newPopulation = populationEditor.filterCarTripsAndRescale(population, 0.1);
-        populationEditor.summarizePopulation(newPopulation);
-        populationWriter = new PopulationWriter(newPopulation);
-        populationWriter.write(args[4]);
+
 
         //WRITES A 1/1000
         newPopulation = populationEditor.filterCarTripsAndRescale(population, 0.01);
         populationEditor.summarizePopulation(newPopulation);
         populationWriter = new PopulationWriter(newPopulation);
+        populationWriter.write(args[2]);
+
+//        WRITES A 1%
+        newPopulation = populationEditor.filterCarTripsAndRescale(population, .1);
+        populationEditor.summarizePopulation(newPopulation);
+        populationWriter = new PopulationWriter(newPopulation);
+        populationWriter.write(args[3]);
+
+        //WRITES THE 5%
+        newPopulation = populationEditor.filterCarTripsAndRescale(population, 0.5);
+        populationEditor.summarizePopulation(newPopulation);
+        populationWriter = new PopulationWriter(newPopulation);
+        populationWriter.write(args[4]);
+
+//        WRITES A 10%
+        newPopulation = populationEditor.filterCarTripsAndRescale(population, 1);
+        populationEditor.summarizePopulation(newPopulation);
+        populationWriter = new PopulationWriter(newPopulation);
         populationWriter.write(args[5]);
+
+        Population scaledUpPopulation;
+//        WRITES A 20%
+        scaledUpPopulation = populationEditor.filterCarTripsAndRescale(newPopulation, 2);
+        populationEditor.summarizePopulation(scaledUpPopulation);
+        populationWriter = new PopulationWriter(scaledUpPopulation);
+        populationWriter.write(args[6]);
+
+//        WRITES A 50%
+        scaledUpPopulation = populationEditor.filterCarTripsAndRescale(newPopulation, 5);
+        populationEditor.summarizePopulation(scaledUpPopulation);
+        populationWriter = new PopulationWriter(scaledUpPopulation);
+        populationWriter.write(args[7]);
+
 
     }
 
@@ -104,25 +126,37 @@ public class PopulationEditor {
 
     public Population filterCarTripsAndRescale(Population originalPopulation, double relativeScale) throws IOException {
 
-        PrintWriter pw = new PrintWriter(new FileWriter(relativeScale + "population.csv"));
+        if (relativeScale <= 1) {
+            return scaleDownPopulation(originalPopulation, relativeScale);
+        } else {
+            return scaleUpPopulation(originalPopulation, relativeScale);
+        }
 
-        pw.println("person,sequence,type,endTime");
+    }
+
+    public Population scaleDownPopulation(Population originalPopulation, double relativeScale) throws IOException {
 
         Config config = ConfigUtils.createConfig();
         Scenario scenario = ScenarioUtils.createScenario(config);
         Population newPopulation = scenario.getPopulation();
         PopulationFactory populationFactory = newPopulation.getFactory();
 
-        int numberOfUndefinedActs = 0;
+        PrintWriter pw = new PrintWriter(new FileWriter(relativeScale + "population.csv"));
 
+        pw.println("person,sequence,type,endTime,x,y");
+
+        int numberOfUndefinedActs = 0;
+        int personCounter = 0;
         for (Person person : originalPopulation.getPersons().values()) {
-            Person newPerson = populationFactory.createPerson(person.getId());
+            Person newPerson = populationFactory.createPerson(Id.createPersonId(personCounter));
+            personCounter++;
             if (Math.random() < relativeScale) {
+                boolean useCar = false;
                 for (Plan plan : person.getPlans()) {
                     Plan newPlan = populationFactory.createPlan();
-                    boolean returnsHome = false;
                     Coord firstLocation = new Coord(0, 0);
                     String firstType = "home";
+
                     int sequence = 0;
                     Activity previousAct = new Activity() {
                         @Override
@@ -204,6 +238,11 @@ public class PopulationEditor {
                         //can be activity or leg //careful I select the first interface. What if there is more than one?
                         Activity act;
                         if (element.getClass().getInterfaces()[0].equals(Leg.class)) {
+                            Leg leg = (Leg) element;
+                            if (leg.getMode().equals(TransportMode.car)) {
+                                useCar = true;
+                            }
+                            ;
                         } else {
                             act = (Activity) element;
                             String type = act.getType();
@@ -222,15 +261,17 @@ public class PopulationEditor {
                                     Activity act1 = populationFactory.createActivityFromCoord(act.getType(), act.getCoord());
                                     act1.setEndTime(act.getEndTime());
                                     newPlan.addActivity(act1);
-                                    pw.print(person.getId() + ",");
+                                    pw.print(newPerson.getId() + ",");
                                     pw.print(sequence + ",");
                                     pw.print(act.getType() + ",");
-                                    pw.println(act.getEndTime());
+                                    pw.print(act.getEndTime() + ",");
+                                    pw.println(act.getCoord().getX() + "," + act.getCoord().getY());
                                     sequence++;
-                                    newPlan.addLeg(populationFactory.createLeg(TransportMode.car));
+
                                     previousAct = (Activity) element;
                                 } else {
-                                    if (!act.getCoord().equals(previousAct.getCoord()) && (act.getEndTime() - act.getStartTime() > 10)) {
+                                    if (!act.getCoord().equals(previousAct.getCoord()) && (act.getEndTime() - act.getStartTime()) > 0) {
+                                        newPlan.addLeg(populationFactory.createLeg(TransportMode.car));
                                         if (type.contains("home")) {
                                             act.setType("home");
                                         } else if (type.contains("work")) {
@@ -240,14 +281,15 @@ public class PopulationEditor {
                                         }
                                         Activity act2 = populationFactory.createActivityFromCoord(act.getType(), act.getCoord());
                                         act2.setEndTime(act.getEndTime());
+                                        act2.setStartTime(act.getStartTime());
                                         newPlan.addActivity(act2);
-                                        pw.print(person.getId() + ",");
+                                        pw.print(newPerson.getId() + ",");
                                         pw.print(sequence + ",");
                                         pw.print(act.getType() + ",");
-                                        pw.println(act.getEndTime());
+                                        pw.print(act.getEndTime() + ",");
+                                        pw.println(act.getCoord().getX() + "," + act.getCoord().getY());
                                         sequence++;
                                         previousAct = (Activity) element;
-                                        newPlan.addLeg(populationFactory.createLeg(TransportMode.car));
                                     }
                                 }
                             } else {
@@ -255,17 +297,20 @@ public class PopulationEditor {
                             }
                         }
                     }
-                    if (!previousAct.getCoord().equals(firstLocation)){
+                    if (!previousAct.getCoord().equals(firstLocation)) {
+                        newPlan.addLeg(populationFactory.createLeg(TransportMode.car));
                         newPlan.addActivity(populationFactory.createActivityFromCoord(firstType, firstLocation));
-                        pw.print(person.getId() + ",");
+                        pw.print(newPerson.getId() + ",");
                         pw.print(sequence + ",");
                         pw.print(firstType + ",");
-                        pw.println(-1);
+                        pw.print(-1 + ",");
+                        pw.println(firstLocation.getX() + "," + firstLocation.getY());
                     }
                     newPerson.addPlan(newPlan);
                 }
-
-                newPopulation.addPerson(newPerson);
+                if (useCar) {
+                    newPopulation.addPerson(newPerson);
+                }
             }
         }
         logger.warn("The number of activities without end time is: " + numberOfUndefinedActs);
@@ -273,6 +318,54 @@ public class PopulationEditor {
         pw.flush();
         pw.close();
 
+        return newPopulation;
+    }
+
+    public Population scaleUpPopulation(Population originalPopulation, double relativeScale) throws IOException {
+
+        Config config = ConfigUtils.createConfig();
+        Scenario scenario = ScenarioUtils.createScenario(config);
+        Population newPopulation = scenario.getPopulation();
+
+        PopulationFactory populationFactory = originalPopulation.getFactory();
+
+        long expansionFactor = Math.min(Math.round(relativeScale), 10);
+        int personIndex = 1;
+        ArrayList<Person> newPersons = new ArrayList<>();
+        for (int i = 0; i < expansionFactor; i++) {
+            for (Person person : originalPopulation.getPersons().values()) {
+                Person newPerson = populationFactory.createPerson(Id.createPersonId(personIndex));
+                personIndex++;
+                for (Plan plan : person.getPlans()) {
+                    Plan newPlan = populationFactory.createPlan();
+                    for (PlanElement element : plan.getPlanElements()) {
+                        if (element.getClass().getInterfaces()[0].equals(Leg.class)) {
+                            newPlan.addLeg(populationFactory.createLeg(TransportMode.car));
+                        } else {
+                            Activity act = (Activity) element;
+                            if (org.matsim.core.population.PopulationUtils.getLastActivity(plan).equals(act)){
+                                if (!org.matsim.core.population.PopulationUtils.getFirstActivity(plan).equals(act)){
+                                    act.setCoord(org.matsim.core.population.PopulationUtils.getFirstActivity(newPlan).getCoord());
+                                } else {
+                                    act.setCoord(new Coord(act.getCoord().getX() + (Math.random() - 0.5) * 5000, act.getCoord().getY() + (Math.random() - 0.5) * 5000));
+                                }
+                            } else {
+                                act.setCoord(new Coord(act.getCoord().getX() + (Math.random() - 0.5) * 5000, act.getCoord().getY() + (Math.random() - 0.5) * 5000));
+                                act.setEndTime(act.getEndTime());
+                            }
+                            newPlan.addActivity(act);
+                        }
+                    }
+                    newPerson.addPlan(newPlan);
+                }
+                newPersons.add(newPerson);
+            }
+        }
+
+
+        for (Person person : newPersons){
+            newPopulation.addPerson(person);
+        }
         return newPopulation;
     }
 
