@@ -26,8 +26,8 @@ public class AddIntrazonals {
 
         matrix = TravelTimeMatrix.assignIntrazonals(matrix, 3, 20000, 0.5f);
 
-        TravelTimeMatrix.createOmxFile("./data/tdFastestPathCompleteFine.omx", locationList);
-        TravelTimeMatrix.createOmxSkimMatrix(matrix, "./data/tdFastestPathCompleteFine.omx", "td8");
+        TravelTimeMatrix.createOmxFile("./data/tdShortestPathCompleteFine.omx", locationList);
+        TravelTimeMatrix.createOmxSkimMatrix(matrix, "./data/tdShortestPathCompleteFine.omx", "td8");
 
 
 
