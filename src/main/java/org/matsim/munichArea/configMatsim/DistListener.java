@@ -205,7 +205,4 @@ public class DistListener implements IterationEndsListener {
         return autoTravelDistance;
     }
 
-/**
- * @author dziemke
- */
 }

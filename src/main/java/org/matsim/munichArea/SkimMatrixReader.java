@@ -16,7 +16,7 @@ public class SkimMatrixReader {
     public SkimMatrixReader() {
     }
 
-    public Matrix readSkim(String fileName, String matrixName) {
+    public static Matrix readSkim(String fileName, String matrixName) {
         // read skim file
 
         OmxFile hSkim = new OmxFile(fileName);

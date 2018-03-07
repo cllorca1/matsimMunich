@@ -82,7 +82,7 @@ public class RunMATSim {
         //two alternative methods to create the demand
         if (useSp) {
             ReadSyntheticPopulation readSp = new ReadSyntheticPopulation(rb, locationList);
-            readSp.demandFromSyntheticPopulation(0, (float) tripScalingFactor, "sp/output/plans.xml");
+            readSp.demandFromSyntheticPopulation(0, (float) tripScalingFactor, "sp/output/plans.xml.gz");
             matsimPopulation = readSp.getMatsimPopulation();
             readSp.printHistogram();
             readSp.printSyntheticPlansList("./sp/output/plansAuto.csv", 0);

@@ -173,7 +173,4 @@ public class TimeListener implements IterationEndsListener {
     }
 
 
-    /**
-     * @author dziemke
-     */
 }

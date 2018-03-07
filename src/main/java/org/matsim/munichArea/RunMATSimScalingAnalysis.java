@@ -2,7 +2,12 @@ package org.matsim.munichArea;
 
 import com.pb.common.matrix.Matrix;
 import com.pb.common.util.ResourceUtil;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.Population;
+import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.population.io.PopulationReader;
+import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.munichArea.configMatsim.MatsimRunFromJava;
 import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
@@ -66,14 +71,41 @@ public class RunMATSimScalingAnalysis {
 
                 //generate matsim plans based on SP
                 ReadSyntheticPopulation readSp = new ReadSyntheticPopulation(rb, locationList);
-                readSp.demandFromSyntheticPopulation(0, (float) tripScalingFactor, "sp/plans.xml");
+                readSp.demandFromSyntheticPopulation(0, (float) tripScalingFactor, "sp/output/plans.xml.gz");
                 matsimPopulation = readSp.getMatsimPopulation();
                 readSp.printHistogram();
-                readSp.printSyntheticPlansList("./sp/plansAuto.csv", 0);
-                readSp.printSyntheticPlansList("./sp/plansWalk.csv", 1);
-                readSp.printSyntheticPlansList("./sp/plansCycle.csv", 2);
-                readSp.printSyntheticPlansList("./sp/plansTransit.csv", 3);
+                readSp.printSyntheticPlansList("./sp/output/plansAuto.csv", 0);
+                readSp.printSyntheticPlansList("./sp/output/plansWalk.csv", 1);
+                readSp.printSyntheticPlansList("./sp/output/plansCycle.csv", 2);
+                readSp.printSyntheticPlansList("./sp/output/plansTransit.csv", 3);
 
+//                //todo overwriting of properties
+//                Config config  = ConfigUtils.createConfig();
+//                Scenario scenario = ScenarioUtils.createScenario(config);
+//                PopulationReader populationReader = new PopulationReader(scenario);
+//
+//
+//                if (tripScalingFactor == 0.01){
+//                    populationReader.readFile("./input/santiago/population1.xml.gz");
+//                    matsimPopulation = scenario.getPopulation();
+//                } else if (tripScalingFactor == 0.05){
+//                    populationReader.readFile("./input/santiago/population5.xml.gz");
+//                    matsimPopulation = scenario.getPopulation();
+//                } else if (tripScalingFactor == 0.001){
+//                    populationReader.readFile("./input/santiago/population0.1.xml.gz");
+//                    matsimPopulation = scenario.getPopulation();
+//                } else if (tripScalingFactor == 0.1){
+//                    populationReader.readFile("./input/santiago/population10.xml.gz");
+//                    matsimPopulation = scenario.getPopulation();
+//                } else if (tripScalingFactor == 0.2) {
+//                    populationReader.readFile("./input/santiago/population20.xml.gz");
+//                    matsimPopulation = scenario.getPopulation();
+//                }else {
+//                    populationReader.readFile("./input/santiago/population50.xml.gz");
+//                    matsimPopulation = scenario.getPopulation();
+//                }
+//
+//                networkFile = "./input/santiago/network_cl.xml.gz";
 
 
 
@@ -84,6 +116,7 @@ public class RunMATSimScalingAnalysis {
 
                 //get travel times and run Matsim
                 MatsimRunFromJava matsimRunner = new MatsimRunFromJava(rb);
+
                 matsimRunner.configureMatsim(networkFile, year, TransformationFactory.DHDN_GK4, iterations, simulationName, outputFolder,
                         flowCapacityFactor, storageCapacityFactor, scheduleFile, vehicleFile, (float) stuckTime, Boolean.parseBoolean(rb.getString("use.transit")));
 
@@ -98,7 +131,6 @@ public class RunMATSimScalingAnalysis {
                 }
 
                 matsimRunner.runMatsim();
-
                 if (eucliddistSkims) {
                     EuclideanDistanceCalculator edc = new EuclideanDistanceCalculator();
                     Matrix euclideanDistanceMatrix = edc.createEuclideanDistanceMatrix(locationList);
