@@ -29,11 +29,5 @@ public class AddIntrazonals {
         TravelTimeMatrix.createOmxFile("./data/tdShortestPathCompleteFine.omx", locationList);
         TravelTimeMatrix.createOmxSkimMatrix(matrix, "./data/tdShortestPathCompleteFine.omx", "td8");
 
-
-
-
-
-
-
     }
 }

@@ -36,15 +36,15 @@ public class NetworkEditor {
 //        //add opposing direction
 //        OpposingDirectionGenerator opposingDirectionGenerator = new OpposingDirectionGenerator(rb);
 //
-        RemovePtNetwork removePtNetwork = new RemovePtNetwork();
-        Network newNetwork = removePtNetwork.removePublicTransport(network);
+//        RemovePtNetwork removePtNetwork = new RemovePtNetwork();
+//        Network newNetwork = removePtNetwork.removePublicTransport(network);
 //        newNetwork = opposingDirectionGenerator.addOpposingDirection(network);
 //
 //        if (Boolean.parseBoolean(rb.getString("add.single.link"))) {
 //            newNetwork = roadBuilder.addNewLink(newNetwork);
 //        }
 
-        new NetworkWriter(newNetwork).write(rb.getString("editor.new.network.file"));
+        new NetworkWriter(network).write(rb.getString("editor.new.network.file"));
 
     }
 }
