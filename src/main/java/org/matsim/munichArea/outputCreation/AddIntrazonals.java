@@ -22,12 +22,12 @@ public class AddIntrazonals {
         ArrayList<Location> locationList = ctl.readCentroidList();
 
 
-        Matrix matrix = SkimMatrixReader.readSkim("./data/tdskimFull.omx", "td8");
+        Matrix matrix = SkimMatrixReader.readSkim("./data/skimAll.omx", "distanceByDistance");
 
-        matrix = TravelTimeMatrix.assignIntrazonals(matrix, 3, 20000, 0.5f);
+        matrix = TravelTimeMatrix.assignIntrazonals(matrix, 3, 2000000, 0.5f);
 
-        TravelTimeMatrix.createOmxFile("./data/tdShortestPathCompleteFine.omx", locationList);
-        TravelTimeMatrix.createOmxSkimMatrix(matrix, "./data/tdShortestPathCompleteFine.omx", "td8");
+        //TravelTimeMatrix.createOmxFile("./data/skimsAllIntrazonal.omx", locationList);
+        TravelTimeMatrix.createOmxSkimMatrix(matrix, "./data/skimsAllIntrazonal.omx", "distanceByDistance");
 
     }
 }

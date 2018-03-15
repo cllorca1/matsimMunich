@@ -82,7 +82,7 @@ public class ReadSyntheticPopulation {
     private ArrayList<InputTrip> trips;
     private int sequence;
 
-    private boolean storeInputPlans = true;
+    private boolean storeInputPlans = false;
 
 
     public ReadSyntheticPopulation(ResourceBundle rb, ArrayList<Location> locationList) {
@@ -138,6 +138,8 @@ public class ReadSyntheticPopulation {
         String csvSplitBy = ",";
         BufferedReader br = null;
         String line = "";
+
+
 
         try {
 

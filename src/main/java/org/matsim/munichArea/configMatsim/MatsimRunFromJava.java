@@ -151,7 +151,7 @@ public class MatsimRunFromJava {
         return timeListener.getAutoTravelTime();
     }
 
-    public Matrix addDistanceSkimMatrixCalculator(int timeOfDay, int numberOfCalcPoints,
+    public Map<String, Matrix> addDistanceSkimMatrixCalculator(int timeOfDay, int numberOfCalcPoints,
                                                         ArrayList<Location> locationList){
 
         DistListener distListener = new DistListener(
@@ -159,7 +159,13 @@ public class MatsimRunFromJava {
                 locationList, timeOfDay, numberOfCalcPoints, Float.parseFloat(rb.getString("distance.threshold")));
         controler.addControlerListener(distListener);
 
-        return distListener.getAutoTravelDistance();
+        Map<String, Matrix> matrices = new HashMap<>();
+        matrices.put("distanceByDistance", distListener.getShortDistByDistance());
+        matrices.put("timeByDistance", distListener.getShortTimeByDistance());
+        matrices.put("distanceByTime", distListener.getShortDistByTime());
+        matrices.put("timeByTime", distListener.getShortTimeByTime());
+
+        return matrices;
     }
 
 

@@ -57,13 +57,13 @@ public class RunMATSim {
         double flowCapacityExponent = Double.parseDouble(rb.getString("cf.exp"));
         double stroageFactorExponent = Double.parseDouble(rb.getString("sf.exp"));
 
-        Map<Integer, Matrix> autoTravelTimes = new HashMap<>();
-        Map<Integer, Matrix> autoTravelDistances = new HashMap<>();
+        Map<Integer, Matrix> autoTravelTimes = new HashMap<>(); //map by hour
+        Map<String, Matrix> autoTravelDistances = new HashMap<>(); //map by type
         int sizeOfMatrix = locationList.size();
         //initialize auto skim matrices
         for (int hourOfDay : hoursOfDay) {
             autoTravelTimes.put(hourOfDay, new Matrix(sizeOfMatrix, sizeOfMatrix));
-            autoTravelDistances.put(hourOfDay, new Matrix(sizeOfMatrix, sizeOfMatrix));
+            //autoTravelDistances.put(hourOfDay, new Matrix(sizeOfMatrix, sizeOfMatrix));
         }
 
         //calculate capacity factors
@@ -116,7 +116,7 @@ public class RunMATSim {
 
         if (autoDistSkims) {
             for (int hourOfDay : hoursOfDay) {
-                autoTravelDistances.put(hourOfDay, matsimRunner.addDistanceSkimMatrixCalculator(hourOfDay, 1, locationList));
+                autoTravelDistances = matsimRunner.addDistanceSkimMatrixCalculator(hourOfDay, 1, locationList);
             }
         }
 
@@ -132,8 +132,8 @@ public class RunMATSim {
         if (autoDistSkims) {
             String omxFileName = rb.getString("out.skim.auto.dist") + simulationName + ".omx";
             TravelTimeMatrix.createOmxFile(omxFileName, locationList);
-            for (int hourOfDay : hoursOfDay) {
-                TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistances.get(hourOfDay), omxFileName, "td" + hourOfDay);
+            for (String type : autoTravelDistances.keySet()) {
+                TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistances.get(type), omxFileName, type);
             }
         }
     }

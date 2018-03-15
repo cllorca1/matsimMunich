@@ -7,10 +7,12 @@ package org.matsim.munichArea.configMatsim;
 import com.pb.common.matrix.Matrix;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.Plan;
 import org.matsim.contrib.dvrp.router.DijkstraTree;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.events.IterationEndsEvent;
@@ -21,11 +23,16 @@ import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.router.util.TravelTime;
 import org.matsim.munichArea.outputCreation.EuclideanDistanceCalculator;
 import org.matsim.munichArea.configMatsim.zonalData.Location;
+import org.matsim.utils.leastcostpathtree.LeastCostPathTree;
+import org.matsim.utils.objectattributes.attributable.Attributes;
 import org.matsim.vehicles.Vehicle;
+import org.matsim.vehicles.VehicleType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -43,7 +50,10 @@ public class DistListener implements IterationEndsListener {
     private int numberOfCalcPoints;
     private float upperDistanceThreshold;
     //	private CoordinateTransformation ct;
-    private Matrix autoTravelDistance;
+    private Matrix shortDistByDistance;
+    private Matrix shortTimeByDistance;
+    private Matrix shortDistByTime;
+    private Matrix shortTimeByTime;
 
 
     public DistListener(Controler controler, Network network,
@@ -53,7 +63,10 @@ public class DistListener implements IterationEndsListener {
                         int numberOfCalcPoints,
                         float upperDistanceThreshold) {
 
-        autoTravelDistance = new Matrix(locationList.size(), locationList.size());
+        shortDistByDistance = new Matrix(locationList.size(), locationList.size());
+        shortTimeByDistance = new Matrix(locationList.size(), locationList.size());
+        shortDistByTime = new Matrix(locationList.size(), locationList.size());
+        shortTimeByTime = new Matrix(locationList.size(), locationList.size());
 
         this.controler = controler;
         this.network = network;
@@ -75,70 +88,105 @@ public class DistListener implements IterationEndsListener {
             log.info("Starting to calculate average zone-to-zone travel distances based on MATSim.");
 
             TravelTime travelTime;
-            TravelDisutility travelDisutility;
+            TravelTime travelDistance;
+            TravelDisutility travelTimeDisutility;
+            TravelDisutility travelDistanceDisutility;
 
-            boolean distanceDisutility = Boolean.parseBoolean("distance.is.disutility");
+            travelDistance = new TravelDistanceAsTime();
+            travelDistanceDisutility = new DistanceAsDisutility();
 
-            if (distanceDisutility) {
-                travelDisutility = new DistanceAsDisutility();
-                travelTime = new TravelDistanceAsTime();
-            } else {
-                travelTime = controler.getLinkTravelTimes();
-                travelDisutility = controler.getTravelDisutilityFactory().createTravelDisutility(travelTime);
-            }
+            travelTime = controler.getLinkTravelTimes();
+            travelTimeDisutility = controler.getTravelDisutilityFactory().createTravelDisutility(travelTime);
 
-            DijkstraTree dijkstra = new DijkstraTree(network, travelDisutility, travelTime);
+            DijkstraTree dijkstraDistance = new DijkstraTree(network, travelDistanceDisutility, travelDistance);
+            DijkstraTree dijkstraTime = new DijkstraTree(network, travelTimeDisutility, travelTime);
 
+            LeastCostPathTree leastCoastPathTree = new LeastCostPathTree(travelTime, travelTimeDisutility);
 
             //Map to assign a node to each zone
             Map<Integer, Node> zoneCalculationNodesMap = new HashMap<>();
 
-            for (Location loc : locationList) {
-                Coord originCoord = new Coord(loc.getX(), loc.getY());
-                Link originLink = NetworkUtils.getNearestLink(network, originCoord);
-                Node originNode = originLink.getFromNode();
-                zoneCalculationNodesMap.put(loc.getId(), originNode);
-            }
 
             long startTime = System.currentTimeMillis();
 
+            Person person = getPerson();
+            Vehicle vehicle = getVehicle();
 
             for (Location originZone : locationList) { // going over all origin zones
-                Node originNode = zoneCalculationNodesMap.get(originZone.getId());
+
+
+                Coord originCoord = new Coord(originZone.getX(), originZone.getY());
+                Link originLink = NetworkUtils.getNearestLink(network, originCoord);
+                Node originNode = originLink.getFromNode();
+                //zoneCalculationNodesMap.put(loc.getId(), originNode);
+
+
                 //leastCoaptPathTree.calculate(network, originNode, departureTime);
 
                 //Map<Id<Node>, LeastCostPathTree.NodeData> tree = leastCoastPathTree.getTree();
 
-                dijkstra.calcLeastCostPathTree(originNode, departureTime);
+                dijkstraDistance.calcLeastCostPathTree(originNode, departureTime);
+                dijkstraTime.calcLeastCostPathTree(originNode, departureTime);
 
+                //BACKUP METHOD TO GET TRAVEL TIMES - TEST
+                //leastCoastPathTree.calculate(network, originNode, departureTime);
+                //Map<Id<Node>, LeastCostPathTree.NodeData> tree = leastCoastPathTree.getTree();
+
+                //for (Location destinationZone : locationList) {
                 locationList.parallelStream().forEach((Location destinationZone) -> {
                     //nex line to fill only half matrix and use half time
                     if (originZone.getId() <= destinationZone.getId()) {
-                        Node destinationNode = zoneCalculationNodesMap.get(destinationZone.getId());
+
+                        Coord destCoord = new Coord(destinationZone.getX(), destinationZone.getY());
+                        Link destLink = NetworkUtils.getNearestLink(network, destCoord);
+                        Node destinationNode = destLink.getFromNode();
+
                         //with the next if tense it is possible to limit the distance calculation to certain threshold, over it --> eucl.dist.
                         float euclideanDistance = euclideanDistanceCalculator.getDistanceFrom(originZone, destinationZone);
                         if (euclideanDistance < upperDistanceThreshold) {
                             //Dijkstra dijkstra = new Dijkstra(network, travelDisutility, travelTime);
-                            LeastCostPathCalculator.Path path = dijkstra.getLeastCostPath(destinationNode);
+                            LeastCostPathCalculator.Path pathInDistance = dijkstraDistance.getLeastCostPath(destinationNode);
+                            LeastCostPathCalculator.Path pathInTime = dijkstraTime.getLeastCostPath(destinationNode);
 
-                            float distance = 0;
-                            for (Link link : path.links) {
-                                distance += link.getLength();
+                            float distanceInDistance = 0;
+                            float timeInDistance = 0;
+                            for (Link link : pathInDistance.links) {
+                                distanceInDistance += link.getLength();
+                                timeInDistance += controler.getLinkTravelTimes().getLinkTravelTime(link, departureTime, person, vehicle);
+
                             }
+
+                            shortDistByDistance.setValueAt(originZone.getId(), destinationZone.getId(), distanceInDistance);
+                            shortDistByDistance.setValueAt(destinationZone.getId(), originZone.getId(), distanceInDistance);
+
+                            shortTimeByDistance.setValueAt(originZone.getId(), destinationZone.getId(), timeInDistance);
+                            shortTimeByDistance.setValueAt(destinationZone.getId(), originZone.getId(), timeInDistance);
+
+                            float distanceInTime = 0;
+                            float timeInTime = 0;
+
+                            for (Link link : pathInTime.links) {
+                                distanceInTime += link.getLength();
+                                timeInTime += controler.getLinkTravelTimes().getLinkTravelTime(link, departureTime, person, vehicle);
+
+                            }
+
+
                             //double arrivalTime = tree.get(destinationNode.getId()).getTime();
-                            //congested car travel times in minutes
-                            //float congestedTravelTimeMin = (float) ((arrivalTime - departureTime) / 60.);
-                            autoTravelDistance.setValueAt(originZone.getId(), destinationZone.getId(), distance);
-                            //if only done half matrix need to add next line
-                            autoTravelDistance.setValueAt(destinationZone.getId(), originZone.getId(), distance);
+                            //double congestedTimeMetohd2 = arrivalTime - departureTime;
+
+                            shortDistByTime.setValueAt(originZone.getId(), destinationZone.getId(), distanceInTime);
+                            shortDistByTime.setValueAt(destinationZone.getId(), originZone.getId(), distanceInTime);
+
+                            shortTimeByTime.setValueAt(originZone.getId(), destinationZone.getId(), timeInTime);
+                            shortTimeByTime.setValueAt(destinationZone.getId(), originZone.getId(), timeInTime);
+
 
                         } else {
-                            autoTravelDistance.setValueAt(originZone.getId(), destinationZone.getId(), euclideanDistance);
-                            //if only done half matrix need to add next line
-                            autoTravelDistance.setValueAt(destinationZone.getId(), originZone.getId(), euclideanDistance);
+                            //do nothing now
                         }
                     }
-
+                //}
                 });
                 log.info("Completed origin zone: " + originZone.getId());
             }
@@ -201,8 +249,83 @@ public class DistListener implements IterationEndsListener {
         }
     }
 
-    public Matrix getAutoTravelDistance() {
-        return autoTravelDistance;
+    public Matrix getShortDistByDistance() {
+        return shortDistByDistance;
+    }
+
+    public Matrix getShortTimeByDistance() {
+        return shortTimeByDistance;
+    }
+
+    public Matrix getShortDistByTime() {
+        return shortDistByTime;
+    }
+
+    public Matrix getShortTimeByTime() {
+        return shortTimeByTime;
+    }
+
+    private Person getPerson(){
+        return new Person() {
+            @Override
+            public Map<String, Object> getCustomAttributes() {
+                return null;
+            }
+
+            @Override
+            public List<? extends Plan> getPlans() {
+                return null;
+            }
+
+            @Override
+            public boolean addPlan(Plan plan) {
+                return false;
+            }
+
+            @Override
+            public boolean removePlan(Plan plan) {
+                return false;
+            }
+
+            @Override
+            public Plan getSelectedPlan() {
+                return null;
+            }
+
+            @Override
+            public void setSelectedPlan(Plan plan) {
+
+            }
+
+            @Override
+            public Plan createCopyOfSelectedPlanAndMakeSelected() {
+                return null;
+            }
+
+            @Override
+            public Id<Person> getId() {
+                return null;
+            }
+
+            @Override
+            public Attributes getAttributes() {
+                return null;
+            }
+        };
+    }
+
+    private Vehicle getVehicle(){
+        return new Vehicle() {
+            @Override
+            public VehicleType getType() {
+                return null;
+            }
+
+            @Override
+            public Id<Vehicle> getId() {
+                return null;
+            }
+        };
     }
 
 }

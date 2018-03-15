@@ -127,7 +127,7 @@ public class RunMATSimScalingAnalysis {
                 }
 
                 if (autoDistSkims && !autoTimeSkims) {
-                    autoTravelDistance = matsimRunner.addDistanceSkimMatrixCalculator(hourOfDay, 1, locationList);
+                    //autoTravelDistance = matsimRunner.addDistanceSkimMatrixCalculator(hourOfDay, 1, locationList);
                 }
 
                 matsimRunner.runMatsim();
@@ -145,9 +145,9 @@ public class RunMATSimScalingAnalysis {
                     TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, omxFileName, "mat1");
                 }
                 if (autoDistSkims) {
-                    String omxFileName = rb.getString("out.skim.auto.dist") + singleRunName + ".omx";
-                    TravelTimeMatrix.createOmxFile(omxFileName, locationList);
-                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistance,  omxFileName, "mat1");
+//                    String omxFileName = rb.getString("out.skim.auto.dist") + singleRunName + ".omx";
+//                    TravelTimeMatrix.createOmxFile(omxFileName, locationList);
+//                    TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistance,  omxFileName, "mat1");
                 }
             }
 
