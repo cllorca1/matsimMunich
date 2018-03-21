@@ -14,6 +14,7 @@ package org.matsim.munichArea;
         import org.geotools.geometry.jts.JTS;
         import org.geotools.referencing.CRS;
         import org.matsim.api.core.v01.Coord;
+        import org.matsim.core.utils.gis.ShapeFileReader;
         import org.opengis.feature.simple.SimpleFeature;
         import org.opengis.referencing.FactoryException;
         import org.opengis.referencing.operation.TransformException;
@@ -88,6 +89,34 @@ public class Util {
         double y = envelope.getMinY() + Math.random() * envelope.getHeight();
         return geometryFactory.createPoint(new Coordinate(x,y));
     }
+
+    public static final Coord getRandomCoordinateInZone(SimpleFeature feature) {
+        Geometry geometry = (Geometry) feature.getDefaultGeometry();
+        Envelope envelope = geometry.getEnvelopeInternal();
+        while (true) {
+            Point point = getRandomPointInEnvelope(envelope);
+            if (point.within(geometry)) {
+                return new Coord(point.getX(), point.getY());
+            }
+        }
+    }
+
+    public static Map<Integer, SimpleFeature> loadZoneShapeFile(String fileName, String idName){
+        Map<Integer,SimpleFeature> zoneFeatureMap = new HashMap<>();
+        for (SimpleFeature feature: ShapeFileReader.getAllFeatures(fileName)){
+            int zoneId = Integer.parseInt(feature.getAttribute(idName).toString());
+            zoneFeatureMap.put(zoneId,feature);
+        }
+        return zoneFeatureMap;
+
+    }
+
+    public static boolean checkCoordinatesInFeature(Coord coord, SimpleFeature feature){
+        Coordinate coordinate = new Coordinate(coord.getX(), coord.getY());
+        return ((Geometry) feature.getDefaultGeometry()).getEnvelopeInternal().contains(coordinate);
+    }
+
+
 
 
 }

@@ -221,7 +221,7 @@ public class DistListener implements IterationEndsListener {
     }
 
 
-    class DistanceAsDisutility implements TravelDisutility {
+    static class DistanceAsDisutility implements TravelDisutility {
 
 
         public DistanceAsDisutility() {
@@ -241,7 +241,7 @@ public class DistListener implements IterationEndsListener {
     }
 
 
-    class TravelDistanceAsTime implements TravelTime {
+    static class TravelDistanceAsTime implements TravelTime {
 
         @Override
         public double getLinkTravelTime(Link link, double v, Person person, Vehicle vehicle) {
@@ -265,7 +265,7 @@ public class DistListener implements IterationEndsListener {
         return shortTimeByTime;
     }
 
-    private Person getPerson(){
+    public static Person getPerson(){
         return new Person() {
             @Override
             public Map<String, Object> getCustomAttributes() {
@@ -314,7 +314,7 @@ public class DistListener implements IterationEndsListener {
         };
     }
 
-    private Vehicle getVehicle(){
+    public static Vehicle getVehicle(){
         return new Vehicle() {
             @Override
             public VehicleType getType() {

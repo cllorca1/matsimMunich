@@ -82,7 +82,7 @@ public class ReadSyntheticPopulation {
     private ArrayList<InputTrip> trips;
     private int sequence;
 
-    private boolean storeInputPlans = false;
+    private boolean storeInputPlans = true;
 
 
     public ReadSyntheticPopulation(ResourceBundle rb, ArrayList<Location> locationList) {

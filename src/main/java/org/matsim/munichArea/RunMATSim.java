@@ -5,6 +5,7 @@ import com.pb.common.util.ResourceUtil;
 import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.munichArea.configMatsim.DistListener;
+import org.matsim.munichArea.configMatsim.IntrazonalTravelTimeCalculator;
 import org.matsim.munichArea.configMatsim.MatsimRunFromJava;
 import org.matsim.munichArea.configMatsim.TimeListener;
 import org.matsim.munichArea.configMatsim.createDemandPt.MatsimPopulationCreator;
@@ -35,6 +36,7 @@ public class RunMATSim {
         boolean autoTimeSkims = ResourceUtil.getBooleanProperty(rb, "skim.auto.times");
         boolean autoDistSkims = ResourceUtil.getBooleanProperty(rb, "skim.auto.dist");
         boolean addExternalFlows = ResourceUtil.getBooleanProperty(rb, "add.external.flows");
+        boolean calculateIntrazonals = ResourceUtil.getBooleanProperty(rb, "get.intrazonals");
         String networkFile = rb.getString("network.folder") + rb.getString("xml.network.file");
         String scheduleFile = rb.getString("network.folder") + rb.getString("schedule.file");
         String vehicleFile = rb.getString("network.folder") + rb.getString("vehicle.file");
@@ -120,6 +122,13 @@ public class RunMATSim {
             }
         }
 
+
+        if (calculateIntrazonals){
+            matsimRunner.addIntrazonalTravelTimeCalculator(locationList, rb.getString("intrazonal.file"), Util.loadZoneShapeFile(rb.getString("zone.shapefile"),"id" ));
+
+
+        }
+
         matsimRunner.runMatsim();
 
         if (autoTimeSkims) {
@@ -136,5 +145,7 @@ public class RunMATSim {
                 TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistances.get(type), omxFileName, type);
             }
         }
+
+
     }
 }

@@ -15,6 +15,7 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.munichArea.configMatsim.zonalData.Location;
 
 import org.matsim.munichArea.roadSafety.VolumeAnalysisListener;
+import org.opengis.feature.simple.SimpleFeature;
 
 import java.util.*;
 
@@ -178,5 +179,11 @@ public class MatsimRunFromJava {
     public Network getNetwork() {
         Scenario scenario = ScenarioUtils.loadScenario(config);
         return scenario.getNetwork();
+    }
+
+    public void addIntrazonalTravelTimeCalculator(ArrayList<Location> locationList, String fileName, Map<Integer, SimpleFeature> zoneFeatureMap) {
+        IntrazonalTravelTimeCalculator intrazonalTravelTimeCalculator = new IntrazonalTravelTimeCalculator(controler, scenario.getNetwork(),
+                config.controler().getLastIteration(),zoneFeatureMap,locationList,fileName );
+        controler.addControlerListener(intrazonalTravelTimeCalculator);
     }
 }
