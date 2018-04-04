@@ -136,7 +136,7 @@ public class IntrazonalTravelTimeCalculator implements IterationEndsListener {
                             pw.print(avg);
                             pw.println();
                         } else {
-                            pw.println(location.getId() + ",noRoutes,noRoutes");
+                            pw.println(location.getId() + ",0,noRoutes,noRoutes");
                         }
                     } catch (NullPointerException e) {
                         pw.println(location.getId() + ",0,noNodes,noNodes");

@@ -1,6 +1,7 @@
 package org.matsim.munichArea.configMatsim.networkTools;
 
 import com.pb.common.util.ResourceUtil;
+import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
@@ -12,6 +13,7 @@ import org.matsim.core.network.algorithms.NetworkCleaner;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.geometry.CoordinateTransformation;
 import org.matsim.core.utils.geometry.transformations.TransformationFactory;
+import org.matsim.core.utils.gis.ShapeFileReader;
 import org.matsim.core.utils.io.OsmNetworkReader;
 
 import java.io.BufferedReader;
@@ -81,6 +83,8 @@ public class CreateNetwork {
 
         OsmNetworkReader onr = new OsmNetworkReader(network,ct);
         onr.parse(osm);
+
+
 
         /*
 		 * Clean the Network. Cleaning means removing disconnected components, so that afterwards there is a route from every link

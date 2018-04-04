@@ -118,6 +118,8 @@ public class DistListener implements IterationEndsListener {
                 Coord originCoord = new Coord(originZone.getX(), originZone.getY());
                 Link originLink = NetworkUtils.getNearestLink(network, originCoord);
                 Node originNode = originLink.getFromNode();
+
+                Node node = NetworkUtils.getNearestNode(network, new Coord(10,10));
                 //zoneCalculationNodesMap.put(loc.getId(), originNode);
 
 
