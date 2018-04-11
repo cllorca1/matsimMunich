@@ -29,7 +29,7 @@ public class TransitDemandForSkim {
         PopulationFactory matsimPopulationFactory = matsimPopulation.getFactory();
 
             for (Location origLoc : shortServedZonesList) {
-                double time = 8 * 60 * 60;
+                double time = 5 * 60 * 60;
                 for (Location destLoc : servedZonesList) {
 
 

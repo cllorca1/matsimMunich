@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 /**
  * Created by carlloga on 02.03.2017.
  */
-public class TransitSkimPostProcessing {
+public class AddAccessAndEgressAtNonServedZones {
 
     private ResourceBundle munich;
     private Matrix inTransitCompleteMatrix;
@@ -35,7 +35,7 @@ public class TransitSkimPostProcessing {
     private Matrix autoTravelDistance;
     private Matrix inVehicle;
 
-    public double minutesThreshold = 200;
+    public double minutesThreshold = 9999;
 
     private static String simulationName;
 
@@ -55,7 +55,7 @@ public class TransitSkimPostProcessing {
 
 
         //fill matrices for non-served locations
-        TransitSkimPostProcessing postProcess = new TransitSkimPostProcessing(munich, locationList, servedZoneList);
+        AddAccessAndEgressAtNonServedZones postProcess = new AddAccessAndEgressAtNonServedZones(munich, locationList, servedZoneList);
         postProcess.fillTransitSkims();
         postProcess.writeFilledMatrices();
 
@@ -65,7 +65,7 @@ public class TransitSkimPostProcessing {
 
 
 
-    public TransitSkimPostProcessing(ResourceBundle munich, ArrayList<Location> locationList, ArrayList<Location> servedZoneList) {
+    public AddAccessAndEgressAtNonServedZones(ResourceBundle munich, ArrayList<Location> locationList, ArrayList<Location> servedZoneList) {
         this.munich = munich;
         this.locationList = locationList;
         this.servedZoneList = servedZoneList;
@@ -84,7 +84,8 @@ public class TransitSkimPostProcessing {
         transfers = skimReader.readSkim(munich.getString("pt.transfer.skim.file") + simulationName + ".omx", "mat1");
         inVehicle = skimReader.readSkim(munich.getString("pt.in.vehicle.skim.file") + simulationName + ".omx", "mat1");
         //read the distances
-        autoTravelDistance = skimReader.readSkim(munich.getString("out.skim.auto.dist.base") + ".omx", "mat1");
+        autoTravelDistance = skimReader.readSkim(munich.getString("skim.file.dist.access") + ".omx",
+                munich.getString("skim.matrix.dist.access"));
         //fill in the locations without access by transit
         fillTransitMatrix();
 
@@ -100,12 +101,13 @@ public class TransitSkimPostProcessing {
         transfersCompleteMatrix = transfers;
         inVehicleTimeCompleteMatrix = inVehicle;
 
+        //for each origin i
         locationList.parallelStream().forEach((Location origLoc) -> {
             int i = origLoc.getId();
             float access;
             float egress;
             float tt;
-            //total time matrix is used as check if -1
+            //fir each destination j
             for (int j = 1; j <= totalTime.getColumnCount(); j++) {
                 if (totalTime.getValueAt(i, j) == -1 & i <= j) {
                     tt = Float.MAX_VALUE;
@@ -113,16 +115,19 @@ public class TransitSkimPostProcessing {
                     float addEgressTime = 0;
                     int startZoneIndex = 0;
                     int finalZoneIndex = 0;
+                    //look for boarding station
                     for (Location k : servedZoneList) {
                         access = (float) (autoTravelDistance.getValueAt(i, k.getId()) / 1.4 / 60);
                         if (access < minutesThreshold ) {
+                            //look for boarding station k and alighting station l
                             for (Location l : servedZoneList) {
                                 egress = (float) (autoTravelDistance.getValueAt(l.getId(), j) / 1.4 / 60);
                                 if (egress < minutesThreshold) {
-                                    if (totalTime.getValueAt(k.getId(), l.getId()) > 0) {
-                                        if (tt > totalTime.getValueAt(k.getId(), l.getId()) + access + egress) {
+                                    //the access and egress time at k and l are discarded because the agent walks from other zone
+                                    if (inTransit.getValueAt(k.getId(), l.getId()) > 0) {
+                                        if (tt > inTransit.getValueAt(k.getId(), l.getId()) + access + egress) {
                                             //a better OD tranist pair has been found
-                                            tt = totalTime.getValueAt(k.getId(), l.getId()) + access + egress;
+                                            tt = inTransit.getValueAt(k.getId(), l.getId()) + access + egress;
                                             //stores the access and egress points
                                             startZoneIndex = k.getId();
                                             finalZoneIndex = l.getId();
@@ -138,16 +143,18 @@ public class TransitSkimPostProcessing {
 
                     if (startZoneIndex != 0 & finalZoneIndex != 0){
 
+                        //todo add the if to check if there is no invehicle time
+
                         if (tt < minutesThreshold & tt > 0) {
                         //found the best k and l that link i and j by transit inn tt mins
                         inTransitCompleteMatrix.setValueAt(i,j,inTransit.getValueAt(startZoneIndex, finalZoneIndex));
                         inTransitCompleteMatrix.setValueAt(j,i,inTransit.getValueAt(startZoneIndex, finalZoneIndex));
 
-                        accessTimeCompleteMatrix.setValueAt(i,j,addAccessTime + accessTime.getValueAt(startZoneIndex, finalZoneIndex));
-                        accessTimeCompleteMatrix.setValueAt(j,i,addAccessTime + accessTime.getValueAt(startZoneIndex, finalZoneIndex));
+                        accessTimeCompleteMatrix.setValueAt(i,j,addAccessTime);
+                        accessTimeCompleteMatrix.setValueAt(j,i,addAccessTime);
 
-                        egressTimeCompleteMatrix.setValueAt(i,j,addEgressTime + egressTime.getValueAt(startZoneIndex, finalZoneIndex));
-                        egressTimeCompleteMatrix.setValueAt(j,i,addEgressTime + egressTime.getValueAt(startZoneIndex, finalZoneIndex));
+                        egressTimeCompleteMatrix.setValueAt(i,j,addEgressTime);
+                        egressTimeCompleteMatrix.setValueAt(j,i,addEgressTime);
 
                         transfersCompleteMatrix.setValueAt(i,j,transfers.getValueAt(startZoneIndex, finalZoneIndex));
                         transfersCompleteMatrix.setValueAt(j,i,transfers.getValueAt(startZoneIndex, finalZoneIndex));
@@ -172,27 +179,27 @@ public class TransitSkimPostProcessing {
 
     public void writeFilledMatrices(){
 
-        String omxPtFileName = munich.getString("pt.total.skim.file") + simulationName + "Complete.omx";
+        String omxPtFileName = munich.getString("pt.total.skim.file") + simulationName + "Full.omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
         TravelTimeMatrix.createOmxSkimMatrix(totalTimeCompleteMatrix,  omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.in.skim.file") + simulationName + "Complete.omx";
+        omxPtFileName = munich.getString("pt.in.skim.file") + simulationName + "Full.omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
         TravelTimeMatrix.createOmxSkimMatrix(inTransitCompleteMatrix,  omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.access.skim.file") + simulationName + "Complete.omx";
+        omxPtFileName = munich.getString("pt.access.skim.file") + simulationName + "Full.omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
         TravelTimeMatrix.createOmxSkimMatrix(accessTimeCompleteMatrix,  omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.egress.skim.file") + simulationName + "Complete.omx";
+        omxPtFileName = munich.getString("pt.egress.skim.file") + simulationName + "Full.omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
         TravelTimeMatrix.createOmxSkimMatrix(egressTimeCompleteMatrix,  omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.transfer.skim.file") + simulationName + "Complete.omx";
+        omxPtFileName = munich.getString("pt.transfer.skim.file") + simulationName + "Full.omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
         TravelTimeMatrix.createOmxSkimMatrix(transfersCompleteMatrix,  omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + simulationName + "Complete.omx";
+        omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + simulationName + "Full.omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
         TravelTimeMatrix.createOmxSkimMatrix(inVehicleTimeCompleteMatrix,  omxPtFileName, "mat1");
 

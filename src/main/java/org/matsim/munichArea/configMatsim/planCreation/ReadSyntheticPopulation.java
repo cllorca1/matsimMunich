@@ -82,7 +82,7 @@ public class ReadSyntheticPopulation {
     private ArrayList<InputTrip> trips;
     private int sequence;
 
-    private boolean storeInputPlans = true;
+    private boolean storeInputPlans = false;
 
 
     public ReadSyntheticPopulation(ResourceBundle rb, ArrayList<Location> locationList) {
@@ -293,9 +293,7 @@ public class ReadSyntheticPopulation {
                     }
                 }
 
-
             }
-
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

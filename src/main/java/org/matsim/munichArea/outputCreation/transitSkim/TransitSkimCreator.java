@@ -23,7 +23,7 @@ public class TransitSkimCreator {
         new MatsimEventsReader(eventsManager).readFile(eventsFile);
     }
 
-    public Matrix ptTotalTime(Map<Id,PtSyntheticTraveller> ptSyntheticTravellerMap, Matrix transitTravelTime) {
+    public Matrix ptTotalTime(Map<Id,PtSyntheticTraveller> ptSyntheticTravellerMap, Matrix transitTotalTime) {
 
         //transitTravelTime.fill(-1F);
 
@@ -31,17 +31,17 @@ public class TransitSkimCreator {
         for (PtSyntheticTraveller ptst : ptSyntheticTravellerMap.values()){
             float tt = (float) (( ptst.getArrivalTime() - ptst.getDepartureTime())/60);
 
-            if (tt > 300) tt=-1F;
+            if (ptst.getStopMap().size() == 0) tt=-1F;
 
             //System.out.println(ptst.getOrigLoc().getId() + "-" + tt);
-            transitTravelTime.setValueAt(ptst.getOrigLoc().getId(), ptst.getDestLoc().getId(), tt);
-            transitTravelTime.setValueAt(ptst.getDestLoc().getId(), ptst.getOrigLoc().getId(), tt);
+            transitTotalTime.setValueAt(ptst.getOrigLoc().getId(), ptst.getDestLoc().getId(), tt);
+            transitTotalTime.setValueAt(ptst.getDestLoc().getId(), ptst.getOrigLoc().getId(), tt);
         }
 
-        return transitTravelTime;
+        return transitTotalTime;
     }
 
-    public Matrix ptInTransitTime(Map<Id,PtSyntheticTraveller> ptSyntheticTravellerMap, Matrix transitTravelTime) {
+    public Matrix ptInTransitTime(Map<Id,PtSyntheticTraveller> ptSyntheticTravellerMap, Matrix inTransitTime) {
 
         //transitTravelTime.fill(-1F);
 
@@ -56,15 +56,16 @@ public class TransitSkimCreator {
 
                 float tt = (float) ((end - start)/60);
 
-                if (tt > 300) {tt=-1F;}
-
-                transitTravelTime.setValueAt(ptst.getOrigLoc().getId(), ptst.getDestLoc().getId(), tt);
-                transitTravelTime.setValueAt(ptst.getDestLoc().getId(), ptst.getOrigLoc().getId(), tt);
+                inTransitTime.setValueAt(ptst.getOrigLoc().getId(), ptst.getDestLoc().getId(), tt);
+                inTransitTime.setValueAt(ptst.getDestLoc().getId(), ptst.getOrigLoc().getId(), tt);
+            } else {
+                inTransitTime.setValueAt(ptst.getOrigLoc().getId(), ptst.getDestLoc().getId(), -1F);
+                inTransitTime.setValueAt(ptst.getDestLoc().getId(), ptst.getOrigLoc().getId(), -1F);
             }
 
         }
 
-        return transitTravelTime;
+        return inTransitTime;
     }
 
     public Matrix ptTransfers(Map<Id,PtSyntheticTraveller> ptSyntheticTravellerMap, Matrix transfers) {
