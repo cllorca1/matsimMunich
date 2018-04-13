@@ -2,6 +2,7 @@ package org.matsim.munichArea.outputCreation.transitSkim;
 
 import com.pb.common.matrix.Matrix;
 import com.pb.common.util.ResourceUtil;
+import org.apache.log4j.Logger;
 import org.matsim.munichArea.SkimMatrixReader;
 import org.matsim.munichArea.configMatsim.createDemandPt.ReadZonesServedByTransit;
 import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
@@ -11,11 +12,14 @@ import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by carlloga on 02.03.2017.
  */
 public class AddAccessAndEgressAtNonServedZones {
+
+    private final static Logger log = Logger.getLogger(AddAccessAndEgressAtNonServedZones.class);
 
     private ResourceBundle munich;
     private Matrix inTransitCompleteMatrix;
@@ -35,7 +39,7 @@ public class AddAccessAndEgressAtNonServedZones {
     private Matrix autoTravelDistance;
     private Matrix inVehicle;
 
-    public double minutesThreshold = 9999;
+    public double minutesThreshold = 30;
 
     private static String simulationName;
 
@@ -100,6 +104,8 @@ public class AddAccessAndEgressAtNonServedZones {
         egressTimeCompleteMatrix = egressTime;
         transfersCompleteMatrix = transfers;
         inVehicleTimeCompleteMatrix = inVehicle;
+
+        AtomicInteger counter = new AtomicInteger(0);
 
         //for each origin i
         locationList.parallelStream().forEach((Location origLoc) -> {
@@ -167,13 +173,33 @@ public class AddAccessAndEgressAtNonServedZones {
                         }
                     }
 
+                } else if (accessTime.getValueAt(i, j)> minutesThreshold || egressTime.getValueAt(i, j) > minutesThreshold) {
+
+                    inTransitCompleteMatrix.setValueAt(i,j,-1f);
+                    inTransitCompleteMatrix.setValueAt(j,i,-1f);
+
+                    accessTimeCompleteMatrix.setValueAt(i,j,-1f);
+                    accessTimeCompleteMatrix.setValueAt(j,i,-1f);
+
+                    egressTimeCompleteMatrix.setValueAt(i,j,-1f);
+                    egressTimeCompleteMatrix.setValueAt(j,i,-1f);
+
+                    transfersCompleteMatrix.setValueAt(i,j,-1f);
+                    transfersCompleteMatrix.setValueAt(j,i,-1f);
+
+                    inVehicleTimeCompleteMatrix.setValueAt(i,j,-1f);
+                    inVehicleTimeCompleteMatrix.setValueAt(j,i,-1f);
+
+                    totalTimeCompleteMatrix.setValueAt(i, j, -1f);
+                    totalTimeCompleteMatrix.setValueAt(j, i, -1f);
+
                 }
                 //if not found a -1 then skip this
 
 
             }
 
-        System.out.println("zone completed " + i);
+        log.info(counter.incrementAndGet() +  " zones completed");
         });
     }
 
