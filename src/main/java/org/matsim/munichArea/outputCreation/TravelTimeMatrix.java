@@ -68,18 +68,9 @@ public class TravelTimeMatrix {
             System.out.println(omxMatrixName + "matrix written");
 
         }
-// clean the matrix if not needed ?
-//        try (OmxFile omxFile = new OmxFile(f)) {
-//            omxFile.openReadWrite();
-//            System.out.println(omxFile.summary());
-//            omxFile.deleteMatrix("mat1");
-//            omxFile.deleteLookup("lookup1");
-//            System.out.println(omxFile.summary());
-//        }
-
     }
 
-    public static void createStringCSVSkimMatrix(String[][] matrix, ArrayList<Location> locationList, String omxFileName, String omxMatrixName) {
+       public static void createStringCSVSkimMatrix(String[][] matrix, ArrayList<Location> locationList, String omxFileName, String omxMatrixName) {
 
 
         try {

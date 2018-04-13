@@ -1,7 +1,9 @@
 package org.matsim.munichArea.configMatsim.createDemandPt;
 
+import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.population.Plan;
+import org.matsim.core.population.PopulationUtils;
 import org.matsim.munichArea.configMatsim.zonalData.Location;
 
 import org.matsim.api.core.v01.Coord;
@@ -17,6 +19,8 @@ import java.util.Map;
  */
 public class TransitDemandForSkim {
 
+    private final static Logger logger = Logger.getLogger(TransitDemandForSkim.class);
+
 
     public Map< Id, PtSyntheticTraveller> createDemandForSkims(ArrayList<Location> servedZonesList,ArrayList<Location> shortServedZonesList, int personId, Population matsimPopulation) {
 
@@ -25,6 +29,7 @@ public class TransitDemandForSkim {
         for (Location loc : servedZonesList){
             locationMap.put(loc.getId(), loc);
         }
+
 
         PopulationFactory matsimPopulationFactory = matsimPopulation.getFactory();
 
