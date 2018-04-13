@@ -89,31 +89,31 @@ public class RunMATSimTransitSkims {
 
 
         //if (ptSkimsFromEvents) {
-        String omxPtFileName = rb.getString("pt.total.skim.file") + simulationName + ".omx";
+        String omxPtFileName = rb.getString("pt.total.skim.file")  + "_served" + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
 //            TravelTimeMatrix.createOmxSkimMatrix(transitTotalTime,  omxPtFileName, "mat1");
 
-        omxPtFileName = rb.getString("pt.in.skim.file") + simulationName + ".omx";
+        omxPtFileName = rb.getString("pt.in.skim.file")  + "_served" + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
 //            TravelTimeMatrix.createOmxSkimMatrix(transitInTime,  omxPtFileName, "mat1");
 
-        omxPtFileName = rb.getString("pt.transfer.skim.file") + simulationName + ".omx";
+        omxPtFileName = rb.getString("pt.transfer.skim.file") + "_served"  + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
 //            TravelTimeMatrix.createOmxSkimMatrix(transitTransfers,  omxPtFileName, "mat1");
 //
-        omxPtFileName = rb.getString("pt.in.vehicle.skim.file") + simulationName + ".omx";
+        omxPtFileName = rb.getString("pt.in.vehicle.skim.file")  + "_served" + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
 //            TravelTimeMatrix.createOmxSkimMatrix(inVehicleTime,  omxPtFileName, "mat1");
 //
-        omxPtFileName = rb.getString("pt.access.skim.file") + simulationName + ".omx";
+        omxPtFileName = rb.getString("pt.access.skim.file") + "_served"  + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
 //            TravelTimeMatrix.createOmxSkimMatrix(transitAccessTt,  omxPtFileName, "mat1");
 
-        omxPtFileName = rb.getString("pt.egress.skim.file") + simulationName + ".omx";
+        omxPtFileName = rb.getString("pt.egress.skim.file") + "_served"  + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
 //            TravelTimeMatrix.createOmxSkimMatrix(transitEgressTt,  omxPtFileName, "mat1");
 
-        omxPtFileName = rb.getString("pt.route.skim.file") + simulationName + ".csv";
+        omxPtFileName = rb.getString("pt.route.skim.file") + "_served"  + ".csv";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
 //            TravelTimeMatrix.createStringCSVSkimMatrix(routeMatrix, locationList, omxPtFileName, "mat1");
         // }
@@ -180,27 +180,27 @@ public class RunMATSimTransitSkims {
             routeMatrix = ptEH.ptRouteMatrix(ptSyntheticTravellerMap, routeMatrix);
 
 
-            omxPtFileName = rb.getString("pt.total.skim.file") + simulationName + ".omx";
+            omxPtFileName = rb.getString("pt.total.skim.file")  + "_served" + ".omx";
             TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(transitTotalTime, omxPtFileName, "mat1");
 
-            omxPtFileName = rb.getString("pt.in.skim.file") + simulationName + ".omx";
+            omxPtFileName = rb.getString("pt.in.skim.file")  + "_served" + ".omx";
             TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(transitInTime, omxPtFileName, "mat1");
 
-            omxPtFileName = rb.getString("pt.transfer.skim.file") + simulationName + ".omx";
+            omxPtFileName = rb.getString("pt.transfer.skim.file")  + "_served"+ ".omx";
             TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(transitTransfers, omxPtFileName, "mat1");
 
-            omxPtFileName = rb.getString("pt.in.vehicle.skim.file") + simulationName + ".omx";
+            omxPtFileName = rb.getString("pt.in.vehicle.skim.file") + "_served" + ".omx";
             TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(inVehicleTime, omxPtFileName, "mat1");
 
-            omxPtFileName = rb.getString("pt.access.skim.file") + simulationName + ".omx";
+            omxPtFileName = rb.getString("pt.access.skim.file") + "_served" + ".omx";
             TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(transitAccessTt, omxPtFileName, "mat1");
 
-            omxPtFileName = rb.getString("pt.egress.skim.file") + simulationName + ".omx";
+            omxPtFileName = rb.getString("pt.egress.skim.file") + "_served" + ".omx";
             TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(transitEgressTt, omxPtFileName, "mat1");
 
@@ -214,7 +214,7 @@ public class RunMATSimTransitSkims {
 
         //if (ptSkimsFromEvents) {
 
-        omxPtFileName = rb.getString("pt.route.skim.file") + simulationName + ".csv";
+        omxPtFileName = rb.getString("pt.route.skim.file")  + "_served" + ".csv";
 //            TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
         TravelTimeMatrix.createStringCSVSkimMatrix(routeMatrix, locationList, omxPtFileName, "mat1");
         //}
