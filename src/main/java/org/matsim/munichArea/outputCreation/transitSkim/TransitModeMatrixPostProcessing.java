@@ -16,13 +16,15 @@ public class TransitModeMatrixPostProcessing {
     private String[] modes = new  String []{"train", "metro", "bus"};
 
     //train = 0; metro = 1; bus = 2
-    private String[] folders = new String[] {"withTrain", "withMetroTram", "withBus"};
+    private String[] folders = new String[] {"skimsTransit", "bus_tram_metro", "only_bus"};
     private Matrix[] totalTt = new Matrix[3];
     private Matrix[] egress = new Matrix[3];
     private Matrix[] access = new Matrix[3];
     private Matrix[] inTransit = new Matrix[3];
     private Matrix[] transfer = new Matrix[3];
     private Matrix[] inVehicle = new Matrix[3];
+
+
 
     private static ResourceBundle rb;
     private ArrayList<Location> locationList;
@@ -55,17 +57,17 @@ public class TransitModeMatrixPostProcessing {
     public void readMatrices(){
         SkimMatrixReader skimReader = new SkimMatrixReader();
         for (int i = 0; i< modes.length; i++ ){
-            String fileName = "./data/" + folders[i] + "/ttTransitTotal" + rb.getString("simulation.name") + ".omx";
+            String fileName = "./data/" + folders[i] + "/total_t" + ".omx";
             totalTt[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/ttTRansitEgress" + rb.getString("simulation.name") + ".omx";
+            fileName = "./data/" + folders[i] + "/eggress_t" + ".omx";
             egress[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/ttTransitAccess" + rb.getString("simulation.name") + ".omx";
+            fileName = "./data/" + folders[i] + "/access_t"  + ".omx";
             access[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/ttTransitIn" + rb.getString("simulation.name") + ".omx";
+            fileName = "./data/" + folders[i] + "/in_transit_t" +  ".omx";
             inTransit[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/ttTransitInVehicle" + rb.getString("simulation.name") + ".omx";
+            fileName = "./data/" + folders[i] + "/in_vehicle_t"  + ".omx";
             inVehicle[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/ttTransitTransfer" + rb.getString("simulation.name") + ".omx";
+            fileName = "./data/" + folders[i] + "/transfers" + ".omx";
             transfer[i] = skimReader.readSkim(fileName,"mat1");
         }
 
@@ -85,22 +87,22 @@ public class TransitModeMatrixPostProcessing {
     public void writeMatrices(){
         //do not write again the bus?
         for (int i = 0; i< modes.length; i++ ) {
-            String fileName = "./data/" + folders[i] + "/ttTransitTotal" + rb.getString("simulation.name") + "Clean" + ".omx";
+            String fileName = "./data/" + folders[i] + "/total_t_" + modes[i] + ".omx";
             TravelTimeMatrix.createOmxFile(fileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(totalTt[i],  fileName, "mat1");
-            fileName = "./data/" + folders[i] + "/ttTransitAccess" + rb.getString("simulation.name") + "Clean" + ".omx";
+            fileName = "./data/" + folders[i] + "/access_t_" +modes[i] + ".omx";
             TravelTimeMatrix.createOmxFile(fileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(access[i],  fileName, "mat1");
-            fileName = "./data/" + folders[i] + "/ttTransitEgress" + rb.getString("simulation.name") + "Clean" + ".omx";
+            fileName = "./data/" + folders[i] + "/eggress_t_" + modes[i] + ".omx";
             TravelTimeMatrix.createOmxFile(fileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(egress[i],  fileName, "mat1");
-            fileName = "./data/" + folders[i] + "/ttTransitIn" + rb.getString("simulation.name") + "Clean" + ".omx";
+            fileName = "./data/" + folders[i] + "/in_transit_t_" + modes[i] + ".omx";
             TravelTimeMatrix.createOmxFile(fileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(inTransit[i],  fileName, "mat1");
-            fileName = "./data/" + folders[i] + "/ttTransitInVehicle" + rb.getString("simulation.name") + "Clean" + ".omx";
+            fileName = "./data/" + folders[i] + "/in_vehicle_t_" + modes[i] + ".omx";
             TravelTimeMatrix.createOmxFile(fileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(inVehicle[i],  fileName, "mat1");
-            fileName = "./data/" + folders[i] + "/ttTransitTransfer" + rb.getString("simulation.name") + "Clean" + ".omx";
+            fileName = "./data/" + folders[i] + "/transfers_" + modes[i]+ ".omx";
             TravelTimeMatrix.createOmxFile(fileName, locationList);
             TravelTimeMatrix.createOmxSkimMatrix(transfer[i],  fileName, "mat1");
         }
@@ -112,14 +114,17 @@ public class TransitModeMatrixPostProcessing {
         int counter = 0;
          for (int i : totalTt[modeToEdit].getExternalColumnNumbers()){
              for (int j : totalTt[modeToEdit].getExternalRowNumbers()){
-                 if (totalTt[modeToEdit].getValueAt(i,j) == totalTt[modeReference].getValueAt(i,j)){
+                 if (inVehicle[modeToEdit].getValueAt(i,j) == inVehicle[modeReference].getValueAt(i,j)){
                      egress[modeToEdit].setValueAt(i,j, -1f);
                      access[modeToEdit].setValueAt(i,j, -1f);
                      inVehicle[modeToEdit].setValueAt(i,j, -1f);
                      inTransit[modeToEdit].setValueAt(i,j, -1f);
                      totalTt[modeToEdit].setValueAt(i,j, -1f);
                      transfer[modeToEdit].setValueAt(i,j, -1f);
-                     counter++;
+                     if (totalTt[modeReference].getValueAt(i,j)> 0){
+                         counter++;
+                     }
+
                  }
              }
          }

@@ -4,6 +4,7 @@ import com.pb.common.matrix.Matrix;
 import omx.OmxFile;
 import omx.OmxMatrix;
 import omx.hdf5.OmxHdf5Datatype;
+import org.apache.log4j.Logger;
 
 import static java.lang.System.exit;
 
@@ -12,6 +13,8 @@ import static java.lang.System.exit;
  * Created by carlloga on 02.03.2017.
  */
 public class SkimMatrixReader {
+
+    private final static Logger log = Logger.getLogger(SkimMatrixReader.class);
 
     public SkimMatrixReader() {
     }
@@ -22,6 +25,8 @@ public class SkimMatrixReader {
         OmxFile hSkim = new OmxFile(fileName);
         hSkim.openReadOnly();
         OmxMatrix timeOmxSkimAutos = hSkim.getMatrix(matrixName);
+
+        log.info("Read " + matrixName + " from " + fileName);
 
         return convertOmxToMatrix(timeOmxSkimAutos);
 

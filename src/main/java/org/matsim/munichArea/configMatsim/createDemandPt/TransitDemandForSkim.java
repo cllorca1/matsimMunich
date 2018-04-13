@@ -13,6 +13,7 @@ import org.matsim.api.core.v01.population.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by carlloga on 3/2/17.
@@ -20,6 +21,8 @@ import java.util.Map;
 public class TransitDemandForSkim {
 
     private final static Logger logger = Logger.getLogger(TransitDemandForSkim.class);
+
+    private Random rand = new Random(1);
 
 
     public Map< Id, PtSyntheticTraveller> createDemandForSkims(ArrayList<Location> servedZonesList,ArrayList<Location> shortServedZonesList, int personId, Population matsimPopulation) {
@@ -56,14 +59,14 @@ public class TransitDemandForSkim {
                         Plan matsimPlan = matsimPopulationFactory.createPlan();
                         matsimPerson.addPlan(matsimPlan);
 
-                        //the coordinates of the centroid are inside a square 10% of the equivalent squared zone
-                        Coord homeCoordinates = new Coord(origLoc.getX() + origLoc.getSize() * 0.1*(Math.random() - 0.5), origLoc.getY() + origLoc.getSize() *0.1 * (Math.random() - 0.5));
+                        //the coordinates of the centroid are NOT randomized
+                        Coord homeCoordinates = new Coord(origLoc.getX() , origLoc.getY() );
                         Activity activity1 = matsimPopulationFactory.createActivityFromCoord("home", homeCoordinates);
                         activity1.setEndTime(time + 5*60*60*Math.random());
                         matsimPlan.addActivity(activity1);
                         matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.pt));
 
-                        Coord workCoordinates = new Coord(destLoc.getX() + destLoc.getSize() * 0.1* (Math.random() - 0.5), destLoc.getY() + destLoc.getSize() * 0.1 * (Math.random() - 0.5));
+                        Coord workCoordinates = new Coord(destLoc.getX() , destLoc.getY());
                         Activity activity2 = matsimPopulationFactory.createActivityFromCoord("work", workCoordinates);
                         matsimPlan.addActivity(activity2);
 

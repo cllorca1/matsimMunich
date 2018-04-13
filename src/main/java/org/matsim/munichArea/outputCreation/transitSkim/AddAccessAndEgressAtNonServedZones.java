@@ -30,6 +30,7 @@ public class AddAccessAndEgressAtNonServedZones {
     private Matrix inVehicleTimeCompleteMatrix;
     private ArrayList<Location> locationList;
     private ArrayList<Location> servedZoneList;
+    private ArrayList<Location> nonServedZoneList;
 
     private Matrix inTransit;
     private Matrix totalTime;
@@ -44,7 +45,7 @@ public class AddAccessAndEgressAtNonServedZones {
     private static String simulationName;
 
 
-    public static void main (String[] args){
+    public static void main(String[] args) {
 
         File propFile = new File(args[0]);
         ResourceBundle munich = ResourceUtil.getPropertyBundle(propFile);
@@ -60,40 +61,115 @@ public class AddAccessAndEgressAtNonServedZones {
 
         //fill matrices for non-served locations
         AddAccessAndEgressAtNonServedZones postProcess = new AddAccessAndEgressAtNonServedZones(munich, locationList, servedZoneList);
+        postProcess.readSkims();
+        postProcess.generateTheNonServedZoneList();
+        postProcess.removeNonTransitTrips();
         postProcess.fillTransitSkims();
         postProcess.writeFilledMatrices();
 
 
-
     }
-
 
 
     public AddAccessAndEgressAtNonServedZones(ResourceBundle munich, ArrayList<Location> locationList, ArrayList<Location> servedZoneList) {
         this.munich = munich;
         this.locationList = locationList;
         this.servedZoneList = servedZoneList;
+        nonServedZoneList = new ArrayList<>();
 
     }
 
 
-
-    public void fillTransitSkims() {
+    public void readSkims(){
         SkimMatrixReader skimReader = new SkimMatrixReader();
         //read original matrices
-        inTransit = skimReader.readSkim(munich.getString("pt.in.skim.file") + simulationName + ".omx", "mat1");
-        totalTime = skimReader.readSkim(munich.getString("pt.total.skim.file") + simulationName + ".omx", "mat1");
-        accessTime = skimReader.readSkim(munich.getString("pt.access.skim.file") + simulationName + ".omx", "mat1");
-        egressTime = skimReader.readSkim(munich.getString("pt.egress.skim.file") + simulationName + ".omx", "mat1");
-        transfers = skimReader.readSkim(munich.getString("pt.transfer.skim.file") + simulationName + ".omx", "mat1");
-        inVehicle = skimReader.readSkim(munich.getString("pt.in.vehicle.skim.file") + simulationName + ".omx", "mat1");
+        inTransit = skimReader.readSkim(munich.getString("pt.in.skim.file") + "_served" + ".omx", "mat1");
+        totalTime = skimReader.readSkim(munich.getString("pt.total.skim.file") + "_served" + ".omx", "mat1");
+        accessTime = skimReader.readSkim(munich.getString("pt.access.skim.file") + "_served" + ".omx", "mat1");
+        egressTime = skimReader.readSkim(munich.getString("pt.egress.skim.file") + "_served" + ".omx", "mat1");
+        transfers = skimReader.readSkim(munich.getString("pt.transfer.skim.file") + "_served" + ".omx", "mat1");
+        inVehicle = skimReader.readSkim(munich.getString("pt.in.vehicle.skim.file") + "_served" + ".omx", "mat1");
         //read the distances
         autoTravelDistance = skimReader.readSkim(munich.getString("skim.file.dist.access") + ".omx",
                 munich.getString("skim.matrix.dist.access"));
+    }
+
+
+    public void fillTransitSkims() {
+
         //fill in the locations without access by transit
         fillTransitMatrix();
 
     }
+
+
+    public void removeNonTransitTrips() {
+
+        AtomicInteger counter1 = new AtomicInteger(0);
+        AtomicInteger counter2= new AtomicInteger(0);
+
+        servedZoneList.parallelStream().forEach((Location origLoc) -> {
+            int i = origLoc.getId();
+            for (Location destLoc : servedZoneList) {
+                int j = destLoc.getId();
+                if (inVehicle.getValueAt(i, j) == 0) {
+                    inTransit.setValueAt(i, j, -1f);
+                    inTransit.setValueAt(j, i, -1f);
+
+                    accessTime.setValueAt(i, j, -1f);
+                    accessTime.setValueAt(j, i, -1f);
+
+                    egressTime.setValueAt(i, j, -1f);
+                    egressTime.setValueAt(j, i, -1f);
+
+                    transfers.setValueAt(i, j, -1f);
+                    transfers.setValueAt(j, i, -1f);
+
+                    inVehicle.setValueAt(i, j, -1f);
+                    inVehicle.setValueAt(j, i, -1f);
+
+                    totalTime.setValueAt(i, j, -1f);
+                    totalTime.setValueAt(j, i, -1f);
+
+                    counter1.incrementAndGet();
+                } else if (accessTime.getValueAt(i, j) > minutesThreshold || egressTime.getValueAt(i, j) > minutesThreshold) {
+
+                    inTransit.setValueAt(i, j, -1f);
+                    inTransit.setValueAt(j, i, -1f);
+
+                    accessTime.setValueAt(i, j, -1f);
+                    accessTime.setValueAt(j, i, -1f);
+
+                    egressTime.setValueAt(i, j, -1f);
+                    egressTime.setValueAt(j, i, -1f);
+
+                    transfers.setValueAt(i, j, -1f);
+                    transfers.setValueAt(j, i, -1f);
+
+                    inVehicle.setValueAt(i, j, -1f);
+                    inVehicle.setValueAt(j, i, -1f);
+
+                    totalTime.setValueAt(i, j, -1f);
+                    totalTime.setValueAt(j, i, -1f);
+                    counter2.incrementAndGet();
+
+                }
+            }
+
+        });
+
+        log.info("Removed " + counter1.toString() + " trips where there is not in-vehicle time");
+        log.info("Removed " + counter2.toString() + " because access or egress is higher then " + minutesThreshold + " minutes");
+    }
+
+    public void generateTheNonServedZoneList(){
+        for (Location loc : locationList){
+            if (!servedZoneList.contains(loc)){
+                nonServedZoneList.add(loc);
+            }
+        }
+    }
+
 
     public void fillTransitMatrix() {
 
@@ -107,15 +183,18 @@ public class AddAccessAndEgressAtNonServedZones {
 
         AtomicInteger counter = new AtomicInteger(0);
 
-        //for each origin i
-        locationList.parallelStream().forEach((Location origLoc) -> {
+        int numberOfNonservedZones = nonServedZoneList.size();
+
+        //for each origin i non served
+        nonServedZoneList.parallelStream().forEach((Location origLoc) -> {
             int i = origLoc.getId();
             float access;
             float egress;
             float tt;
-            //fir each destination j
-            for (int j = 1; j <= totalTime.getColumnCount(); j++) {
-                if (totalTime.getValueAt(i, j) == -1 & i <= j) {
+            //for each destination j including all the possible destinations
+            for (Location destLoc : locationList) {
+                int j = destLoc.getId();
+                if (i != j) {
                     tt = Float.MAX_VALUE;
                     float addAccessTime = 0;
                     float addEgressTime = 0;
@@ -124,7 +203,7 @@ public class AddAccessAndEgressAtNonServedZones {
                     //look for boarding station
                     for (Location k : servedZoneList) {
                         access = (float) (autoTravelDistance.getValueAt(i, k.getId()) / 1.4 / 60);
-                        if (access < minutesThreshold ) {
+                        if (access < minutesThreshold) {
                             //look for boarding station k and alighting station l
                             for (Location l : servedZoneList) {
                                 egress = (float) (autoTravelDistance.getValueAt(l.getId(), j) / 1.4 / 60);
@@ -145,94 +224,67 @@ public class AddAccessAndEgressAtNonServedZones {
                             }
                         }
 
+
                     }
 
-                    if (startZoneIndex != 0 & finalZoneIndex != 0){
-
-                        //todo add the if to check if there is no invehicle time
-
+                    if (startZoneIndex != 0 & finalZoneIndex != 0) {
                         if (tt < minutesThreshold & tt > 0) {
-                        //found the best k and l that link i and j by transit inn tt mins
-                        inTransitCompleteMatrix.setValueAt(i,j,inTransit.getValueAt(startZoneIndex, finalZoneIndex));
-                        inTransitCompleteMatrix.setValueAt(j,i,inTransit.getValueAt(startZoneIndex, finalZoneIndex));
+                            //found the best k and l that link i and j by transit inn tt mins
+                            inTransitCompleteMatrix.setValueAt(i, j, inTransit.getValueAt(startZoneIndex, finalZoneIndex));
+                            inTransitCompleteMatrix.setValueAt(j, i, inTransit.getValueAt(startZoneIndex, finalZoneIndex));
 
-                        accessTimeCompleteMatrix.setValueAt(i,j,addAccessTime);
-                        accessTimeCompleteMatrix.setValueAt(j,i,addAccessTime);
+                            accessTimeCompleteMatrix.setValueAt(i, j, addAccessTime);
+                            accessTimeCompleteMatrix.setValueAt(j, i, addEgressTime);
 
-                        egressTimeCompleteMatrix.setValueAt(i,j,addEgressTime);
-                        egressTimeCompleteMatrix.setValueAt(j,i,addEgressTime);
+                            egressTimeCompleteMatrix.setValueAt(i, j, addEgressTime);
+                            egressTimeCompleteMatrix.setValueAt(j, i, addAccessTime);
 
-                        transfersCompleteMatrix.setValueAt(i,j,transfers.getValueAt(startZoneIndex, finalZoneIndex));
-                        transfersCompleteMatrix.setValueAt(j,i,transfers.getValueAt(startZoneIndex, finalZoneIndex));
+                            transfersCompleteMatrix.setValueAt(i, j, transfers.getValueAt(startZoneIndex, finalZoneIndex));
+                            transfersCompleteMatrix.setValueAt(j, i, transfers.getValueAt(startZoneIndex, finalZoneIndex));
 
-                        inVehicleTimeCompleteMatrix.setValueAt(i,j,inVehicle.getValueAt(startZoneIndex, finalZoneIndex));
-                        inVehicleTimeCompleteMatrix.setValueAt(j,i,inVehicle.getValueAt(startZoneIndex, finalZoneIndex));
+                            inVehicleTimeCompleteMatrix.setValueAt(i, j, inVehicle.getValueAt(startZoneIndex, finalZoneIndex));
+                            inVehicleTimeCompleteMatrix.setValueAt(j, i, inVehicle.getValueAt(startZoneIndex, finalZoneIndex));
 
-                        totalTimeCompleteMatrix.setValueAt(i, j, tt);
-                        totalTimeCompleteMatrix.setValueAt(j, i, tt);
+                            totalTimeCompleteMatrix.setValueAt(i, j, tt);
+                            totalTimeCompleteMatrix.setValueAt(j, i, tt);
                         }
                     }
-
-                } else if (accessTime.getValueAt(i, j)> minutesThreshold || egressTime.getValueAt(i, j) > minutesThreshold) {
-
-                    inTransitCompleteMatrix.setValueAt(i,j,-1f);
-                    inTransitCompleteMatrix.setValueAt(j,i,-1f);
-
-                    accessTimeCompleteMatrix.setValueAt(i,j,-1f);
-                    accessTimeCompleteMatrix.setValueAt(j,i,-1f);
-
-                    egressTimeCompleteMatrix.setValueAt(i,j,-1f);
-                    egressTimeCompleteMatrix.setValueAt(j,i,-1f);
-
-                    transfersCompleteMatrix.setValueAt(i,j,-1f);
-                    transfersCompleteMatrix.setValueAt(j,i,-1f);
-
-                    inVehicleTimeCompleteMatrix.setValueAt(i,j,-1f);
-                    inVehicleTimeCompleteMatrix.setValueAt(j,i,-1f);
-
-                    totalTimeCompleteMatrix.setValueAt(i, j, -1f);
-                    totalTimeCompleteMatrix.setValueAt(j, i, -1f);
-
                 }
-                //if not found a -1 then skip this
-
-
             }
-
-        log.info(counter.incrementAndGet() +  " zones completed");
+            counter.incrementAndGet();
+            int percentage = Math.round(counter.floatValue()/numberOfNonservedZones*100);
+            log.info(percentage+ "% zones completed");
         });
     }
 
-    public void writeFilledMatrices(){
+    public void writeFilledMatrices() {
 
-        String omxPtFileName = munich.getString("pt.total.skim.file") + simulationName + "Full.omx";
+        String omxPtFileName = munich.getString("pt.total.skim.file") + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
-        TravelTimeMatrix.createOmxSkimMatrix(totalTimeCompleteMatrix,  omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxSkimMatrix(totalTimeCompleteMatrix, omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.in.skim.file") + simulationName + "Full.omx";
+        omxPtFileName = munich.getString("pt.in.skim.file") + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
-        TravelTimeMatrix.createOmxSkimMatrix(inTransitCompleteMatrix,  omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxSkimMatrix(inTransitCompleteMatrix, omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.access.skim.file") + simulationName + "Full.omx";
+        omxPtFileName = munich.getString("pt.access.skim.file") + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
-        TravelTimeMatrix.createOmxSkimMatrix(accessTimeCompleteMatrix,  omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxSkimMatrix(accessTimeCompleteMatrix, omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.egress.skim.file") + simulationName + "Full.omx";
+        omxPtFileName = munich.getString("pt.egress.skim.file") + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
-        TravelTimeMatrix.createOmxSkimMatrix(egressTimeCompleteMatrix,  omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxSkimMatrix(egressTimeCompleteMatrix, omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.transfer.skim.file") + simulationName + "Full.omx";
+        omxPtFileName = munich.getString("pt.transfer.skim.file") + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
-        TravelTimeMatrix.createOmxSkimMatrix(transfersCompleteMatrix,  omxPtFileName, "mat1");
+        TravelTimeMatrix.createOmxSkimMatrix(transfersCompleteMatrix, omxPtFileName, "mat1");
 
-        omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + simulationName + "Full.omx";
+        omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
-        TravelTimeMatrix.createOmxSkimMatrix(inVehicleTimeCompleteMatrix,  omxPtFileName, "mat1");
-
+        TravelTimeMatrix.createOmxSkimMatrix(inVehicleTimeCompleteMatrix, omxPtFileName, "mat1");
 
 
     }
-
 
 
 }
