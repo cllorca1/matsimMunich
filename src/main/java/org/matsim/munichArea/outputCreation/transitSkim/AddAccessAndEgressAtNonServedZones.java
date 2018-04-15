@@ -227,8 +227,8 @@ public class AddAccessAndEgressAtNonServedZones {
 
                     }
 
-                    if (startZoneIndex != 0 & finalZoneIndex != 0) {
-                        if (tt < minutesThreshold & tt > 0) {
+                    if (startZoneIndex != 0 && finalZoneIndex != 0) {
+                        if (tt > 0) {
                             //found the best k and l that link i and j by transit inn tt mins
                             inTransitCompleteMatrix.setValueAt(i, j, inTransit.getValueAt(startZoneIndex, finalZoneIndex));
                             inTransitCompleteMatrix.setValueAt(j, i, inTransit.getValueAt(startZoneIndex, finalZoneIndex));
