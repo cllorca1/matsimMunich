@@ -41,6 +41,8 @@ public class VolumeAnalysisListener implements IterationEndsListener {
                 double daylyVolume = 0;
                 try {
                     int[] linkVolume = analyzer.getVolumesForLink(link.getId());
+
+
                     daylyVolume = Arrays.stream(linkVolume).sum() / scaleFactor;
                 } catch (NullPointerException e){
 
