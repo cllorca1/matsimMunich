@@ -18,20 +18,12 @@ public class SimplePopulationGenerator {
         PopulationFactory factory = population.getFactory();
 
         int personId = 0;
-        double time = 0;
+        double time = 100;
         double headway;
 
         while (time < 24 * 60 *60) {
 
-            if (time < 2*60*60){
-                headway = 3600 / capacity / .5 / scaleFactor;
-            } else if (time < 4*60*60){
-                headway = 3600 / capacity / 1/ scaleFactor;
-            } else if (time < 6*60*60){
-                headway = 3600 / capacity / 1.5 / scaleFactor;
-            } else {
-                headway = 3600 / capacity / 2 / scaleFactor;
-            }
+            headway = 3600 / capacity;
 
             Person person;
             Plan plan;
@@ -47,7 +39,9 @@ public class SimplePopulationGenerator {
             activity = factory.createActivityFromCoord("work", network.getNodes().get(Id.createNodeId("destination")).getCoord());
             plan.addActivity(activity);
 
-            population.addPerson(person);
+            if (Math.random() < scaleFactor) {
+                population.addPerson(person);
+            }
 
             time += headway;
             personId++;

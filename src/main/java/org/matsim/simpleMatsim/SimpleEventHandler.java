@@ -14,13 +14,15 @@ import org.matsim.core.utils.io.IOUtils;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SimpleEventHandler implements LinkEnterEventHandler, LinkLeaveEventHandler, VehicleEntersTrafficEventHandler, VehicleLeavesTrafficEventHandler {
 
     private BufferedWriter bw;
+    //Atomic because parallel event handling?
     private double enterTime = 0;
     private double leaveTime = 0;
-    private int counter = 0;
+    private AtomicInteger counter = new AtomicInteger(0);
     private static DecimalFormat df2 = new DecimalFormat(".##");
 
     public void initialize(String fileName) throws IOException {
@@ -47,8 +49,8 @@ public class SimpleEventHandler implements LinkEnterEventHandler, LinkLeaveEvent
                 double time = event.getTime();
                 bw.write(df2.format(time));
                 bw.write(",");
-                counter++;
-                bw.write(Integer.toString(counter));
+
+                bw.write(Integer.toString(counter.incrementAndGet()));
                 bw.write(",");
                 bw.write(df2.format(time - enterTime));
                 bw.write(",");
@@ -58,7 +60,7 @@ public class SimpleEventHandler implements LinkEnterEventHandler, LinkLeaveEvent
                 bw.write(",");
                 bw.write("NA");
                 bw.write(",");
-                bw.write(df2.format(counter/20));
+                bw.write(df2.format(counter.get()/20));
                 bw.newLine();
                 enterTime = time;
             }
@@ -80,10 +82,9 @@ public class SimpleEventHandler implements LinkEnterEventHandler, LinkLeaveEvent
                 bw.write(",");
                 double time = event.getTime();
                 bw.write(df2.format(time));
-
                 bw.write(",");
-                counter--;
-                bw.write(Integer.toString(counter));
+
+                bw.write(Integer.toString(counter.decrementAndGet()));
                 bw.write(",");
                 bw.write("NA");
                 bw.write(",");
@@ -93,7 +94,7 @@ public class SimpleEventHandler implements LinkEnterEventHandler, LinkLeaveEvent
                 bw.write(",");
                 bw.write(df2.format(3600/(time - leaveTime)));
                 bw.write(",");
-                bw.write(df2.format(counter/20));
+                bw.write(df2.format(counter.get()/20));
                 leaveTime = time;
                 bw.newLine();
             }

@@ -15,15 +15,16 @@ public class SimpleNetworkGenerator {
     private static double speed = 50/3.6;
 
 
-    public static Network createNetwork( double capacity){
+
+    public static Network createNetwork( double capacity, double leng){
 
         network = NetworkUtils.createNetwork();
 
         Coord originCoord = new Coord(-6000,0);
         Coord origin2Coord = new Coord(-5000,0);
         Coord entranceCoord = new Coord(0,0);
-        Coord exitCoord = new Coord(20000,0);
-        Coord destinationCoord = new Coord(25000,0);
+        Coord exitCoord = new Coord(leng,0);
+        Coord destinationCoord = new Coord(leng + 5000,0);
 
         Node origin = NetworkUtils.createNode(Id.createNodeId("origin"), originCoord);
         Node origin2 = NetworkUtils.createNode(Id.createNodeId("origin2"), origin2Coord);
@@ -40,7 +41,7 @@ public class SimpleNetworkGenerator {
 
         Link preAccessLink = NetworkUtils.createLink(Id.createLinkId("preAccess"),origin,
                 origin2, network,NetworkUtils.getEuclideanDistance(originCoord,origin2Coord),
-                speed, capacity*10, lanes);
+                speed, capacity *10, lanes);
 
         Link accessLink = NetworkUtils.createLink(Id.createLinkId("access"),origin2,
                 entrance, network,NetworkUtils.getEuclideanDistance(origin2Coord,entranceCoord),
@@ -48,11 +49,11 @@ public class SimpleNetworkGenerator {
 
         Link analyzedLink = NetworkUtils.createLink(Id.createLinkId("analyzedLink"),entrance,
                 exit, network,NetworkUtils.getEuclideanDistance(entranceCoord,exitCoord),
-                speed, capacity, lanes);
+                speed, capacity*10, lanes);
 
         Link egressLink = NetworkUtils.createLink(Id.createLinkId("egress"),exit,
                 destination, network,NetworkUtils.getEuclideanDistance(exitCoord,destinationCoord),
-                speed, capacity/2, lanes);
+                speed, capacity, lanes);
 
         network.addLink(preAccessLink);
         network.addLink(accessLink);
