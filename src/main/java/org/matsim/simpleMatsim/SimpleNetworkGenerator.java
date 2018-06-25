@@ -41,15 +41,15 @@ public class SimpleNetworkGenerator {
 
         Link preAccessLink = NetworkUtils.createLink(Id.createLinkId("preAccess"),origin,
                 origin2, network,NetworkUtils.getEuclideanDistance(originCoord,origin2Coord),
-                speed, capacity *10, lanes);
+                speed, capacity *2, lanes);
 
         Link accessLink = NetworkUtils.createLink(Id.createLinkId("access"),origin2,
                 entrance, network,NetworkUtils.getEuclideanDistance(origin2Coord,entranceCoord),
-                speed, capacity*10, lanes);
+                speed, capacity*2, lanes);
 
         Link analyzedLink = NetworkUtils.createLink(Id.createLinkId("analyzedLink"),entrance,
                 exit, network,NetworkUtils.getEuclideanDistance(entranceCoord,exitCoord),
-                speed, capacity*10, lanes);
+                speed, capacity*2, lanes);
 
         Link egressLink = NetworkUtils.createLink(Id.createLinkId("egress"),exit,
                 destination, network,NetworkUtils.getEuclideanDistance(exitCoord,destinationCoord),

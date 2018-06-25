@@ -435,6 +435,8 @@ public class ReadSyntheticPopulation {
 //                matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.bike));
 //                matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.walk));
             //matsimPlan.addLeg(matsimPopulationFactory.createLeg(TransportMode.pt));
+
+
         }
         Coord workCoordinates = new Coord(destLoc.getX() + destLoc.getSize() * (Math.random() - 0.5), destLoc.getY() + destLoc.getSize() * (Math.random() - 0.5));
         if (storeInputPlans) plannedTrip.setDestCoord(workCoordinates);

@@ -24,15 +24,19 @@ public class ConfigureAndRun {
     private String outputDirectory;
     private String runId;
     private int replication;
+    private Population population;
 
     private double capacity;
     private double leng;
 
-    public ConfigureAndRun(double flowCapacityFactor, int replication, double capacity, double leng){
+    public ConfigureAndRun(double flowCapacityFactor, int replication, double capacity, double leng, double exponent){
         this.flowCapacityFactor = flowCapacityFactor;
-//        storageCapacityFactor = Math.pow(flowCapacityFactor,0.75);
-        storageCapacityFactor = flowCapacityFactor;
-        outputDirectory = "./output/C=" + capacity + "/L=" + leng + "/";
+        storageCapacityFactor = Math.pow(flowCapacityFactor,exponent);
+//        storageCapacityFactor = flowCapacityFactor;
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        String exponentString = df.format(exponent);
+        outputDirectory = "./output/withHoles" + exponentString + "/C=" + capacity + "/L=" + leng + "/";
         runId = "scale" + String.valueOf(flowCapacityFactor*100) + "replication" + replication;
         this.replication = replication;
         this.capacity = capacity;
@@ -59,7 +63,7 @@ public class ConfigureAndRun {
         config.qsim().setStartTime(0);
         //config.qsim().setEndTime(24*60*60);
         config.qsim().setStuckTime(100000);
-        //config.qsim().setTrafficDynamics(QSimConfigGroup.TrafficDynamics.withHoles);
+        config.qsim().setTrafficDynamics(QSimConfigGroup.TrafficDynamics.withHoles);
 
         // Controler
         config.qsim().setTimeStepSize(1.0);
@@ -105,7 +109,7 @@ public class ConfigureAndRun {
         MutableScenario scenario = (MutableScenario) ScenarioUtils.loadScenario(config);
         scenario.setNetwork(SimpleNetworkGenerator.createNetwork(capacity, leng));
 
-        Population population = SimplePopulationGenerator.generatePopulation(config, scenario, capacity * 2, flowCapacityFactor);
+        population = SimplePopulationGenerator.generatePopulation(config, scenario, capacity * 2, flowCapacityFactor);
         //create population here
         scenario.setPopulation(population);
 
@@ -119,4 +123,11 @@ public class ConfigureAndRun {
         SimpleEventAnalyzer.run(outputDirectory + "/" + runId + ".output_events.xml.gz", outputDirectory + "/" + runId + ".csv");
 
     }
+
+    public int getPopulationSize(){
+        return this.population.getPersons().size();
+    }
+
+
+
 }
