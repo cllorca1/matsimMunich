@@ -77,6 +77,16 @@
 			<artifactId>matrixbasedptrouter</artifactId>
 			<version>0.10.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.matsim.contrib</groupId>
+			<artifactId>matsim4urbansim</artifactId>
+			<version>0.10.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.matsim.contrib</groupId>
+			<artifactId>minibus</artifactId>
+			<version>0.10.0-SNAPSHOT</version>
+		</dependency>
 
 		<!--<dependency>-->
 			<!--<groupId>org.matsim</groupId>-->

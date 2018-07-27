@@ -70,8 +70,14 @@ public class TimeListener implements IterationEndsListener {
             float startTime = System.currentTimeMillis();
             //EuclideanDistanceCalculator euclideanDistanceCalculator = new EuclideanDistanceCalculator();
             log.info("Starting to calculate average zone-to-zone travel times based on MATSim at " + departureTime/3600);
+
+            //load time independent travel time and travel disutility
+            //TravelTime travelTime = new TravelTimeFast();
+            //TravelDisutility travelDisutility = new TravelDisutilityFast();
+
             TravelTime travelTime = controler.getLinkTravelTimes();
             TravelDisutility travelDisutility = controler.getTravelDisutilityFactory().createTravelDisutility(travelTime);
+
 //            TravelDisutility travelTimeAsTravelDisutility = new MyTravelTimeDisutility(controler.getLinkTravelTimes());
 //            Dijkstra dijkstra = new Dijkstra(network, travelTimeAsTravelDisutility, travelTime);
 
@@ -134,7 +140,7 @@ public class TimeListener implements IterationEndsListener {
                     }
 //                });
                 }
-                //log.info("Completed origin zone: " + originZone.getId());
+
             }
 //          });
             duration = (System.currentTimeMillis() - startTime) / 1000 / 60;
@@ -145,32 +151,29 @@ public class TimeListener implements IterationEndsListener {
 
     }
 
-
-    // inner class to use travel time as travel disutility
-    class MyTravelTimeDisutility implements TravelDisutility {
-        TravelTime travelTime;
-
-        public MyTravelTimeDisutility(TravelTime travelTime) {
-            this.travelTime = travelTime;
-        }
-
-
-        @Override
-        public double getLinkTravelDisutility(Link link, double time, Person person, Vehicle vehicle) {
-            return travelTime.getLinkTravelTime(link, time, person, vehicle);
-        }
-
-
-        @Override
-        public double getLinkMinimumTravelDisutility(Link link) {
-            return link.getLength() / link.getFreespeed(); // minimum travel time
-        }
-
-    }
-
     public Matrix getAutoTravelTime() {
         return autoTravelTime;
     }
 
+    private class TravelTimeFast implements TravelTime{
+
+        @Override
+        public double getLinkTravelTime(Link link, double time, Person person, Vehicle vehicle) {
+            return link.getLength()/link.getFreespeed();
+        }
+    }
+
+    private class TravelDisutilityFast implements TravelDisutility{
+
+        @Override
+        public double getLinkTravelDisutility(Link link, double time, Person person, Vehicle vehicle) {
+            return link.getLength()/link.getFreespeed();
+        }
+
+        @Override
+        public double getLinkMinimumTravelDisutility(Link link) {
+            return link.getLength()/link.getFreespeed();
+        }
+    }
 
 }
