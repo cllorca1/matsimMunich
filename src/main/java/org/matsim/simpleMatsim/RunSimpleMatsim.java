@@ -11,7 +11,7 @@ public class RunSimpleMatsim {
         //double[] capacities = new double[]{100,500,1000,2000};
 
         double[] lengths = new double[]{100, 1000, 10000};
-        double[] capacities = new double[]{750, 1000, 1250};
+        double[] capacities = new double[]{750};
         double[] exponents = new double[]{1.00, 0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65};
 
         for (int i = 0; i < args.length; i++) {
