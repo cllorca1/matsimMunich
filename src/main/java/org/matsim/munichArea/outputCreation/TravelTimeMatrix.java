@@ -22,11 +22,11 @@ public class TravelTimeMatrix {
 
     public static Logger logger = Logger.getLogger(TravelTimeMatrix.class);
 
-    public static void createOmxFile(String omxFileName, ArrayList<Location> locationList) {
+    public static void createOmxFile(String omxFileName, int dim0) {
 
         try (OmxFile omxFile = new OmxFile(omxFileName)) {
 
-            int dim0 = locationList.size();
+
 
             int dim1 = dim0;
             int[] shape = {dim0, dim1};

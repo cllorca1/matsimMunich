@@ -260,27 +260,27 @@ public class AddAccessAndEgressAtNonServedZones {
     public void writeFilledMatrices() {
 
         String omxPtFileName = munich.getString("pt.total.skim.file") + ".omx";
-        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList.size());
         TravelTimeMatrix.createOmxSkimMatrix(totalTimeCompleteMatrix, omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.in.skim.file") + ".omx";
-        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList.size());
         TravelTimeMatrix.createOmxSkimMatrix(inTransitCompleteMatrix, omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.access.skim.file") + ".omx";
-        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList.size());
         TravelTimeMatrix.createOmxSkimMatrix(accessTimeCompleteMatrix, omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.egress.skim.file") + ".omx";
-        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList.size());
         TravelTimeMatrix.createOmxSkimMatrix(egressTimeCompleteMatrix, omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.transfer.skim.file") + ".omx";
-        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList.size());
         TravelTimeMatrix.createOmxSkimMatrix(transfersCompleteMatrix, omxPtFileName, "mat1");
 
         omxPtFileName = munich.getString("pt.in.vehicle.skim.file") + ".omx";
-        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList);
+        TravelTimeMatrix.createOmxFile(omxPtFileName, locationList.size());
         TravelTimeMatrix.createOmxSkimMatrix(inVehicleTimeCompleteMatrix, omxPtFileName, "mat1");
 
 

@@ -88,22 +88,22 @@ public class TransitModeMatrixPostProcessing {
         //do not write again the bus?
         for (int i = 0; i< modes.length; i++ ) {
             String fileName = "./data/" + folders[i] + "/total_t_" + modes[i] + ".omx";
-            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxFile(fileName, locationList.size());
             TravelTimeMatrix.createOmxSkimMatrix(totalTt[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/access_t_" +modes[i] + ".omx";
-            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxFile(fileName, locationList.size());
             TravelTimeMatrix.createOmxSkimMatrix(access[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/eggress_t_" + modes[i] + ".omx";
-            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxFile(fileName, locationList.size());
             TravelTimeMatrix.createOmxSkimMatrix(egress[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/in_transit_t_" + modes[i] + ".omx";
-            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxFile(fileName, locationList.size());
             TravelTimeMatrix.createOmxSkimMatrix(inTransit[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/in_vehicle_t_" + modes[i] + ".omx";
-            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxFile(fileName, locationList.size());
             TravelTimeMatrix.createOmxSkimMatrix(inVehicle[i],  fileName, "mat1");
             fileName = "./data/" + folders[i] + "/transfers_" + modes[i]+ ".omx";
-            TravelTimeMatrix.createOmxFile(fileName, locationList);
+            TravelTimeMatrix.createOmxFile(fileName, locationList.size());
             TravelTimeMatrix.createOmxSkimMatrix(transfer[i],  fileName, "mat1");
         }
     }

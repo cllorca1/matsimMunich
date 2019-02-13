@@ -141,7 +141,7 @@ public class RunMATSimScalingAnalysis {
                 if (autoTimeSkims) {
 //                  String omxFileName = rb.getString("out.skim.auto.time") + simulationName + ".omx";
                     String omxFileName = rb.getString("out.skim.auto.time") + singleRunName + ".omx";
-                    TravelTimeMatrix.createOmxFile(omxFileName, locationList);
+                    TravelTimeMatrix.createOmxFile(omxFileName, locationList.size());
                     TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime, omxFileName, "mat1");
                 }
                 if (autoDistSkims) {

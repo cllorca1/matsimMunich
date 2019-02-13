@@ -29,19 +29,26 @@ public class ConfigureAndRun {
 
     private double capacity;
     private double leng;
+    private double flowToCapacityFactor;
 
-    public ConfigureAndRun(double flowCapacityFactor, int replication, double capacity, double leng, double exponent){
+    public ConfigureAndRun(double flowCapacityFactor,
+                           int replication, double capacity,
+                           double leng, double exponent,
+                           double flowToCapacityFactor, String mainFolderName){
+
         this.flowCapacityFactor = flowCapacityFactor;
         storageCapacityFactor = Math.pow(flowCapacityFactor,exponent);
 //        storageCapacityFactor = flowCapacityFactor;
 
         DecimalFormat df = new DecimalFormat("#.00");
         String exponentString = df.format(exponent);
-        outputDirectory = "./output/withHoles" + exponentString + "/C=" + capacity + "/L=" + leng + "/";
+        String flowToCapacityString = df.format(flowToCapacityFactor);
+        outputDirectory = "./output/" + mainFolderName + flowToCapacityString + "-" + exponentString + "/C=" + capacity + "/L=" + leng + "/";
         runId = "scale" + String.valueOf(flowCapacityFactor*100) + "replication" + replication;
         this.replication = replication;
         this.capacity = capacity;
         this.leng = leng;
+        this.flowToCapacityFactor = flowToCapacityFactor;
     }
 
 
@@ -110,7 +117,7 @@ public class ConfigureAndRun {
         MutableScenario scenario = (MutableScenario) ScenarioUtils.loadScenario(config);
         scenario.setNetwork(SimpleNetworkGenerator.createNetwork(capacity, leng));
 
-        population = SimplePopulationGenerator.generatePopulation(config, scenario, capacity * 2, flowCapacityFactor);
+        population = SimplePopulationGenerator.generatePopulation(config, scenario, capacity * flowToCapacityFactor, flowCapacityFactor);
         //create population here
         scenario.setPopulation(population);
 

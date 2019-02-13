@@ -19,11 +19,11 @@ public class SimplePopulationGenerator {
 
         int personId = 0;
         double time = 100;
-        double headway;
+        double headway = 3600 / capacity;;
 
         while (time < 24 * 60 *60) {
 
-            headway = 3600 / capacity;
+
 
             Person person;
             Plan plan;

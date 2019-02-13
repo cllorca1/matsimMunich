@@ -76,7 +76,7 @@ public class Accessibility {
 
         if (Boolean.parseBoolean(rb.getString("acc.omx.output"))) {
             String newSkimFileName = rb.getString("acc.omx.output.file");
-            TravelTimeMatrix.createOmxFile(newSkimFileName,locationList);
+            TravelTimeMatrix.createOmxFile(newSkimFileName,locationList.size());
             TravelTimeMatrix.createOmxSkimMatrix(autoTravelTime,  newSkimFileName, "mat1");
         }
     }

@@ -42,7 +42,7 @@ public class HhXmlToCsv {
 
         ObjectAttributes householdAttributes = new ObjectAttributes();
         ObjectAttributesXmlReader householdAttributesReader = new ObjectAttributesXmlReader(householdAttributes);
-        householdAttributesReader.putAttributeConverter(Coord.class, new CoordConverter());
+        householdAttributesReader.putAttributeConverter(org.matsim.api.core.v01.Coord.class, new CoordConverter());
         householdAttributesReader.readFile(inputHouseholdAttributesFileName);
 
         Iterator<Household> it = scenario.getHouseholds().getHouseholds().values().iterator();

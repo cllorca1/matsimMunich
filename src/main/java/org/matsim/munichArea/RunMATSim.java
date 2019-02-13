@@ -133,14 +133,14 @@ public class RunMATSim {
 
         if (autoTimeSkims) {
             String omxFileName = rb.getString("out.skim.auto.time") + simulationName + ".omx";
-            TravelTimeMatrix.createOmxFile(omxFileName, locationList);
+            TravelTimeMatrix.createOmxFile(omxFileName, locationList.size());
             for (int hourOfDay : hoursOfDay) {
                 TravelTimeMatrix.createOmxSkimMatrix(autoTravelTimes.get(hourOfDay),  omxFileName, "tt" + hourOfDay);
             }
         }
         if (autoDistSkims) {
             String omxFileName = rb.getString("out.skim.auto.dist") + simulationName + ".omx";
-            TravelTimeMatrix.createOmxFile(omxFileName, locationList);
+            TravelTimeMatrix.createOmxFile(omxFileName, locationList.size());
             for (String type : autoTravelDistances.keySet()) {
                 TravelTimeMatrix.createOmxSkimMatrix(autoTravelDistances.get(type), omxFileName, type);
             }
