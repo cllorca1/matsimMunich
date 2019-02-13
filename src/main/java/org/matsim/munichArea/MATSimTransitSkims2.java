@@ -80,7 +80,7 @@ public class MATSimTransitSkims2 {
 
         AtomicInteger counter = new AtomicInteger(0);
 
-        long startTime_s = System.currentTimeMillis()/1000;
+        long startTime_s = System.currentTimeMillis() / 1000;
 
         zoneMap.values().parallelStream().forEach(originTAZ -> {
 
@@ -89,14 +89,12 @@ public class MATSimTransitSkims2 {
             ActivityFacility originFacility = activityFacilitiesFactory.createActivityFacility(null, originNode.getCoord(), originLink);
 
             for (ModelTAZ destinationTAZ : zoneMap.values()) {
-                if (originTAZ.id <= destinationTAZ.id) {
+                if (originTAZ.id < destinationTAZ.id && originTAZ.id < 200 && destinationTAZ.id < 200) {
                     Node destinationNode = NetworkUtils.getNearestNode(scenario.getNetwork(), destinationTAZ.coord);
                     Id<Link> destinationLink = destinationNode.getInLinks().values().iterator().next().getId();
                     ActivityFacility destinationFacility = activityFacilitiesFactory.createActivityFacility(null, destinationNode.getCoord(), destinationLink);
-
                     List<? extends PlanElement> route2 = transitRouter.calcRoute(originFacility, destinationFacility, 10 * 60 * 60, null);
                     float sumTravelTime_min = 0;
-
                     int sequence = 0;
                     float access_min = 0;
                     float egress_min = 0;
@@ -105,7 +103,7 @@ public class MATSimTransitSkims2 {
                     int pt_legs = 0;
                     for (PlanElement pe : route2) {
                         if (pe instanceof Activity) {
-                            //activities do not seem to appear in the routes as provided by transit router
+                            //activities do not seem to appear in the routes provided by transit router
                         } else if (pe instanceof Leg) {
                             double this_leg_time = (((Leg) pe).getRoute().getTravelTime() / 60.);
                             double this_leg_distance = (((Leg) pe).getRoute().getDistance());
@@ -126,6 +124,17 @@ public class MATSimTransitSkims2 {
 
                     counter.incrementAndGet();
 
+                    //cap access and egress to 30 mins, but only if transit trips is made
+                    if (access_min > 30 && pt_legs > 0) {
+                        sumTravelTime_min = sumTravelTime_min - access_min + 30;
+                        access_min = 30;
+                    }
+
+                    if (egress_min > 30 && pt_legs > 0) {
+                        sumTravelTime_min = sumTravelTime_min - egress_min + 30;
+                        egress_min = 30;
+                    }
+
                     transitTotalTime.setValueAt(originTAZ.id, destinationTAZ.id, sumTravelTime_min);
                     transitInTime.setValueAt(originTAZ.id, destinationTAZ.id, sumTravelTime_min - access_min - egress_min);
                     transitAccessTt.setValueAt(originTAZ.id, destinationTAZ.id, access_min);
@@ -135,18 +144,18 @@ public class MATSimTransitSkims2 {
                     transitDistance.setValueAt(originTAZ.id, destinationTAZ.id, distance);
 
 
-                    transitTotalTime.setValueAt(destinationTAZ.id,originTAZ.id, sumTravelTime_min);
-                    transitInTime.setValueAt(destinationTAZ.id,originTAZ.id, sumTravelTime_min - access_min - egress_min);
-                    transitAccessTt.setValueAt(destinationTAZ.id,originTAZ.id, access_min);
-                    transitEgressTt.setValueAt(destinationTAZ.id,originTAZ.id, egress_min);
-                    transitTransfers.setValueAt(destinationTAZ.id,originTAZ.id, pt_legs - 1);
-                    inVehicleTime.setValueAt(destinationTAZ.id, originTAZ.id,  inVehicle);
-                    transitDistance.setValueAt(destinationTAZ.id,originTAZ.id, distance);
+                    transitTotalTime.setValueAt(destinationTAZ.id, originTAZ.id, sumTravelTime_min);
+                    transitInTime.setValueAt(destinationTAZ.id, originTAZ.id, sumTravelTime_min - access_min - egress_min);
+                    transitAccessTt.setValueAt(destinationTAZ.id, originTAZ.id, access_min);
+                    transitEgressTt.setValueAt(destinationTAZ.id, originTAZ.id, egress_min);
+                    transitTransfers.setValueAt(destinationTAZ.id, originTAZ.id, pt_legs - 1);
+                    inVehicleTime.setValueAt(destinationTAZ.id, originTAZ.id, inVehicle);
+                    transitDistance.setValueAt(destinationTAZ.id, originTAZ.id, distance);
 
 
                     if (LongMath.isPowerOfTwo(counter.get())) {
-                        long duration = System.currentTimeMillis()/1000- startTime_s;
-                        logger.info(counter + " completed in " + duration + " seconds" );
+                        long duration = System.currentTimeMillis() / 1000 - startTime_s;
+                        logger.info(counter + " completed in " + duration + " seconds");
                     }
 
                 }
@@ -217,19 +226,6 @@ public class MATSimTransitSkims2 {
         return config;
     }
 
-    class ModelTAZ {
-        Coord coord;
-        boolean served;
-        int id;
-
-        public ModelTAZ(int id, boolean served, Coord coord) {
-            this.coord = coord;
-            this.served = served;
-            this.id = id;
-        }
-
-    }
-
     private Map<Integer, ModelTAZ> readCSVOfZones() {
 
         Map<Integer, ModelTAZ> map = new HashMap<>();
@@ -264,6 +260,19 @@ public class MATSimTransitSkims2 {
 
         logger.info("Read " + map.size() + " TAZs");
         return map;
+
+    }
+
+    class ModelTAZ {
+        Coord coord;
+        boolean served;
+        int id;
+
+        public ModelTAZ(int id, boolean served, Coord coord) {
+            this.coord = coord;
+            this.served = served;
+            this.id = id;
+        }
 
     }
 
