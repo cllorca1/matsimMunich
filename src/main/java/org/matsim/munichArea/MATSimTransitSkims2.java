@@ -1,43 +1,32 @@
 package org.matsim.munichArea;
 
-import com.google.common.math.LongMath;
 import com.pb.common.matrix.Matrix;
 import com.pb.common.util.ResourceUtil;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
-import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.config.groups.ControlerConfigGroup;
-import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.network.NetworkUtils;
-import org.matsim.core.router.StageActivityTypes;
-import org.matsim.core.router.TripRouter;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.core.utils.geometry.CoordinateTransformation;
 import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.facilities.ActivityFacilitiesFactory;
 import org.matsim.facilities.ActivityFacilitiesFactoryImpl;
 import org.matsim.facilities.ActivityFacility;
-import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 import org.matsim.pt.router.TransitRouter;
 import org.matsim.pt.router.TransitRouterConfig;
 import org.matsim.pt.router.TransitRouterImpl;
-import org.matsim.pt.router.TransitRouterNetwork;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class MATSimTransitSkims2 {
 
@@ -74,26 +63,31 @@ public class MATSimTransitSkims2 {
         Matrix transitDistance = new Matrix(size, size);
         transitDistance.fill(-1F);
 
-        TransitRouterConfig transitConfig = new TransitRouterConfig(config);
-        TransitRouter transitRouter = new TransitRouterImpl(transitConfig, scenario.getTransitSchedule());
-        ActivityFacilitiesFactory activityFacilitiesFactory = new ActivityFacilitiesFactoryImpl();
 
-        AtomicInteger counter = new AtomicInteger(0);
+        AtomicInteger counter = new AtomicInteger(1);
 
         long startTime_s = System.currentTimeMillis() / 1000;
 
-        zoneMap.values().parallelStream().forEach(originTAZ -> {
+        ActivityFacilitiesFactory activityFacilitiesFactory = new ActivityFacilitiesFactoryImpl();
 
-            Node originNode = NetworkUtils.getNearestNode(scenario.getNetwork(), originTAZ.coord);
-            Id<Link> originLink = originNode.getInLinks().values().iterator().next().getId();
-            ActivityFacility originFacility = activityFacilitiesFactory.createActivityFacility(null, originNode.getCoord(), originLink);
+        Map<ModelTAZ, ActivityFacility> facilitiesByTaz = new HashMap<>();
+        zoneMap.values().parallelStream().forEach(taz -> {
+            Node node = NetworkUtils.getNearestNode(scenario.getNetwork(), taz.coord);
+            Id<Link> link = node.getInLinks().values().iterator().next().getId();
+            facilitiesByTaz.put(taz, activityFacilitiesFactory.createActivityFacility(null, node.getCoord(), link));
+        });
 
-            for (ModelTAZ destinationTAZ : zoneMap.values()) {
-                if (originTAZ.id < destinationTAZ.id && originTAZ.id < 200 && destinationTAZ.id < 200) {
-                    Node destinationNode = NetworkUtils.getNearestNode(scenario.getNetwork(), destinationTAZ.coord);
-                    Id<Link> destinationLink = destinationNode.getInLinks().values().iterator().next().getId();
-                    ActivityFacility destinationFacility = activityFacilitiesFactory.createActivityFacility(null, destinationNode.getCoord(), destinationLink);
-                    List<? extends PlanElement> route2 = transitRouter.calcRoute(originFacility, destinationFacility, 10 * 60 * 60, null);
+        logger.warn("Assign facilities to taz");
+
+        TransitRouterConfig transitConfig = new TransitRouterConfig(config);
+
+        facilitiesByTaz.keySet().parallelStream().forEach(originTAZ -> {
+            TransitRouter transitRouter = new TransitRouterImpl(transitConfig, scenario.getTransitSchedule());
+            ActivityFacility originFacility = facilitiesByTaz.get(originTAZ);
+            for (ModelTAZ destinationTAZ : facilitiesByTaz.keySet()) {
+                if (originTAZ.id < destinationTAZ.id) {
+                    ActivityFacility destinationFacility = facilitiesByTaz.get(destinationTAZ);
+                    List<? extends PlanElement> route = transitRouter.calcRoute(originFacility, destinationFacility, 10 * 60 * 60, null);
                     float sumTravelTime_min = 0;
                     int sequence = 0;
                     float access_min = 0;
@@ -101,30 +95,30 @@ public class MATSimTransitSkims2 {
                     float inVehicle = 0;
                     float distance = 0;
                     int pt_legs = 0;
-                    for (PlanElement pe : route2) {
-                        if (pe instanceof Activity) {
-                            //activities do not seem to appear in the routes provided by transit router
-                        } else if (pe instanceof Leg) {
-                            double this_leg_time = (((Leg) pe).getRoute().getTravelTime() / 60.);
-                            double this_leg_distance = (((Leg) pe).getRoute().getDistance());
-                            sumTravelTime_min += this_leg_time;
-                            if (((Leg) pe).getMode().equals("transit_walk") && sequence == 0) {
-                                access_min += this_leg_time;
-                            } else if (((Leg) pe).getMode().equals("transit_walk") && sequence == route2.size() - 1) {
-                                egress_min += this_leg_time;
-                            } else if (((Leg) pe).getMode().equals("pt")) {
-                                inVehicle += this_leg_time;
-                                distance += this_leg_distance;
-                                pt_legs++;
-                            }
-
+                    for (PlanElement pe : route) {
+//                        if (pe instanceof Activity) {
+//                            //activities do not seem to appear in the routes provided by transit router
+//                        } else if (pe instanceof Leg) {
+                        double this_leg_time = (((Leg) pe).getRoute().getTravelTime() / 60.);
+                        double this_leg_distance = (((Leg) pe).getRoute().getDistance());
+                        sumTravelTime_min += this_leg_time;
+                        if (((Leg) pe).getMode().equals("transit_walk") && sequence == 0) {
+                            access_min += this_leg_time;
+                        } else if (((Leg) pe).getMode().equals("transit_walk") && sequence == route.size() - 1) {
+                            egress_min += this_leg_time;
+                        } else if (((Leg) pe).getMode().equals("pt")) {
+                            inVehicle += this_leg_time;
+                            distance += this_leg_distance;
+                            pt_legs++;
                         }
+
+//                        }
                         sequence++;
                     }
 
                     counter.incrementAndGet();
 
-                    //cap access and egress to 30 mins, but only if transit trips is made
+                    //limit access and egress to 30 mins, but only if transit trip is made
                     if (access_min > 30 && pt_legs > 0) {
                         sumTravelTime_min = sumTravelTime_min - access_min + 30;
                         access_min = 30;
@@ -152,13 +146,13 @@ public class MATSimTransitSkims2 {
                     inVehicleTime.setValueAt(destinationTAZ.id, originTAZ.id, inVehicle);
                     transitDistance.setValueAt(destinationTAZ.id, originTAZ.id, distance);
 
-
-                    if (LongMath.isPowerOfTwo(counter.get())) {
-                        long duration = System.currentTimeMillis() / 1000 - startTime_s;
-                        logger.info(counter + " completed in " + duration + " seconds");
-                    }
-
                 }
+
+                if (counter.get() % 10000 == 0) {
+                    long duration = System.currentTimeMillis() / 1000 - startTime_s;
+                    logger.warn(counter + " completed in " + duration + " seconds");
+                }
+
             }
 
         });
@@ -258,7 +252,7 @@ public class MATSimTransitSkims2 {
             e.printStackTrace();
         }
 
-        logger.info("Read " + map.size() + " TAZs");
+        logger.warn("Read " + map.size() + " TAZs");
         return map;
 
     }
