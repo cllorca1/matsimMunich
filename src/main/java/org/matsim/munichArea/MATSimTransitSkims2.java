@@ -74,7 +74,10 @@ public class MATSimTransitSkims2 {
         zoneMap.values().parallelStream().forEach(taz -> {
             Node node = NetworkUtils.getNearestNode(scenario.getNetwork(), taz.coord);
             Id<Link> link = node.getInLinks().values().iterator().next().getId();
-            facilitiesByTaz.put(taz, activityFacilitiesFactory.createActivityFacility(null, node.getCoord(), link));
+            ActivityFacility facility = activityFacilitiesFactory.createActivityFacility(null, node.getCoord(), link);
+            if (facility != null && facility.getCoord() != null){
+                facilitiesByTaz.put(taz, facility);
+            }
         });
 
         logger.warn("Assign facilities to taz");
