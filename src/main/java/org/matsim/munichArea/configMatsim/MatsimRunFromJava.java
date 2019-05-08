@@ -152,6 +152,7 @@ public class MatsimRunFromJava {
         return timeListener.getAutoTravelTime();
     }
 
+
     public Map<String, Matrix> addDistanceSkimMatrixCalculator(int timeOfDay, int numberOfCalcPoints,
                                                         ArrayList<Location> locationList){
 

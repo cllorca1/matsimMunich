@@ -16,7 +16,7 @@ public class TransitModeMatrixPostProcessing {
     private String[] modes = new  String []{"train", "metro", "bus"};
 
     //train = 0; metro = 1; bus = 2
-    private String[] folders = new String[] {"skimsTransit", "bus_tram_metro", "only_bus"};
+    private String[] folders = new String[] {"new/all", "new/bus_tram_metro", "new/bus"};
     private Matrix[] totalTt = new Matrix[3];
     private Matrix[] egress = new Matrix[3];
     private Matrix[] access = new Matrix[3];
@@ -57,17 +57,17 @@ public class TransitModeMatrixPostProcessing {
     public void readMatrices(){
         SkimMatrixReader skimReader = new SkimMatrixReader();
         for (int i = 0; i< modes.length; i++ ){
-            String fileName = "./data/" + folders[i] + "/total_t" + ".omx";
+            String fileName = "./data/" + folders[i] + "/total_t_new.omx";
             totalTt[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/eggress_t" + ".omx";
+            fileName = "./data/" + folders[i] + "/eggress_t_new.omx";
             egress[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/access_t"  + ".omx";
+            fileName = "./data/" + folders[i] + "/access_t_new.omx";
             access[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/in_transit_t" +  ".omx";
+            fileName = "./data/" + folders[i] + "/in_transit_t_new.omx";
             inTransit[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/in_vehicle_t"  + ".omx";
+            fileName = "./data/" + folders[i] + "/in_vehicle_t_new.omx";
             inVehicle[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/transfers" + ".omx";
+            fileName = "./data/" + folders[i] + "/transfers_new.omx";
             transfer[i] = skimReader.readSkim(fileName,"mat1");
         }
 
@@ -78,7 +78,7 @@ public class TransitModeMatrixPostProcessing {
         //train matrices are cleaned when train is not used, if the travel time is equal as with the rest of modes, set to -1 (=NA)
         System.out.println("train vs. metro:");
         compareAndCleanIfEqual(0,1);
-        //metro matrices are cleaned when neither metro nor tram are not used
+        //metro/tram matrices are cleaned when neither metro nor tram are not used
         System.out.println("metro vs. bus");
         compareAndCleanIfEqual(1,2);
 
@@ -115,6 +115,8 @@ public class TransitModeMatrixPostProcessing {
          for (int i : totalTt[modeToEdit].getExternalColumnNumbers()){
              for (int j : totalTt[modeToEdit].getExternalRowNumbers()){
                  if (inVehicle[modeToEdit].getValueAt(i,j) == inVehicle[modeReference].getValueAt(i,j)){
+                     //if the in vehicle time of the mode A is equal to the one in mode B, being A of
+                     // higher hierarchy, one cannot take A as the fastest option
                      egress[modeToEdit].setValueAt(i,j, -1f);
                      access[modeToEdit].setValueAt(i,j, -1f);
                      inVehicle[modeToEdit].setValueAt(i,j, -1f);

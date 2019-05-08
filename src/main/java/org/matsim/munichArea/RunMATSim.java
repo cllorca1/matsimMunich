@@ -2,7 +2,12 @@ package org.matsim.munichArea;
 
 import com.pb.common.matrix.Matrix;
 import com.pb.common.util.ResourceUtil;
-import org.matsim.api.core.v01.population.Population;
+import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.TransportMode;
+import org.matsim.api.core.v01.population.*;
+import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.munichArea.configMatsim.DistListener;
 import org.matsim.munichArea.configMatsim.IntrazonalTravelTimeCalculator;
@@ -13,6 +18,7 @@ import org.matsim.munichArea.configMatsim.zonalData.CentroidsToLocations;
 import org.matsim.munichArea.configMatsim.zonalData.Location;
 import org.matsim.munichArea.configMatsim.planCreation.ReadSyntheticPopulation;
 import org.matsim.munichArea.configMatsim.planCreation.externalFlows.LongDistanceTraffic;
+import org.matsim.munichArea.outputCreation.EuclideanDistanceCalculator;
 import org.matsim.munichArea.outputCreation.TravelTimeMatrix;
 
 import java.io.File;
@@ -47,6 +53,8 @@ public class RunMATSim {
 
         boolean useSp = ResourceUtil.getBooleanProperty(rb, "use.sp");
 
+        boolean useSimpleSp = ResourceUtil.getBooleanProperty(rb, "use.simple.sp", false);
+
         //read centroids and get list of locations
         CentroidsToLocations centroidsToLocations = new CentroidsToLocations(rb);
         ArrayList<Location> locationList = centroidsToLocations.readCentroidList();
@@ -67,6 +75,8 @@ public class RunMATSim {
             autoTravelTimes.put(hourOfDay, new Matrix(sizeOfMatrix, sizeOfMatrix));
             //autoTravelDistances.put(hourOfDay, new Matrix(sizeOfMatrix, sizeOfMatrix));
         }
+
+        Matrix euclideanDistance = new Matrix(sizeOfMatrix, sizeOfMatrix);
 
         //calculate capacity factors
         double flowCapacityFactor = Math.pow(tripScalingFactor, flowCapacityExponent);
@@ -91,10 +101,28 @@ public class RunMATSim {
             readSp.printSyntheticPlansList("./sp/output/plansWalk.csv", 1);
             readSp.printSyntheticPlansList("./sp/output/plansCycle.csv", 2);
             readSp.printSyntheticPlansList("./sp/output/plansTransit.csv", 3);
-        } else {
+        } else if (useSimpleSp) {
             MatsimPopulationCreator matsimPopulationCreator = new MatsimPopulationCreator(rb);
             matsimPopulationCreator.createMatsimPopulation(locationList, 2013, false, tripScalingFactor);
             matsimPopulation = matsimPopulationCreator.getMatsimPopulation();
+        } else {
+            //create artificial simulation just to have "something"
+            matsimPopulation = ScenarioUtils.loadScenario(ConfigUtils.createConfig()).getPopulation();
+            PopulationFactory factory = matsimPopulation.getFactory();
+            Person p = factory.createPerson(Id.createPersonId("person1"));
+            matsimPopulation.addPerson(p);
+            Plan pl = factory.createPlan();
+            Coord origin = new Coord(locationList.get(10).getX(), locationList.get(10).getY());
+            Coord destination = new Coord(locationList.get(20).getX(), locationList.get(20).getY());
+            Activity a1 = factory.createActivityFromCoord("home", origin);
+            a1.setEndTime(8 * 60 * 60);
+            Leg l = factory.createLeg(TransportMode.car);
+            Activity a2 = factory.createActivityFromCoord("work", destination);
+            pl.addActivity(a1);
+            pl.addLeg(l);
+            pl.addActivity(a2);
+            p.addPlan(pl);
+
         }
 
         if (addExternalFlows) {
@@ -103,6 +131,8 @@ public class RunMATSim {
             longDistanceTraffic.readMatrices();
             matsimPopulation = longDistanceTraffic.addLongDistancePlans(tripScalingFactor, matsimPopulation);
         }
+
+
         //run Matsim and get travel times
         MatsimRunFromJava matsimRunner = new MatsimRunFromJava(rb);
         matsimRunner.configureMatsim(networkFile, year, TransformationFactory.DHDN_GK4, iterations, simulationName, outputFolder,
@@ -123,8 +153,8 @@ public class RunMATSim {
         }
 
 
-        if (calculateIntrazonals){
-            matsimRunner.addIntrazonalTravelTimeCalculator(locationList, rb.getString("intrazonal.file"), Util.loadZoneShapeFile(rb.getString("zone.shapefile"),"id" ));
+        if (calculateIntrazonals) {
+            matsimRunner.addIntrazonalTravelTimeCalculator(locationList, rb.getString("intrazonal.file"), Util.loadZoneShapeFile(rb.getString("zone.shapefile"), "id"));
 
 
         }
@@ -135,7 +165,9 @@ public class RunMATSim {
             String omxFileName = rb.getString("out.skim.auto.time") + simulationName + ".omx";
             TravelTimeMatrix.createOmxFile(omxFileName, locationList.size());
             for (int hourOfDay : hoursOfDay) {
-                TravelTimeMatrix.createOmxSkimMatrix(autoTravelTimes.get(hourOfDay),  omxFileName, "tt" + hourOfDay);
+                Matrix matrix = autoTravelTimes.get(hourOfDay);
+                matrix = TravelTimeMatrix.assignIntrazonals(matrix, 3, 2000000, 0.5f);
+                TravelTimeMatrix.createOmxSkimMatrix(matrix, omxFileName, "tt" + hourOfDay);
             }
         }
         if (autoDistSkims) {
@@ -146,6 +178,15 @@ public class RunMATSim {
             }
         }
 
+        if (Boolean.parseBoolean(rb.getString("skim.eucliddist"))) {
+            String omxFileName = rb.getString("skim.eucliddist.file") + simulationName + ".omx";
+            TravelTimeMatrix.createOmxFile(omxFileName, locationList.size());
+            EuclideanDistanceCalculator euclideanDistanceCalculator = new EuclideanDistanceCalculator();
+            Matrix matrix = euclideanDistanceCalculator.createEuclideanDistanceMatrix(locationList);
+            matrix = TravelTimeMatrix.assignIntrazonals(matrix, 3, 2000000, 0.5f);
+            TravelTimeMatrix.createOmxSkimMatrix(matrix, omxFileName, "euclideanDistance");
 
+        }
     }
+
 }

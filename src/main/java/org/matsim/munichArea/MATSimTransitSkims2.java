@@ -14,6 +14,7 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.network.NetworkUtils;
+import org.matsim.core.router.TransitRouterWrapper;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.facilities.ActivityFacilitiesFactory;
@@ -24,6 +25,7 @@ import org.matsim.pt.router.TransitRouter;
 import org.matsim.pt.router.TransitRouterConfig;
 import org.matsim.pt.router.TransitRouterImpl;
 
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,6 +34,7 @@ public class MATSimTransitSkims2 {
 
     private static ResourceBundle rb;
     private static Logger logger = Logger.getLogger(MATSimTransitSkims2.class);
+    private static float stopThresholdRadius_m = 1000;
 
     public static void main(String[] args) {
         File propFile = new File(args[0]);
@@ -47,7 +50,7 @@ public class MATSimTransitSkims2 {
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
         Map<Integer, ModelTAZ> zoneMap = readCSVOfZones();
-        int size = zoneMap.size();
+        int size = zoneMap.keySet().stream().max(Integer::compareTo).get();
         Matrix transitTotalTime = new Matrix(size, size);
         transitTotalTime.fill(-1F);
         Matrix transitInTime = new Matrix(size, size);
@@ -83,6 +86,9 @@ public class MATSimTransitSkims2 {
         logger.warn("Assign facilities to taz");
 
         TransitRouterConfig transitConfig = new TransitRouterConfig(config);
+        transitConfig.setAdditionalTransferTime(60);
+        transitConfig.setBeelineWalkSpeed(3/3.6);
+
 
         facilitiesByTaz.keySet().parallelStream().forEach(originTAZ -> {
             TransitRouter transitRouter = new TransitRouterImpl(transitConfig, scenario.getTransitSchedule());
@@ -114,26 +120,38 @@ public class MATSimTransitSkims2 {
                             distance += this_leg_distance;
                             pt_legs++;
                         }
-
-//                        }
                         sequence++;
                     }
 
+                    float inTransitTime = sumTravelTime_min - access_min - egress_min;
+
                     counter.incrementAndGet();
 
-                    //limit access and egress to 30 mins, but only if transit trip is made
-                    if (access_min > 30 && pt_legs > 0) {
-                        sumTravelTime_min = sumTravelTime_min - access_min + 30;
-                        access_min = 30;
-                    }
+                    if (pt_legs == 0){
+                        //this trips are not made by transit
+                        if (originTAZ.distanceToClosest < stopThresholdRadius_m && destinationTAZ.distanceToClosest < stopThresholdRadius_m){
+                            //there are stops in the areas and probably it is possible to go by transit
+                            //assume the same time as by walk
+                            inVehicle = access_min;
+                            inTransitTime = inVehicle;
+                            //but add new access and egress
+                            access_min = (float) (originTAZ.distanceToClosest / transitConfig.getBeelineWalkSpeed());
+                            egress_min = (float) (destinationTAZ.distanceToClosest / transitConfig.getBeelineWalkSpeed());
+                            sumTravelTime_min = access_min + egress_min + inVehicle;
 
-                    if (egress_min > 30 && pt_legs > 0) {
-                        sumTravelTime_min = sumTravelTime_min - egress_min + 30;
-                        egress_min = 30;
+                        } else {
+                            //there are no transit stops and the trips by transit is not viable
+                            //stored as -1
+                            sumTravelTime_min = -1;
+                            inVehicle = -1;
+                            inTransitTime = -1;
+                            access_min = -1;
+                            egress_min = -1;
+                        }
                     }
 
                     transitTotalTime.setValueAt(originTAZ.id, destinationTAZ.id, sumTravelTime_min);
-                    transitInTime.setValueAt(originTAZ.id, destinationTAZ.id, sumTravelTime_min - access_min - egress_min);
+                    transitInTime.setValueAt(originTAZ.id, destinationTAZ.id,inTransitTime);
                     transitAccessTt.setValueAt(originTAZ.id, destinationTAZ.id, access_min);
                     transitEgressTt.setValueAt(originTAZ.id, destinationTAZ.id, egress_min);
                     transitTransfers.setValueAt(originTAZ.id, destinationTAZ.id, pt_legs - 1);
@@ -149,6 +167,7 @@ public class MATSimTransitSkims2 {
                     inVehicleTime.setValueAt(destinationTAZ.id, originTAZ.id, inVehicle);
                     transitDistance.setValueAt(destinationTAZ.id, originTAZ.id, distance);
 
+
                 }
 
                 if (counter.get() % 10000 == 0) {
@@ -160,7 +179,7 @@ public class MATSimTransitSkims2 {
 
         });
 
-        String tag = "new";
+        String tag = "new_2";
 
         String omxPtFileName = rb.getString("pt.total.skim.file") + "_" + tag + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, size);
@@ -200,6 +219,7 @@ public class MATSimTransitSkims2 {
 
         config.global().setCoordinateSystem(TransformationFactory.DHDN_GK4);
 
+
         // Network
         config.network().setInputFile(networkFile);
 
@@ -237,6 +257,7 @@ public class MATSimTransitSkims2 {
             int posX = Util.findPositionInArray("x", header);
             int posY = Util.findPositionInArray("y", header);
             int posServed = Util.findPositionInArray("served", header);
+            int posDistToClosest = Util.findPositionInArray("dist", header);
 
             while ((line = bufferReader.readLine()) != null) {
                 String[] splitLine = line.split(",");
@@ -245,8 +266,9 @@ public class MATSimTransitSkims2 {
                 double x = Double.parseDouble(splitLine[posX]);
                 double y = Double.parseDouble(splitLine[posY]);
                 boolean served = Boolean.parseBoolean(splitLine[posServed]);
+                double distanceToClosest = Double.parseDouble(splitLine[posDistToClosest]);
 
-                map.put(id, new ModelTAZ(id, served, new Coord(x, y)));
+                map.put(id, new ModelTAZ(id, served, new Coord(x, y), distanceToClosest));
             }
 
         } catch (FileNotFoundException e) {
@@ -264,11 +286,13 @@ public class MATSimTransitSkims2 {
         Coord coord;
         boolean served;
         int id;
+        double distanceToClosest;
 
-        public ModelTAZ(int id, boolean served, Coord coord) {
+        public ModelTAZ(int id, boolean served, Coord coord, double distanceToClosest) {
             this.coord = coord;
             this.served = served;
             this.id = id;
+            this.distanceToClosest = distanceToClosest;
         }
 
     }
