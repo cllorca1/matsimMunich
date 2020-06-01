@@ -105,9 +105,6 @@ public class MATSimTransitSkims2 {
                     float distance = 0;
                     int pt_legs = 0;
                     for (PlanElement pe : route) {
-//                        if (pe instanceof Activity) {
-//                            //activities do not seem to appear in the routes provided by transit router
-//                        } else if (pe instanceof Leg) {
                         double this_leg_time = (((Leg) pe).getRoute().getTravelTime() / 60.);
                         double this_leg_distance = (((Leg) pe).getRoute().getDistance());
                         sumTravelTime_min += this_leg_time;
@@ -140,7 +137,7 @@ public class MATSimTransitSkims2 {
                             sumTravelTime_min = access_min + egress_min + inVehicle;
 
                         } else {
-                            //there are no transit stops and the trips by transit is not viable
+                            //there are no transit stops and the trips by transit are not reasonable
                             //stored as -1
                             sumTravelTime_min = -1;
                             inVehicle = -1;
@@ -158,9 +155,9 @@ public class MATSimTransitSkims2 {
                     inVehicleTime.setValueAt(originTAZ.id, destinationTAZ.id, inVehicle);
                     transitDistance.setValueAt(originTAZ.id, destinationTAZ.id, distance);
 
-
+                    //and the other half matrix
                     transitTotalTime.setValueAt(destinationTAZ.id, originTAZ.id, sumTravelTime_min);
-                    transitInTime.setValueAt(destinationTAZ.id, originTAZ.id, sumTravelTime_min - access_min - egress_min);
+                    transitInTime.setValueAt(destinationTAZ.id, originTAZ.id, inTransitTime);
                     transitAccessTt.setValueAt(destinationTAZ.id, originTAZ.id, access_min);
                     transitEgressTt.setValueAt(destinationTAZ.id, originTAZ.id, egress_min);
                     transitTransfers.setValueAt(destinationTAZ.id, originTAZ.id, pt_legs - 1);
@@ -179,7 +176,7 @@ public class MATSimTransitSkims2 {
 
         });
 
-        String tag = "new_2";
+        String tag = "new_3";
 
         String omxPtFileName = rb.getString("pt.total.skim.file") + "_" + tag + ".omx";
         TravelTimeMatrix.createOmxFile(omxPtFileName, size);

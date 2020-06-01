@@ -57,17 +57,17 @@ public class TransitModeMatrixPostProcessing {
     public void readMatrices(){
         SkimMatrixReader skimReader = new SkimMatrixReader();
         for (int i = 0; i< modes.length; i++ ){
-            String fileName = "./data/" + folders[i] + "/total_t_new.omx";
+            String fileName = "./data/" + folders[i] + "/total_t_new_2.omx";
             totalTt[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/eggress_t_new.omx";
+            fileName = "./data/" + folders[i] + "/eggress_t_new_2.omx";
             egress[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/access_t_new.omx";
+            fileName = "./data/" + folders[i] + "/access_t_new_2.omx";
             access[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/in_transit_t_new.omx";
+            fileName = "./data/" + folders[i] + "/in_transit_t_new_2.omx";
             inTransit[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/in_vehicle_t_new.omx";
+            fileName = "./data/" + folders[i] + "/in_vehicle_t_new_2.omx";
             inVehicle[i] = skimReader.readSkim(fileName,"mat1");
-            fileName = "./data/" + folders[i] + "/transfers_new.omx";
+            fileName = "./data/" + folders[i] + "/transfers_new_2.omx";
             transfer[i] = skimReader.readSkim(fileName,"mat1");
         }
 
@@ -78,6 +78,11 @@ public class TransitModeMatrixPostProcessing {
         //train matrices are cleaned when train is not used, if the travel time is equal as with the rest of modes, set to -1 (=NA)
         System.out.println("train vs. metro:");
         compareAndCleanIfEqual(0,1);
+
+        //train matrices are cleaned when train and metro is not used, if the travel time is equal as with the rest of modes, set to -1 (=NA)
+        System.out.println("train vs. metro:");
+        compareAndCleanIfEqual(0,2);
+
         //metro/tram matrices are cleaned when neither metro nor tram are not used
         System.out.println("metro vs. bus");
         compareAndCleanIfEqual(1,2);

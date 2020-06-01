@@ -5,14 +5,13 @@ package org.matsim.munichArea;
         import com.pb.common.datafile.TableDataFileReader;
         import com.pb.common.datafile.TableDataSet;
         import com.pb.common.matrix.Matrix;
-        import com.pb.common.util.ResourceUtil;
-        import com.vividsolutions.jts.geom.*;
 
         import omx.OmxMatrix;
         import omx.hdf5.OmxHdf5Datatype;
         import org.apache.log4j.Logger;
         import org.geotools.geometry.jts.JTS;
         import org.geotools.referencing.CRS;
+        import org.locationtech.jts.geom.*;
         import org.matsim.api.core.v01.Coord;
         import org.matsim.core.utils.gis.ShapeFileReader;
         import org.opengis.feature.simple.SimpleFeature;

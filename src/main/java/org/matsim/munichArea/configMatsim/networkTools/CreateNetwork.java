@@ -52,6 +52,9 @@ public class CreateNetwork {
         String osm = networkFolder + rb.getString("osm.input.file");
 
 
+        OsmNetworkReader reader = new OsmNetworkReader(null, null);
+        reader.setHierarchyLayer(5);
+
 		/*
 		 * The coordinate system to use. OpenStreetMap uses WGS84, but for MATSim, we need a projection where distances
 		 * are (roughly) euclidean distances in meters.

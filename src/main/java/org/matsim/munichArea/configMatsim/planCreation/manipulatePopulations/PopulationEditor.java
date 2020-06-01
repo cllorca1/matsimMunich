@@ -13,7 +13,7 @@ import org.matsim.api.core.v01.population.*;
 import org.matsim.contrib.util.PopulationUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.mobsim.qsim.PopulationPlugin;
+
 import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.population.io.PopulationReader;
 import org.matsim.core.scenario.ScenarioUtils;
